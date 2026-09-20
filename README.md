@@ -3,13 +3,16 @@
 Static website for **Cinnery**, a cinnamon roll bakery at Zwanestraat 29, Groningen (NL).
 Two design variants share the same content, translations and images.
 
-| | Variant A · *Sugar Rush* | Variant B · *Midnight Glaze* |
+| | Variant A · *Cream* | Variant B · *Eggplant* |
 |---|---|---|
 | Folder | `variant-a/` | `variant-b/` |
-| Mood | light, playful, sticker-style | dark eggplant, editorial, glaze gradients |
-| Display font | Fredoka | Unbounded |
-| Body font | Nunito | DM Sans |
-| Extras | marquee ticker, rotating badge, polaroids | horizontal menu rail, mosaic gallery, mobile order bar |
+| Mood | light, minimal, product-grid | editorial, eggplant hero band, menu as numbered list |
+| Display font | Plus Jakarta Sans | Fraunces (soft serif) |
+| Body font | Plus Jakarta Sans | Inter |
+| Menu | 6 rolls + 5 cookies as pastel tiles (swap in photos later) | 6 rolls + 5 cookies as a list with descriptions |
+
+Design references: canela.amsterdam, cinnamoodrolls.com – lots of whitespace, one typeface,
+product photography, almost no decoration.
 
 `index.html` at the root is a simple chooser page linking to both.
 
@@ -48,9 +51,9 @@ EN/NL/HU, otherwise English.
 - [ ] Add the WhatsApp number if you want a WhatsApp button (currently only mentioned in the FAQ text).
 - [ ] Check the Google Maps embed shows the right pin (it geocodes the address).
 - [ ] Proofread the Dutch translation (`nl` block in `assets/i18n.js`).
-- [ ] Optional: replace hero photos with higher-resolution images (current photos are 640×480,
-      fine for cards, soft when shown large). Drop new files into `assets/img/` and update the
-      `<img src>` in the hero.
+- [ ] Product photos: Variant A shows a coloured tile per flavour (`.tile-*` in `variant-a/style.css`).
+      When real photos exist, replace each `<div class="tile ...">` with `<img>` (4:3, ≥ 900 px wide).
+- [ ] Higher-resolution hero photos (current photos are 640×480, soft when shown large).
 - [ ] Set `og:image` to an absolute URL once the domain is live.
 
 ## Deploying
