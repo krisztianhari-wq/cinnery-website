@@ -3,6 +3,8 @@
 */
 window.CINNERY_I18N = {
   en: {
+    "home.title": "Artisan",
+    "home.d": "Hand-rolled every morning in our own bakery, with love and quality ingredients.",
     "menu.kicker": "The menu",
     "menu.title": "Cinnamon rolls",
     "menu.lead": "Hand-rolled every morning. Light, airy dough with a cinnamon-sugar swirl, finished six ways.",
@@ -115,6 +117,8 @@ window.CINNERY_I18N = {
   },
 
   nl: {
+    "home.title": "Artisan",
+    "home.d": "Elke ochtend met de hand gerold in onze eigen bakkerij, met liefde en goede ingrediënten.",
     "menu.kicker": "Het menu",
     "menu.title": "Cinnamon rolls",
     "menu.lead": "Elke ochtend met de hand gerold. Licht, luchtig deeg met een kaneel-suikerswirl, op zes manieren afgewerkt.",
@@ -227,6 +231,8 @@ window.CINNERY_I18N = {
   },
 
   hu: {
+    "home.title": "Artisan",
+    "home.d": "Minden reggel kézzel tekerjük a saját pékségünkben, szeretettel és minőségi alapanyagokból.",
     "menu.kicker": "A menü",
     "menu.title": "Fahéjas csigák",
     "menu.lead": "Minden reggel kézzel tekerve. Könnyű, levegős tészta fahéjas-cukros spirállal, hatféle feltéttel.",
