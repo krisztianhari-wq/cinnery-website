@@ -264,6 +264,7 @@ address { font-style: normal; font-size: 1.15rem; margin-bottom: 8px; }
     transform: translateX(100%); transition: transform .25s ease; z-index: 40;
   }
   .site-nav.is-open { transform: none; }
+  .site-header, .site-header.is-scrolled { backdrop-filter: none; -webkit-backdrop-filter: none; background: var(--bg); }
   .site-nav > a:not(.btn) { font-size: 1.5rem; font-family: var(--font-display); font-weight: 700; }
   .hero { min-height: 0; }
   .hero-grid { padding: 10px 0 50px; }
