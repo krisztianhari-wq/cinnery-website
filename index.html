@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cinnery – design variants</title>
+  <link rel="icon" href="assets/roll.svg" type="image/svg+xml">
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root { --pink:#F0A3AF; --plum:#614051; --cream:#FFF7F1; --dark:#2E1B27; }
+    * { box-sizing: border-box; }
+    body { margin:0; min-height:100vh; display:grid; place-items:center; font-family:"Nunito",system-ui,sans-serif; background:var(--cream); color:var(--plum); padding:24px; }
+    main { width:min(900px,100%); text-align:center; }
+    h1 { font-family:"Fredoka",sans-serif; font-size:clamp(2rem,6vw,3.4rem); margin:0 0 6px; }
+    p { margin:0 0 30px; opacity:.8; }
+    .grid { display:grid; grid-template-columns:1fr 1fr; gap:22px; }
+    a.card { display:block; text-decoration:none; color:inherit; border:3px solid var(--plum); border-radius:24px; overflow:hidden; box-shadow:7px 7px 0 var(--plum); transition:transform .15s; background:#fff; }
+    a.card:hover { transform:translate(-3px,-3px); }
+    .thumb { aspect-ratio:16/10; display:grid; place-items:center; font-family:"Fredoka",sans-serif; font-size:2rem; }
+    .a .thumb { background:var(--cream); color:var(--plum); }
+    .b .thumb { background:var(--dark); color:var(--pink); }
+    .body { padding:18px 20px 22px; text-align:left; border-top:3px solid var(--plum); }
+    .body strong { font-family:"Fredoka",sans-serif; font-size:1.25rem; display:block; }
+    .body span { font-size:.95rem; opacity:.85; }
+    @media (max-width:640px) { .grid { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Cinnery – two design variants</h1>
+  <p>Pick a direction. Both share the same content, translations (EN / NL / HU) and images.</p>
+  <div class="grid">
+    <a class="card a" href="variant-a/">
+      <div class="thumb">Sugar Rush</div>
+      <div class="body"><strong>Variant A · Sugar Rush</strong><span>Light, playful, sticker-style. Cream background, chunky borders, rotating badges, marquee.</span></div>
+    </a>
+    <a class="card b" href="variant-b/">
+      <div class="thumb">Midnight Glaze</div>
+      <div class="body"><strong>Variant B · Midnight Glaze</strong><span>Dark eggplant, editorial. Big type, glaze gradients, horizontal menu rail, mobile order bar.</span></div>
+    </a>
+  </div>
+</main>
+</body>
+</html>

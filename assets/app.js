@@ -1,0 +1,101 @@
+/* Cinnery – shared behaviour: language switch, nav, accordion, reveal, open-now, roll icon */
+(function () {
+  const ROLL_SVG = `<svg viewBox="0 0 200 170" fill="none">  <path fill="currentColor" d="M22 66 V112 C22 145 62 160 100 160 C138 160 178 145 178 112 V66 Z"/>  <ellipse cx="100" cy="66" rx="78" ry="38" fill="currentColor"/>  <path d="M22 66 C22 96 62 104 100 104 C138 104 178 96 178 66" stroke="var(--logo-bg,#fff)" stroke-width="6" stroke-linecap="round"/>  <path d="M96.2 66.6 L95.9 66.5 L95.6 66.4 L95.3 66.3 L95.1 66.2 L94.8 66.0 L94.6 65.8 L94.4 65.6 L94.2 65.4 L94.0 65.2 L93.9 65.0 L93.8 64.8 L93.8 64.5 L93.8 64.3 L93.8 64.0 L93.9 63.8 L94.0 63.5 L94.1 63.2 L94.3 63.0 L94.6 62.7 L94.8 62.5 L95.2 62.2 L95.5 61.9 L96.0 61.7 L96.4 61.5 L96.9 61.3 L97.5 61.1 L98.0 60.9 L98.7 60.7 L99.3 60.6 L100.0 60.4 L100.7 60.3 L101.5 60.2 L102.2 60.2 L103.0 60.1 L103.8 60.1 L104.6 60.1 L105.5 60.2 L106.3 60.3 L107.1 60.4 L108.0 60.5 L108.8 60.7 L109.6 60.9 L110.4 61.1 L111.2 61.4 L111.9 61.7 L112.6 62.0 L113.3 62.3 L114.0 62.7 L114.6 63.1 L115.1 63.5 L115.7 64.0 L116.1 64.5 L116.5 65.0 L116.8 65.5 L117.1 66.0 L117.3 66.5 L117.5 67.1 L117.5 67.7 L117.5 68.2 L117.4 68.8 L117.2 69.4 L117.0 70.0 L116.7 70.6 L116.3 71.2 L115.8 71.7 L115.2 72.3 L114.6 72.8 L113.8 73.4 L113.0 73.9 L112.2 74.4 L111.2 74.8 L110.2 75.3 L109.1 75.7 L108.0 76.1 L106.8 76.4 L105.5 76.7 L104.2 77.0 L102.8 77.2 L101.4 77.4 L100.0 77.5 L98.5 77.6 L97.0 77.7 L95.5 77.7 L94.0 77.6 L92.5 77.5 L91.0 77.4 L89.5 77.2 L88.0 76.9 L86.5 76.6 L85.0 76.3 L83.6 75.9 L82.2 75.5 L80.9 75.0 L79.6 74.4 L78.4 73.8 L77.3 73.2 L76.2 72.5 L75.2 71.8 L74.3 71.1 L73.5 70.3 L72.8 69.5 L72.2 68.7 L71.7 67.8 L71.3 66.9 L71.0 66.0 L70.8 65.1 L70.7 64.2 L70.8 63.2 L70.9 62.3 L71.2 61.3 L71.7 60.4 L72.2 59.5 L72.9 58.5 L73.7 57.6 L74.6 56.8 L75.6 55.9 L76.7 55.1 L78.0 54.3 L79.4 53.5 L80.8 52.8 L82.4 52.1 L84.1 51.5 L85.8 50.9 L87.6 50.4 L89.6 49.9 L91.5 49.5 L93.6 49.2 L95.7 48.9 L97.8 48.7 L100.0 48.5 L102.2 48.4 L104.4 48.4 L106.7 48.5 L108.9 48.6 L111.2 48.8 L113.4 49.1 L115.6 49.4 L117.8 49.8 L119.9 50.3 L122.0 50.9 L124.0 51.5 L125.9 52.2 L127.8 53.0 L129.5 53.8 L131.2 54.7 L132.8 55.6 L134.2 56.6 L135.6 57.6 L136.8 58.7 L137.8 59.9 L138.8 61.0 L139.5 62.2 L140.2 63.5 L140.6 64.7 L141.0 66.0 L141.1 67.3 L141.1 68.6 L140.9 69.9 L140.6 71.2 L140.1 72.5 L139.4 73.8 L138.6 75.1 L137.6 76.3 L136.4 77.5 L135.1 78.7 L133.6 79.9 L131.9 81.0 L130.2 82.1 L128.2 83.1 L126.2 84.0 L124.0 84.9 L121.7 85.7 L119.3 86.5 L116.7 87.1 L114.1 87.7 L111.4 88.3 L108.7 88.7 L105.8 89.0 L102.9 89.3 L100.0 89.5 L97.0 89.5 L94.1 89.5 L91.1 89.4 L88.1 89.2 L85.1 88.9 L82.2 88.5 L79.3 88.0 L76.5 87.4 L73.7 86.7 L71.0 85.9 L68.4 85.1 L65.9 84.1 L63.5 83.1 L61.3 82.0 L59.1 80.8 L57.2 79.6 L55.3 78.3 L53.7 76.9 L52.2 75.5 L50.8 74.0 L49.7 72.5 L48.8 70.9 L48.0 69.3 L47.5 67.7 L47.1 66.0 L47.0 64.3 L47.1 62.7 L47.3 61.0 L47.9 59.3 L48.6 57.6 L49.5 56.0 L50.6 54.4 L52.0 52.8 L53.5 51.3 L55.3 49.8 L57.2 48.3 L59.4 46.9 L61.7 45.6 L64.2 44.3 L66.8 43.2 L69.6 42.1 L72.6 41.1 L75.7 40.1 L78.9 39.3 L82.2 38.6 L85.6 38.0 L89.1 37.4 L92.7 37.0 L96.3 36.8 L100.0 36.6 L103.7 36.5 L107.4 36.6 L111.2 36.7 L114.9 37.0 L118.6 37.5 L122.2 38.0 L125.8 38.6 L129.3 39.4 L132.7 40.3 L136.0 41.2 L139.2 42.3 L142.2 43.5 L145.2 44.8 L147.9 46.2 L150.5 47.7 L152.9 49.2 L155.1 50.8 L157.1 52.6 L158.9 54.3 L160.5 56.2 L161.8 58.1 L163.0 60.0 L163.8 62.0 L164.4 64.0 L164.8 66.0 L164.9 68.0 L164.8 70.1 L164.4 72.1 L163.7 74.2 L162.8 76.2" stroke="var(--logo-bg,#fff)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+  const LANGS = ['en', 'nl', 'hu'];
+  const T = window.CINNERY_I18N || {};
+
+  /* ---- roll icon ---- */
+  document.querySelectorAll('.roll-icon').forEach(el => { el.innerHTML = ROLL_SVG; });
+
+  /* ---- language ---- */
+  function pickLang() {
+    const saved = (() => { try { return localStorage.getItem('cinnery-lang'); } catch (e) { return null; } })();
+    if (saved && LANGS.includes(saved)) return saved;
+    const nav = (navigator.language || 'en').slice(0, 2).toLowerCase();
+    return LANGS.includes(nav) ? nav : 'en';
+  }
+  function apply(lang) {
+    const dict = T[lang] || T.en;
+    document.documentElement.lang = lang;
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      const val = dict[key] ?? (T.en && T.en[key]);
+      if (val == null) return;
+      if (el.hasAttribute('data-i18n-html')) el.innerHTML = val; else el.textContent = val;
+    });
+    document.querySelectorAll('[data-i18n-attr]').forEach(el => {
+      el.getAttribute('data-i18n-attr').split(',').forEach(pair => {
+        const [attr, key] = pair.split(':').map(s => s.trim());
+        const val = dict[key] ?? (T.en && T.en[key]);
+        if (val != null) el.setAttribute(attr, val);
+      });
+    });
+    document.querySelectorAll('[data-lang]').forEach(b => {
+      const on = b.getAttribute('data-lang') === lang;
+      b.classList.toggle('is-active', on);
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+    try { localStorage.setItem('cinnery-lang', lang); } catch (e) {}
+  }
+  document.querySelectorAll('[data-lang]').forEach(b => b.addEventListener('click', () => apply(b.getAttribute('data-lang'))));
+  apply(pickLang());
+
+  /* ---- mobile nav ---- */
+  const burger = document.querySelector('.nav-toggle');
+  const nav = document.querySelector('.site-nav');
+  if (burger && nav) {
+    burger.addEventListener('click', () => {
+      const open = nav.classList.toggle('is-open');
+      burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+      document.body.classList.toggle('nav-open', open);
+    });
+    nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+      nav.classList.remove('is-open'); burger.setAttribute('aria-expanded', 'false'); document.body.classList.remove('nav-open');
+    }));
+  }
+
+  /* ---- header shadow on scroll ---- */
+  const header = document.querySelector('.site-header');
+  if (header) {
+    const onScroll = () => header.classList.toggle('is-scrolled', window.scrollY > 12);
+    onScroll(); window.addEventListener('scroll', onScroll, { passive: true });
+  }
+
+  /* ---- FAQ accordion (native <details>, one open at a time) ---- */
+  const faqs = document.querySelectorAll('.faq details');
+  faqs.forEach(d => d.addEventListener('toggle', () => {
+    if (d.open) faqs.forEach(o => { if (o !== d) o.open = false; });
+  }));
+
+  /* ---- reveal on scroll ---- */
+  const revealEls = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window && revealEls.length) {
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('is-visible'); io.unobserve(e.target); } });
+    }, { threshold: 0.12 });
+    revealEls.forEach(el => io.observe(el));
+  } else { revealEls.forEach(el => el.classList.add('is-visible')); }
+
+  /* ---- open now? (Europe/Amsterdam) ---- */
+  const HOURS = { 0: [12, 17], 1: null, 2: [10, 18], 3: [10, 18], 4: [10, 18], 5: [10, 18], 6: [10, 18] };
+  const OPEN_TXT = { en: ['Open now', 'Closed now'], nl: ['Nu open', 'Nu gesloten'], hu: ['Most nyitva', 'Most zárva'] };
+  function updateOpen() {
+    const el = document.querySelector('.open-now'); if (!el) return;
+    const now = new Date();
+    const parts = new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/Amsterdam', weekday: 'short', hour: 'numeric', minute: 'numeric', hour12: false }).formatToParts(now);
+    const wd = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].indexOf(parts.find(p => p.type === 'weekday').value);
+    const h = +parts.find(p => p.type === 'hour').value + (+parts.find(p => p.type === 'minute').value) / 60;
+    const win = HOURS[wd];
+    const open = !!(win && h >= win[0] && h < win[1]);
+    const lang = document.documentElement.lang || 'en';
+    el.textContent = (OPEN_TXT[lang] || OPEN_TXT.en)[open ? 0 : 1];
+    el.classList.toggle('is-open', open);
+    el.classList.toggle('is-closed', !open);
+  }
+  updateOpen();
+  document.querySelectorAll('[data-lang]').forEach(b => b.addEventListener('click', updateOpen));
+  setInterval(updateOpen, 60000);
+
+  /* ---- year ---- */
+  document.querySelectorAll('.year').forEach(el => el.textContent = new Date().getFullYear());
+})();
