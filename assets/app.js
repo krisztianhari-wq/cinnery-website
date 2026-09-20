@@ -8,12 +8,8 @@
   document.querySelectorAll('.roll-icon').forEach(el => { el.innerHTML = ROLL_SVG; });
 
   /* ---- language ---- */
-  function pickLang() {
-    const saved = (() => { try { return localStorage.getItem('cinnery-lang'); } catch (e) { return null; } })();
-    if (saved && LANGS.includes(saved)) return saved;
-    const nav = (navigator.language || 'en').slice(0, 2).toLowerCase();
-    return LANGS.includes(nav) ? nav : 'en';
-  }
+  /* Always start in English, regardless of browser language or previous visits. */
+  function pickLang() { return 'en'; }
   function apply(lang) {
     const dict = T[lang] || T.en;
     document.documentElement.lang = lang;
@@ -35,7 +31,6 @@
       b.classList.toggle('is-active', on);
       b.setAttribute('aria-pressed', on ? 'true' : 'false');
     });
-    try { localStorage.setItem('cinnery-lang', lang); } catch (e) {}
   }
   document.querySelectorAll('[data-lang]').forEach(b => b.addEventListener('click', () => apply(b.getAttribute('data-lang'))));
   apply(pickLang());

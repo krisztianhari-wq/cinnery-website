@@ -29,8 +29,7 @@ python3 -m http.server 8791
 All copy lives in `assets/i18n.js`. Each element in the HTML has a `data-i18n="key"`;
 change the value under `en`, `nl` and `hu`. Answers with HTML (lists) use `data-i18n-html`.
 
-The language is remembered in `localStorage`; the default is the browser language if it is
-EN/NL/HU, otherwise English.
+The page always opens in English; visitors switch with the EN / NL / HU buttons.
 
 ## Deploying
 
