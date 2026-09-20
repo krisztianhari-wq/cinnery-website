@@ -3,6 +3,10 @@
 */
 window.CINNERY_I18N = {
   en: {
+    "order.pickup": "Order for pickup",
+    "order.pickup.title": "Order ahead, pick up in store",
+    "order.pickup.d": "Order and pay online, then collect your rolls at Zwanestraat 29 at the time you choose. No delivery fee, no queue.",
+    "order.delivery": "Delivery",
     "home.title": "Artisan",
     "home.d": "Hand-rolled every morning in our own bakery, with love and quality ingredients.",
     "menu.kicker": "The menu",
@@ -67,7 +71,7 @@ window.CINNERY_I18N = {
     "story.stat2": "rolled by hand",
     "story.stat3": "halal",
 
-    "order.kicker": "Too cosy to leave the house?",
+    "order.kicker": "Order online",
     "order.title": "We deliver",
     "order.lead": "Order Cinnery straight to your door via Thuisbezorgd or Uber Eats. Delivery is limited to a radius around our Groningen bakery.",
     "order.thuis": "Order on Thuisbezorgd",
@@ -117,6 +121,10 @@ window.CINNERY_I18N = {
   },
 
   nl: {
+    "order.pickup": "Bestel om af te halen",
+    "order.pickup.title": "Bestel vooruit, haal af in de winkel",
+    "order.pickup.d": "Bestel en betaal online en haal je rolls op het gekozen tijdstip op aan de Zwanestraat 29. Geen bezorgkosten, geen wachtrij.",
+    "order.delivery": "Bezorging",
     "home.title": "Artisan",
     "home.d": "Elke ochtend met de hand gerold in onze eigen bakkerij, met liefde en goede ingrediënten.",
     "menu.kicker": "Het menu",
@@ -181,7 +189,7 @@ window.CINNERY_I18N = {
     "story.stat2": "met de hand gerold",
     "story.stat3": "halal",
 
-    "order.kicker": "Te gezellig om de deur uit te gaan?",
+    "order.kicker": "Online bestellen",
     "order.title": "Wij bezorgen",
     "order.lead": "Bestel Cinnery aan huis via Thuisbezorgd of Uber Eats. Bezorging is beperkt tot een straal rond onze bakkerij in Groningen.",
     "order.thuis": "Bestel via Thuisbezorgd",
@@ -231,6 +239,10 @@ window.CINNERY_I18N = {
   },
 
   hu: {
+    "order.pickup": "Rendelj elvitelre",
+    "order.pickup.title": "Rendelj előre, vedd át az üzletben",
+    "order.pickup.d": "Rendelj és fizess online, majd vedd át a csigákat a Zwanestraat 29-ben a választott időpontban. Nincs kiszállítási díj, nincs sorban állás.",
+    "order.delivery": "Kiszállítás",
     "home.title": "Artisan",
     "home.d": "Minden reggel kézzel tekerjük a saját pékségünkben, szeretettel és minőségi alapanyagokból.",
     "menu.kicker": "A menü",
@@ -295,7 +307,7 @@ window.CINNERY_I18N = {
     "story.stat2": "kézzel tekerve",
     "story.stat3": "halal",
 
-    "order.kicker": "Túl kényelmes otthon?",
+    "order.kicker": "Online rendelés",
     "order.title": "Házhoz visszük",
     "order.lead": "Rendeld a Cinnery-t egyenesen az ajtódhoz a Thuisbezorgd-on vagy az Uber Eats-en. A kiszállítás a groningeni pékségünk körüli körzetre korlátozódik.",
     "order.thuis": "Rendelés Thuisbezorgd-on",

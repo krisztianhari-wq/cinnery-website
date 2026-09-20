@@ -139,6 +139,10 @@ p { margin: 0 0 1em; }
 .order-panel h2 { color: #fff; }
 .order-panel .eyebrow { color: var(--pink); }
 .order-panel .lead { color: rgba(255,255,255,.78); }
+.order-panel .delivery { margin-top: 34px; padding-top: 26px; border-top: 1px solid rgba(255,255,255,.18); }
+.order-panel .delivery h4 { color: var(--pink); }
+.order-panel .delivery p { color: rgba(255,255,255,.72); font-size: .95rem; }
+.order-panel .btn-glass { font-size: .92rem; padding: 12px 22px; }
 .order-aside { display: grid; gap: 22px; }
 .mini { background: #fff; border: 1px solid var(--line); border-radius: var(--r); padding: 28px; }
 .mini h3 { font-size: 1.25rem; }

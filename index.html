@@ -33,7 +33,7 @@
         <button type="button" data-lang="nl">NL</button>
         <button type="button" data-lang="hu">HU</button>
       </div>
-      <a href="#order" class="btn btn-pink btn-sm" data-i18n="nav.order">Order now</a>
+      <a href="#order" class="btn btn-pink btn-sm" data-i18n="order.pickup">Order for pickup</a>
     </nav>
     <button class="nav-toggle" aria-label="Menu" aria-expanded="false"><span></span><span></span></button>
   </div>
@@ -51,8 +51,8 @@
       <div class="hero-row">
         <p class="lead" data-i18n="hero.sub"></p>
         <div class="cta-row">
-          <a href="#menu" class="btn btn-pink" data-i18n="hero.cta1">See the menu</a>
-          <a href="#order" class="btn btn-glass" data-i18n="hero.cta2">Order delivery</a>
+          <a href="https://order.example.com/cinnery" class="btn btn-pink pickup-link" target="_blank" rel="noopener" data-i18n="order.pickup">Order for pickup</a>
+          <a href="#menu" class="btn btn-glass" data-i18n="hero.cta1">See the menu</a>
         </div>
       </div>
     </div>
@@ -187,11 +187,18 @@
     <div class="wrap order">
       <div class="order-panel">
         <p class="eyebrow" data-i18n="order.kicker"></p>
-        <h2 data-i18n="order.title">We deliver</h2>
-        <p class="lead" data-i18n="order.lead"></p>
+        <h2 data-i18n="order.pickup.title">Order ahead, pick up in store</h2>
+        <p class="lead" data-i18n="order.pickup.d"></p>
         <div class="cta-row">
-          <a class="btn btn-pink" href="https://www.thuisbezorgd.nl/" target="_blank" rel="noopener" data-i18n="order.thuis"></a>
-          <a class="btn btn-pink" href="https://www.ubereats.com/" target="_blank" rel="noopener" data-i18n="order.uber"></a>
+          <a class="btn btn-pink pickup-link" href="https://order.example.com/cinnery" target="_blank" rel="noopener" data-i18n="order.pickup"></a>
+        </div>
+        <div class="delivery">
+          <h4 data-i18n="order.delivery">Delivery</h4>
+          <p data-i18n="order.lead"></p>
+          <div class="cta-row">
+            <a class="btn btn-glass" href="https://www.thuisbezorgd.nl/" target="_blank" rel="noopener" data-i18n="order.thuis"></a>
+            <a class="btn btn-glass" href="https://www.ubereats.com/" target="_blank" rel="noopener" data-i18n="order.uber"></a>
+          </div>
         </div>
       </div>
       <div class="order-aside">
