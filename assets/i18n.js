@@ -3,6 +3,8 @@
 */
 window.CINNERY_I18N = {
   en: {
+    "map.load": "Show map",
+    "map.note": "The map is provided by Google Maps and loads only when you ask for it.",
     "order.pickup": "Order for pickup",
     "order.pickup.title": "Order ahead, pick up in store",
     "order.pickup.d": "Order and pay online, then collect your rolls at Zwanestraat 29 at the time you choose. No delivery fee, no queue.",
@@ -121,6 +123,8 @@ window.CINNERY_I18N = {
   },
 
   nl: {
+    "map.load": "Kaart tonen",
+    "map.note": "De kaart komt van Google Maps en wordt pas geladen als je erom vraagt.",
     "order.pickup": "Bestel om af te halen",
     "order.pickup.title": "Bestel vooruit, haal af in de winkel",
     "order.pickup.d": "Bestel en betaal online en haal je rolls op het gekozen tijdstip op aan de Zwanestraat 29. Geen bezorgkosten, geen wachtrij.",
@@ -239,6 +243,8 @@ window.CINNERY_I18N = {
   },
 
   hu: {
+    "map.load": "Térkép megjelenítése",
+    "map.note": "A térképet a Google Maps szolgáltatja, és csak kérésre töltődik be.",
     "order.pickup": "Rendelj elvitelre",
     "order.pickup.title": "Rendelj előre, vedd át az üzletben",
     "order.pickup.d": "Rendelj és fizess online, majd vedd át a csigákat a Zwanestraat 29-ben a választott időpontban. Nincs kiszállítási díj, nincs sorban állás.",

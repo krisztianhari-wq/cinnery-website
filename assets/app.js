@@ -91,6 +91,20 @@
   document.querySelectorAll('[data-lang]').forEach(b => b.addEventListener('click', updateOpen));
   setInterval(updateOpen, 60000);
 
+  /* ---- Google Maps: load only after the visitor asks for it (no third-party request before consent) ---- */
+  document.querySelectorAll('.map[data-map-src]').forEach(box => {
+    const btn = box.querySelector('.map-load'); if (!btn) return;
+    btn.addEventListener('click', () => {
+      const f = document.createElement('iframe');
+      f.title = 'Map: Zwanestraat 29, Groningen';
+      f.src = box.getAttribute('data-map-src');
+      f.loading = 'lazy';
+      f.referrerPolicy = 'no-referrer';
+      f.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox');
+      box.replaceChildren(f);
+    });
+  });
+
   /* ---- year ---- */
   document.querySelectorAll('.year').forEach(el => el.textContent = new Date().getFullYear());
 })();

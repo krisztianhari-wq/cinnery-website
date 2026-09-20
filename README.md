@@ -13,10 +13,13 @@ assets/
   app.js       shared behaviour: language switch, mobile nav, FAQ accordion,
                "Open now / Closed now", inline roll icon
   roll.svg     the cinnamon roll icon (favicon + inline)
-  img/         logo files
+  fonts/       self-hosted Fredoka + Inter (woff2)
+  img/stock/   photos (Unsplash licence), self-hosted
 ```
 
-Photos are hotlinked from Unsplash (`images.unsplash.com`).
+Privacy and security: no third-party requests on page load (fonts and photos are served from this
+repo), the Google Maps embed loads only after the visitor clicks "Show map", external links open
+with `noopener noreferrer`, and a Content Security Policy is set in `index.html`.
 
 No build step. Open `index.html` in a browser, or serve the folder:
 
