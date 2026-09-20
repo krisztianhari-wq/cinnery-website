@@ -3,13 +3,14 @@
 Static website for **Cinnery**, a cinnamon roll bakery at Zwanestraat 29, Groningen (NL).
 Two design variants share the same content, translations and images.
 
-| | Variant A · *Cream* | Variant B · *Eggplant* |
+| | Variant A · *Cream* | Variant B · *Modern* |
 |---|---|---|
 | Folder | `variant-a/` | `variant-b/` |
-| Mood | light, minimal, product-grid | editorial, eggplant hero band, menu as numbered list |
-| Display font | Plus Jakarta Sans | Fraunces (soft serif) |
+| Mood | light, minimal, product-grid | full-bleed hero, floating pill nav, bento facts, rounded photo cards |
+| Display font | Plus Jakarta Sans | Fredoka (matches the logo wordmark) |
 | Body font | Plus Jakarta Sans | Inter |
-| Menu | 6 rolls + 5 cookies as pastel tiles | 6 rolls + 5 cookies as a list with descriptions |
+| Photos | own photos | stock photos hotlinked from Unsplash (`images.unsplash.com`) |
+| Menu | 6 rolls + 5 cookies as pastel tiles | 6 rolls + 5 cookies as photo cards |
 
 `index.html` at the root is a simple chooser page linking to both.
 
