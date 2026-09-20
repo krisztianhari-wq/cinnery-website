@@ -195,8 +195,8 @@ h2.display { font-size: clamp(2.2rem, 5vw, 3.6rem); }
 .sticker.s3 { width: 120px; height: 120px; right: -20px; bottom: -20px; transform: rotate(-8deg); font-size: 1.1rem; }
 .sticker-spin { width: 150px; height: 150px; left: 42%; bottom: -6%; background: var(--white); z-index: 3; }
 .sticker-spin svg { position: absolute; inset: 0; width: 100%; height: 100%; animation: spin 18s linear infinite; }
-.sticker-spin text { font-family: var(--font-display); font-weight: 700; font-size: 13.5px; letter-spacing: .08em; fill: var(--plum); }
-.sticker-spin .roll-icon { width: 60px; height: 52px; color: var(--pink); --logo-bg: var(--white); }
+.sticker-spin text { font-family: var(--font-display); font-weight: 700; font-size: 11.5px; fill: var(--plum); }
+.sticker-spin .roll-icon { width: 44px; height: 38px; color: var(--pink); --logo-bg: var(--white); position: relative; z-index: 1; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
 /* ---------- ticker ---------- */
@@ -360,6 +360,7 @@ address { font-style: normal; font-weight: 600; }
   .hero { padding: 24px 0 60px; }
   .hero-art { min-height: 380px; }
   .sticker-spin { width: 120px; height: 120px; left: 38%; }
+  .sticker-spin .roll-icon { width: 34px; height: 30px; }
   .sticker.s1 { width: 90px; height: 90px; font-size: .9rem; }
   .order-copy, .catering { padding: 28px 22px; }
   .visit-card { padding: 22px; }
