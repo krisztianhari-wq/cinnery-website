@@ -53,10 +53,10 @@ p { margin: 0 0 1em; }
 
 /* floating pill header */
 .site-header { position: fixed; top: 14px; left: 0; right: 0; z-index: 50; display: flex; justify-content: center; padding: 0 16px; pointer-events: none; }
-.pill { pointer-events: auto; width: min(1200px, 100%); display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 8px 10px 8px 18px; border-radius: 999px; background: rgba(255,252,250,.82); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(97,64,81,.1); box-shadow: 0 10px 30px -18px rgba(43,28,37,.35); }
+.pill { pointer-events: auto; width: min(1200px, 100%); display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 8px 10px 8px 14px; border-radius: 999px; background: rgba(255,252,250,.82); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(97,64,81,.1); box-shadow: 0 10px 30px -18px rgba(43,28,37,.35); }
 .brand { display: inline-flex; align-items: center; gap: 9px; }
-.brand .roll-icon { width: 34px; height: 29px; }
-.brand-word { font-family: var(--font-display); font-weight: 700; font-size: 1.2rem; letter-spacing: .04em; color: var(--plum); }
+.brand .roll-icon { width: 46px; height: 39px; color: var(--plum); --logo-bg: #fff; }
+.brand-word { font-family: var(--font-display); font-weight: 700; font-size: 1.55rem; letter-spacing: .05em; color: var(--plum); }
 .site-nav { display: flex; align-items: center; gap: 24px; }
 .site-nav > a:not(.btn) { font-weight: 500; color: var(--ink-2); font-size: .95rem; }
 .site-nav > a:not(.btn):hover { color: var(--ink); }
@@ -73,6 +73,9 @@ p { margin: 0 0 1em; }
 .hero-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .hero::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(43,28,37,.25) 0%, rgba(43,28,37,.15) 40%, rgba(43,28,37,.82) 100%); }
 .hero-content { position: relative; z-index: 1; padding: 140px 0 56px; }
+.hero-logo { display: flex; align-items: center; gap: 16px; margin-bottom: 34px; }
+.hero-logo .roll-icon { width: 96px; height: 82px; color: #fff; --logo-bg: #3a2530; }
+.hero-word { font-family: var(--font-display); font-weight: 700; font-size: clamp(2rem, 4vw, 3.2rem); letter-spacing: .08em; color: #fff; }
 .hero .eyebrow { color: var(--pink); }
 .hero h1 { color: #fff; max-width: 15ch; margin-bottom: 26px; }
 .hero-row { display: flex; align-items: flex-end; justify-content: space-between; gap: 30px; flex-wrap: wrap; }
@@ -175,8 +178,8 @@ address { font-style: normal; font-weight: 600; margin-bottom: 8px; }
 .site-footer { background: var(--ink); color: rgba(255,255,255,.75); padding: 70px 0 30px; border-radius: var(--r-lg) var(--r-lg) 0 0; margin: 0 12px; }
 .footer-top { display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; }
 .footer-brand { display: flex; gap: 18px; align-items: center; }
-.footer-brand .big { width: 72px; height: 62px; --logo-bg: var(--ink); }
-.footer-brand .brand-word { font-size: 1.8rem; color: #fff; display: block; }
+.footer-brand .big { width: 110px; height: 94px; --logo-bg: var(--ink); }
+.footer-brand .brand-word { font-size: 2.4rem; color: #fff; display: block; letter-spacing: .08em; }
 .footer-brand p { margin: 4px 0 0; }
 .footer-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
 .site-footer h4 { color: var(--pink); }
@@ -208,6 +211,10 @@ address { font-style: normal; font-weight: 600; margin-bottom: 8px; }
   .site-nav > a:not(.btn) { font-family: var(--font-display); font-size: 1.7rem; color: var(--ink); }
   .hero { min-height: 82vh; border-radius: 0 0 var(--r) var(--r); }
   .hero-content { padding: 110px 0 40px; }
+  .hero-logo { margin-bottom: 24px; gap: 12px; }
+  .hero-logo .roll-icon { width: 64px; height: 55px; }
+  .brand .roll-icon { width: 40px; height: 34px; }
+  .brand-word { font-size: 1.35rem; }
   .bento { grid-template-columns: 1fr; margin-top: 16px; }
   .cell { min-height: 0; }
   .section { padding: 64px 0; }
