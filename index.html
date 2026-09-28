@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Cinnery – Cinnamon rolls in Groningen</title>
-  <meta name="description" content="Warm, gooey cinnamon rolls, cookies and specialty coffee, baked fresh every day at Zwanestraat 29, Groningen. Halal. Card only.">
+  <meta name="description" content="Warm, gooey cinnamon rolls, cookies and specialty coffee, baked fresh every day at Zwanestraat 29, Groningen. Order online, pick up in store.">
   <meta name="theme-color" content="#614051">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:; frame-src https://maps.google.com https://www.google.com; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'; upgrade-insecure-requests">
@@ -12,9 +12,10 @@
   <meta property="og:description" content="Warm, gooey cinnamon rolls, cookies and specialty coffee in the heart of Groningen.">
   <meta property="og:url" content="https://cinnery.nl/">
   <meta property="og:type" content="website">
-  <meta property="og:image" content="https://cinnery.nl/assets/img/stock/1645995575875-ea6511c9d127.jpg">
+  <meta property="og:image" content="https://cinnery.nl/assets/img/own/hero-rolls.jpg">
   <link rel="canonical" href="https://cinnery.nl/">
-  <link rel="icon" href="assets/roll.svg" type="image/svg+xml">
+  <link rel="icon" href="assets/img/favicon.png" type="image/png">
+  <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
   <link rel="stylesheet" href="assets/fonts/fonts.css">
   <link rel="stylesheet" href="style.css">
 </head>
@@ -22,22 +23,24 @@
 
 <header class="site-header">
   <div class="pill">
-    <a href="#top" class="brand" aria-label="Cinnery home">
-      <span class="roll-icon" aria-hidden="true"></span><span class="brand-word">CINNERY</span>
-    </a>
     <nav class="site-nav" aria-label="Main">
       <a href="#menu" data-i18n="nav.menu">Menu</a>
       <a href="#story" data-i18n="nav.story">Our story</a>
       <a href="#visit" data-i18n="nav.visit">Visit</a>
       <a href="#faq" data-i18n="nav.faq">FAQ</a>
+    </nav>
+    <a href="#top" class="brand" aria-label="Cinnery home">
+      <span class="logo logo-icon" aria-hidden="true"></span><span class="logo logo-word" role="img" aria-label="Cinnery"></span>
+    </a>
+    <div class="header-right">
       <div class="lang" role="group" aria-label="Language">
         <button type="button" data-lang="en">EN</button>
         <button type="button" data-lang="nl">NL</button>
-        <button type="button" data-lang="hu">HU</button>
       </div>
-      <a href="#order" class="btn btn-pink btn-sm" data-i18n="order.pickup">Order for pickup</a>
-    </nav>
-    <button class="nav-toggle" aria-label="Menu" aria-expanded="false"><span></span><span></span></button>
+      <a href="cart.html" class="cart-link" aria-label="Cart"><span class="cart-icon" aria-hidden="true"></span><span class="cart-count" hidden>0</span></a>
+      <a href="#menu" class="btn btn-pink btn-sm" data-i18n="shop.order">Order now</a>
+      <button class="nav-toggle" aria-label="Menu" aria-expanded="false"><span></span><span></span></button>
+    </div>
   </div>
 </header>
 
@@ -45,18 +48,18 @@
 
   <!-- HERO -->
   <section class="hero">
-    <img class="hero-bg" src="assets/img/stock/1645995575875-ea6511c9d127.jpg" alt="Glaze being poured over fresh cinnamon rolls" fetchpriority="high">
+    <img class="hero-bg" src="assets/img/own/hero-rolls.jpg" alt="Tray of freshly glazed Cinnery cinnamon rolls" fetchpriority="high">
     <div class="hero-content wrap">
-      <div class="hero-logo" aria-hidden="true"><span class="roll-icon"></span><span class="hero-word">CINNERY</span></div>
-      <p class="eyebrow" data-i18n="hero.eyebrow">Cinnamon rolls · Cookies · Coffee</p>
-      <h1 data-i18n="hero.h">Warm, gooey cinnamon rolls, baked fresh every day in Groningen.</h1>
-      <div class="hero-row">
+      <div class="hero-copy">
+        <p class="eyebrow" data-i18n="hero.eyebrow">Cinnamon rolls · Cookies · Coffee</p>
+        <h1 data-i18n="hero.h">Warm, gooey cinnamon rolls, baked fresh every day in Groningen.</h1>
         <p class="lead" data-i18n="hero.sub"></p>
         <div class="cta-row">
-          <a href="https://order.example.com/cinnery" class="btn btn-pink pickup-link" target="_blank" rel="noopener noreferrer" data-i18n="order.pickup">Order for pickup</a>
+          <a href="#menu" class="btn btn-pink" data-i18n="shop.order">Order now</a>
           <a href="#menu" class="btn btn-glass" data-i18n="hero.cta1">See the menu</a>
         </div>
       </div>
+      <div class="hero-logo" aria-hidden="true"><span class="logo logo-full"></span></div>
     </div>
   </section>
 
@@ -91,32 +94,7 @@
       </div>
       <p class="lead" data-i18n="menu.lead"></p>
     </div>
-    <div class="wrap cards cards-3">
-      <article class="card">
-        <img src="assets/img/stock/1593872571314-4a735d4b27b0.jpg" alt="Classic cinnamon roll with glaze" loading="lazy">
-        <div class="card-body"><span class="num">01</span><h3 data-i18n="menu.r1"></h3><p data-i18n="menu.r1.d"></p></div>
-      </article>
-      <article class="card">
-        <img src="assets/img/stock/1583527976767-5399024eeb05.jpg" alt="Red velvet cinnamon roll" loading="lazy">
-        <div class="card-body"><span class="num">02</span><h3 data-i18n="menu.r2"></h3><p data-i18n="menu.r2.d"></p></div>
-      </article>
-      <article class="card">
-        <img src="assets/img/stock/1564354151628-01f04c6c40a7.jpg" alt="Biscoff cinnamon roll" loading="lazy">
-        <div class="card-body"><span class="num">03</span><h3 data-i18n="menu.r3"></h3><p data-i18n="menu.r3.d"></p></div>
-      </article>
-      <article class="card">
-        <img src="assets/img/stock/1593872570782-6c6e7069e67e.jpg" alt="Pistachio cinnamon roll" loading="lazy">
-        <div class="card-body"><span class="num">04</span><h3 data-i18n="menu.r4"></h3><p data-i18n="menu.r4.d"></p></div>
-      </article>
-      <article class="card">
-        <img src="assets/img/stock/1609126979532-0f514232d1a8.jpg" alt="Salted caramel cinnamon rolls" loading="lazy">
-        <div class="card-body"><span class="num">05</span><h3 data-i18n="menu.r5"></h3><p data-i18n="menu.r5.d"></p></div>
-      </article>
-      <article class="card">
-        <img src="assets/img/stock/1509365465985-25d11c17e812.jpg" alt="Cookies and cream cinnamon rolls" loading="lazy">
-        <div class="card-body"><span class="num">06</span><h3 data-i18n="menu.r6"></h3><p data-i18n="menu.r6.d"></p></div>
-      </article>
-    </div>
+    <div class="wrap cards cards-3" data-products="roll"></div>
   </section>
 
   <!-- MENU: COOKIES -->
@@ -126,28 +104,7 @@
       <p class="lead" data-i18n="menu.cookies.lead"></p>
     </div>
     <div class="scroller">
-      <div class="wrap cards cards-5">
-        <article class="card card-sm">
-          <img src="assets/img/stock/1499636136210-6f4ee915583e.jpg" alt="Chocolate chip cookies" loading="lazy">
-          <div class="card-body"><h3 data-i18n="menu.c1"></h3><p data-i18n="menu.c1.d"></p></div>
-        </article>
-        <article class="card card-sm">
-          <img src="assets/img/stock/1598839950984-034f6dc7b495.jpg" alt="Cookies on a pink background" loading="lazy">
-          <div class="card-body"><h3 data-i18n="menu.c2"></h3><p data-i18n="menu.c2.d"></p></div>
-        </article>
-        <article class="card card-sm">
-          <img src="assets/img/stock/1634188023615-7e08901193b6.jpg" alt="Oatmeal cookies" loading="lazy">
-          <div class="card-body"><h3 data-i18n="menu.c3"></h3><p data-i18n="menu.c3.d"></p></div>
-        </article>
-        <article class="card card-sm">
-          <img src="assets/img/stock/1625876981820-be17a6807189.jpg" alt="Stack of cookies" loading="lazy">
-          <div class="card-body"><h3 data-i18n="menu.c4"></h3><p data-i18n="menu.c4.d"></p></div>
-        </article>
-        <article class="card card-sm">
-          <img src="assets/img/stock/1558961363-fa8fdf82db35.jpg" alt="Cookies in a bowl" loading="lazy">
-          <div class="card-body"><h3 data-i18n="menu.c5"></h3><p data-i18n="menu.c5.d"></p></div>
-        </article>
-      </div>
+      <div class="wrap cards cards-5" data-products="cookie"></div>
     </div>
   </section>
 
@@ -155,8 +112,8 @@
   <section class="section">
     <div class="wrap drinks">
       <div class="drinks-img">
-        <img src="assets/img/stock/1650097364104-eef0e54af0da.jpg" alt="Latte with latte art" loading="lazy">
-        <img src="assets/img/stock/1563311977-d285756282dc.jpg" alt="Pouring latte art" loading="lazy">
+        <img src="assets/img/own/drinks-matcha.webp" alt="Cinnery iced matcha drinks" loading="lazy">
+        <img src="assets/img/own/drinks-hot-choco.webp" alt="Cinnery hot chocolates with toppings" loading="lazy">
       </div>
       <div class="drinks-copy">
         <h2 data-i18n="menu.drinks.title">Drinks</h2>
@@ -178,8 +135,8 @@
         <p data-i18n="story.p3"></p>
       </div>
       <div class="story-imgs">
-        <img src="assets/img/stock/1585190775852-3e6bb2b80184.jpg" alt="Tray of cinnamon rolls" loading="lazy">
-        <img src="assets/img/stock/1686207855146-c3ffe2166d40.jpg" alt="Cinnamon rolls on a cooling rack" loading="lazy">
+        <img src="assets/img/own/raw-tray.jpg" alt="Tray of freshly rolled dough" loading="lazy">
+        <img src="assets/img/own/rolls-frosted.jpg" alt="Freshly baked cinnamon rolls with frosting" loading="lazy">
       </div>
     </div>
   </section>
@@ -192,7 +149,8 @@
         <h2 data-i18n="order.pickup.title">Order ahead, pick up in store</h2>
         <p class="lead" data-i18n="order.pickup.d"></p>
         <div class="cta-row">
-          <a class="btn btn-pink pickup-link" href="https://order.example.com/cinnery" target="_blank" rel="noopener noreferrer" data-i18n="order.pickup"></a>
+          <a class="btn btn-pink" href="#menu" data-i18n="shop.order">Order now</a>
+          <a class="btn btn-glass" href="cart.html" data-i18n="shop.cart">Cart</a>
         </div>
       </div>
       <div class="order-aside">
@@ -232,12 +190,12 @@
       </div>
       <div class="map" data-map-src="https://maps.google.com/maps?q=Zwanestraat+29,+9712+EK+Groningen&z=16&output=embed">
         <div class="map-placeholder">
-          <span class="roll-icon" aria-hidden="true"></span>
+          <span class="logo logo-icon" aria-hidden="true"></span>
           <p data-i18n="map.note"></p>
           <button type="button" class="btn btn-pink map-load" data-i18n="map.load">Show map</button>
         </div>
       </div>
-      <img class="visit-img" src="assets/img/stock/1578633701951-3a2a5318e2f0.jpg" alt="Cinnamon roll with a cappuccino" loading="lazy">
+      <img class="visit-img" src="assets/img/own/sign-roll.webp" alt="Cinnamon roll in front of the Cinnery sign" loading="lazy">
     </div>
   </section>
 
@@ -269,8 +227,8 @@
 <footer class="site-footer">
   <div class="wrap footer-top">
     <div class="footer-brand">
-      <span class="roll-icon big" aria-hidden="true"></span>
-      <div><span class="brand-word">CINNERY</span><p data-i18n="footer.tag"></p></div>
+      <span class="logo logo-full footer-logo" aria-hidden="true"></span>
+      <div><p data-i18n="footer.tag"></p></div>
     </div>
     <div class="footer-cols">
       <div>
@@ -281,17 +239,19 @@
       <div>
         <h4 data-i18n="footer.follow"></h4>
         <p><a href="https://www.instagram.com/cinnery_rolls/" target="_blank" rel="noopener noreferrer">Instagram @cinnery_rolls</a></p>
-        <div class="lang"><button type="button" data-lang="en">EN</button><button type="button" data-lang="nl">NL</button><button type="button" data-lang="hu">HU</button></div>
+        <div class="lang"><button type="button" data-lang="en">EN</button><button type="button" data-lang="nl">NL</button></div>
       </div>
     </div>
   </div>
   <div class="wrap footer-bottom">
     <p class="small" data-i18n="footer.allergen"></p>
-    <p class="small">© <span class="year"></span> Cinnery · <span data-i18n="footer.rights"></span> · <span data-i18n="footer.credit"></span> sadrobot · Photos: Unsplash</p>
+    <p class="small">© <span class="year"></span> Cinnery · <span data-i18n="footer.rights"></span> · <span data-i18n="footer.credit"></span> sadrobot</p>
   </div>
 </footer>
 
 <script src="assets/i18n.js"></script>
+<script src="assets/products.js"></script>
 <script src="assets/app.js"></script>
+<script src="assets/shop.js"></script>
 </body>
 </html>
