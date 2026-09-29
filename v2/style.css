@@ -70,6 +70,19 @@ a { color: var(--pink); }
 .summary-box { background: var(--surface); border-color: var(--line); }
 .sum-total { border-color: var(--line); }
 
+/* menu extras */
+.tier { background: rgba(255,255,255,.08); color: var(--ink-2); }
+.tier-deluxe { background: var(--pink-soft); color: var(--pink); }
+.tier-signature { background: var(--pink); color: #2B1C25; }
+.tier-veg { background: rgba(143,214,174,.15); color: #8FD6AE; }
+.ph { background: #3A2632; color: var(--pink); }
+.ph-combo { background: #614051; }
+.pl-price { color: var(--pink); }
+.pl-add { background: var(--pink-soft); color: var(--pink); }
+.price-list a:hover .pl-add { background: var(--pink); color: #2B1C25; }
+.opt-select { background: var(--surface); color: var(--ink); border-color: var(--line); }
+.cart-picks { color: var(--ink-2); }
+
 /* footer */
 .site-footer { background: #150D12; }
 .footer-brand { color: var(--pink); }

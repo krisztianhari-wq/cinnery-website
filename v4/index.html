@@ -98,6 +98,15 @@
     <div class="wrap cards cards-3" data-products="roll"></div>
   </section>
 
+  <!-- MENU: SAVORY ROLLS -->
+  <section id="savory" class="section section-flush">
+    <div class="wrap section-head">
+      <div><h2 data-i18n="menu.savory.title">Savory rolls</h2></div>
+      <p class="lead" data-i18n="menu.savory.lead"></p>
+    </div>
+    <div class="wrap cards cards-2" data-products="savory"></div>
+  </section>
+
   <!-- MENU: COOKIES -->
   <section class="section section-tint">
     <div class="wrap section-head">
@@ -105,24 +114,38 @@
       <p class="lead" data-i18n="menu.cookies.lead"></p>
     </div>
     <div class="scroller">
-      <div class="wrap cards cards-5" data-products="cookie"></div>
+      <div class="wrap cards cards-5" data-products="cookie" data-small></div>
     </div>
   </section>
 
-  <!-- MENU: DRINKS -->
-  <section class="section">
-    <div class="wrap drinks">
-      <div class="drinks-img">
-        <img src="../assets/img/own/drinks-matcha.webp" alt="Cinnery iced matcha drinks" loading="lazy">
-        <img src="../assets/img/own/drinks-hot-choco.webp" alt="Cinnery hot chocolates with toppings" loading="lazy">
-      </div>
-      <div class="drinks-copy">
-        <h2 data-i18n="menu.drinks.title">Drinks</h2>
-        <p class="lead" data-i18n="menu.drinks.lead"></p>
-        <p class="drinks-list" data-i18n="menu.drinks.list"></p>
-        <p class="muted small" data-i18n="menu.note"></p>
-      </div>
+  <!-- MENU: OFFERS -->
+  <section id="offers" class="section">
+    <div class="wrap section-head">
+      <div><h2 data-i18n="menu.offers.title">Offers</h2></div>
+      <p class="lead" data-i18n="menu.offers.lead"></p>
     </div>
+    <div class="wrap cards cards-3" data-products="combo"></div>
+  </section>
+
+  <!-- MENU: DRINKS -->
+  <section id="drinks" class="section section-tint">
+    <div class="wrap section-head">
+      <div><h2 data-i18n="menu.drinks.title">Drinks</h2></div>
+      <p class="lead" data-i18n="menu.drinks.lead"></p>
+    </div>
+    <div class="wrap sub-head"><h3 data-i18n="menu.hotchoco.title">Hot choco collection</h3><p class="muted" data-i18n="menu.hotchoco.lead"></p></div>
+    <div class="scroller">
+      <div class="wrap cards cards-4" data-products="hotchoco" data-small></div>
+    </div>
+    <div class="wrap sub-head"><h3 data-i18n="menu.matcha.title">Iced matcha collection</h3><p class="muted" data-i18n="menu.matcha.lead"></p></div>
+    <div class="scroller">
+      <div class="wrap cards cards-4" data-products="matcha" data-small></div>
+    </div>
+    <div class="wrap price-lists">
+      <div><h3 data-i18n="menu.coffee.title">Coffee</h3><ul class="price-list" data-pricelist="coffee"></ul></div>
+      <div><h3 data-i18n="menu.soft.title">Soft drinks</h3><ul class="price-list" data-pricelist="soft"></ul></div>
+    </div>
+    <p class="wrap muted small menu-note" data-i18n="menu.note"></p>
   </section>
 
   <!-- STORY -->

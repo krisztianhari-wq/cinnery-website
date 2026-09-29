@@ -115,6 +115,8 @@ p { margin: 0 0 1em; }
 .cards { display: grid; gap: 22px; }
 .cards-3 { grid-template-columns: repeat(3, 1fr); }
 .cards-5 { grid-template-columns: repeat(5, 1fr); }
+.cards-4 { grid-template-columns: repeat(4, 1fr); }
+.cards-2 { grid-template-columns: repeat(2, 1fr); }
 .card { position: relative; border-radius: var(--r); overflow: hidden; background: #fff; border: 1px solid var(--line); transition: transform .25s, box-shadow .25s; }
 .card:hover { transform: translateY(-4px); box-shadow: 0 24px 50px -30px rgba(43,28,37,.45); }
 .card img { width: 100%; aspect-ratio: 4/3; object-fit: cover; transition: transform .5s; }
@@ -189,6 +191,41 @@ address { font-style: normal; font-weight: 600; margin-bottom: 8px; }
 .allergen { margin-top: 40px; font-size: .9rem; color: var(--ink-2); }
 .allergen p { margin-bottom: .4em; }
 
+/* menu extras: logo tile for products without a photo, tier tags, sub heads, price lists */
+.ph { display: grid; place-items: center; width: 100%; aspect-ratio: 4 / 3; background: var(--pink-soft); color: var(--plum); }
+.card-sm .ph { aspect-ratio: 1; }
+.cards-2 .ph, .cards-2 img { aspect-ratio: 16 / 7; }
+.ph .logo-icon { width: 34%; max-width: 110px; opacity: .85; }
+.ph-savory { background: #F3E6D6; color: #8A5A2B; }
+.ph-combo { background: var(--plum); color: var(--pink); }
+.ph-coffee { background: #EFE3DA; color: #6B4530; }
+.ph-soft { background: #E7EEE6; color: #4F6B4A; }
+.product-img .ph { aspect-ratio: 1; border-radius: var(--r-lg); }
+.product-img .ph .logo-icon { width: 30%; }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+.tier { font-family: var(--font-display); font-weight: 600; font-size: .72rem; letter-spacing: .06em; text-transform: uppercase; padding: 3px 10px; border-radius: 999px; background: rgba(97,64,81,.08); color: var(--plum); }
+.tier-deluxe { background: var(--pink-soft); }
+.tier-signature { background: var(--plum); color: #fff; }
+.tier-veg { background: #E3F0E6; color: #2E6B45; }
+.section-flush { padding-top: 0; }
+.sub-head { display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap; margin-top: 44px; margin-bottom: 18px; }
+.sub-head h3 { font-size: 1.5rem; margin: 0; }
+.sub-head p { margin: 0; }
+.price-lists { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 56px; }
+.price-lists h3 { font-size: 1.5rem; margin-bottom: 10px; }
+.price-list { list-style: none; margin: 0; padding: 0; }
+.price-list li { border-top: 1px solid var(--line); }
+.price-list li:last-child { border-bottom: 1px solid var(--line); }
+.price-list a { display: flex; align-items: center; gap: 12px; padding: 13px 2px; color: var(--ink); }
+.price-list a:hover .pl-add { background: var(--pink); }
+.pl-name { font-weight: 600; }
+.pl-dots { flex: 1; border-bottom: 1px dotted var(--line); transform: translateY(4px); }
+.pl-price { font-family: var(--font-display); font-weight: 600; color: var(--plum); }
+.pl-add { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; background: var(--pink-soft); color: var(--plum); font-weight: 700; flex: none; }
+.menu-note { margin-top: 26px; }
+.opt-row { display: grid; gap: 6px; margin-bottom: 16px; max-width: 420px; }
+.opt-select { font: inherit; padding: 12px 14px; border-radius: var(--r-sm); border: 1.5px solid var(--line); background: #fff; color: var(--ink); }
+
 /* sub pages: product, cart */
 .page-sub .sub-main { padding: 120px 0 90px; }
 .back { display: inline-block; font-weight: 600; color: var(--ink-2); margin-bottom: 22px; }
@@ -215,7 +252,8 @@ address { font-style: normal; font-weight: 600; margin-bottom: 8px; }
 .cart-grid h1 { font-size: clamp(2rem, 4vw, 3rem); }
 .cart-row { display: grid; grid-template-columns: 96px 1fr auto; gap: 18px; align-items: center; padding: 18px 0; border-top: 1px solid var(--line); }
 .cart-row:last-child { border-bottom: 1px solid var(--line); }
-.cart-row img { width: 96px; height: 96px; object-fit: cover; border-radius: var(--r-sm); }
+.cart-row img, .cart-row .ph { width: 96px; height: 96px; object-fit: cover; border-radius: var(--r-sm); }
+.cart-picks { color: var(--ink); }
 .cart-mid { display: flex; flex-direction: column; gap: 6px; align-items: flex-start; }
 .cart-name { font-family: var(--font-display); font-weight: 600; font-size: 1.1rem; color: var(--ink); }
 .cart-right { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
@@ -250,6 +288,7 @@ address { font-style: normal; font-weight: 600; margin-bottom: 8px; }
   .bento { grid-template-columns: 1fr 1fr; }
   .cards-3 { grid-template-columns: 1fr 1fr; }
   .cards-5 { grid-template-columns: repeat(3, 1fr); }
+  .cards-4 { grid-template-columns: repeat(2, 1fr); }
   .drinks, .story, .order, .faq-grid, .footer-top, .product, .cart-grid { grid-template-columns: 1fr; }
   .hero-content { grid-template-columns: 1fr; }
   .hero-logo { justify-content: flex-start; padding: 0 0 26px; order: -1; }
@@ -272,7 +311,9 @@ address { font-style: normal; font-weight: 600; margin-bottom: 8px; }
   .site-nav.is-open { transform: none; }
   .site-nav > a:not(.btn) { font-family: var(--font-display); font-size: 1.7rem; color: var(--ink); }
   .cart-row { grid-template-columns: 72px 1fr; }
-  .cart-row img { width: 72px; height: 72px; }
+  .cart-row img, .cart-row .ph { width: 72px; height: 72px; }
+  .price-lists { grid-template-columns: 1fr; gap: 28px; }
+  .cards-2 { grid-template-columns: 1fr; }
   .cart-right { grid-column: 2; flex-direction: row; justify-content: space-between; align-items: center; }
   .page-sub .sub-main { padding: 96px 0 60px; }
   .hero { min-height: 82vh; border-radius: 0 0 var(--r) var(--r); }
@@ -288,7 +329,7 @@ address { font-style: normal; font-weight: 600; margin-bottom: 8px; }
   .cards-3 { grid-template-columns: 1fr; }
   .scroller { overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; padding-bottom: 8px; }
   .scroller::-webkit-scrollbar { display: none; }
-  .scroller .cards-5 { display: flex; gap: 14px; width: auto; padding: 0 16px; }
+  .scroller .cards-5, .scroller .cards-4 { display: flex; gap: 14px; width: auto; padding: 0 16px; }
   .scroller .card-sm { flex: 0 0 72vw; scroll-snap-align: start; }
   .drinks-img img:last-child, .story-imgs img:first-child { margin-top: 0; }
   .order-panel { padding: 32px 24px; }
