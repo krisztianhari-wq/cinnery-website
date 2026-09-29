@@ -40,9 +40,9 @@ p { margin: 0 0 1em; }
 
 /* logo: the original artwork as a mask, coloured with currentColor */
 .logo { display: inline-block; background-color: currentColor; -webkit-mask: center / contain no-repeat; mask: center / contain no-repeat; vertical-align: middle; }
-.logo-full { -webkit-mask-image: url(assets/img/logo-full.png); mask-image: url(assets/img/logo-full.png); aspect-ratio: 539 / 306; }
-.logo-icon { -webkit-mask-image: url(assets/img/logo-icon.png); mask-image: url(assets/img/logo-icon.png); aspect-ratio: 228 / 181; }
-.logo-word { -webkit-mask-image: url(assets/img/logo-word.png); mask-image: url(assets/img/logo-word.png); aspect-ratio: 539 / 96; }
+.logo-full { -webkit-mask-image: url(img/logo-full.png); mask-image: url(img/logo-full.png); aspect-ratio: 539 / 306; }
+.logo-icon { -webkit-mask-image: url(img/logo-icon.png); mask-image: url(img/logo-icon.png); aspect-ratio: 228 / 181; }
+.logo-word { -webkit-mask-image: url(img/logo-word.png); mask-image: url(img/logo-word.png); aspect-ratio: 539 / 96; }
 
 /* buttons */
 .btn { display: inline-flex; align-items: center; justify-content: center; font-family: var(--font-display); font-weight: 600; font-size: 1rem; padding: 15px 28px; border-radius: 999px; border: 1.5px solid transparent; transition: transform .15s, background .15s, color .15s, border-color .15s; white-space: nowrap; cursor: pointer; }

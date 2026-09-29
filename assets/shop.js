@@ -3,6 +3,9 @@
   const P = window.CINNERY_PRODUCTS || [];
   const T = window.CINNERY_I18N || {};
   const KEY = 'cinnery-cart';
+  const SCRIPT = document.currentScript && document.currentScript.src;
+  const ROOT = SCRIPT ? new URL('..', SCRIPT) : new URL('./', location.href);
+  const src = path => new URL(path, ROOT).href;
 
   const lang = () => document.documentElement.lang || 'en';
   const t = key => (T[lang()] && T[lang()][key]) || (T.en && T.en[key]) || key;
@@ -29,7 +32,7 @@
   function card(p, small) {
     const a = el('article', 'card' + (small ? ' card-sm' : '') + ' card-shop');
     const link = el('a', 'card-img-link'); link.href = 'product.html?id=' + encodeURIComponent(p.id);
-    const img = el('img'); img.src = p.img; img.alt = p.name[lang()] || p.name.en; img.loading = 'lazy'; link.appendChild(img);
+    const img = el('img'); img.src = src(p.img); img.alt = p.name[lang()] || p.name.en; img.loading = 'lazy'; link.appendChild(img);
     a.appendChild(link);
     const body = el('div', 'card-body');
     body.appendChild(el('h3', null, p.name[lang()] || p.name.en));
@@ -60,7 +63,7 @@
     const p = byId(id);
     if (!p) { box.replaceChildren(el('p', 'lead', t('shop.notfound'))); return; }
     document.title = 'Cinnery – ' + (p.name[lang()] || p.name.en);
-    const fig = el('div', 'product-img'); const img = el('img'); img.src = p.img; img.alt = p.name[lang()] || p.name.en; fig.appendChild(img);
+    const fig = el('div', 'product-img'); const img = el('img'); img.src = src(p.img); img.alt = p.name[lang()] || p.name.en; fig.appendChild(img);
     const info = el('div', 'product-info');
     info.appendChild(el('p', 'eyebrow', t(p.cat === 'roll' ? 'menu.title' : 'menu.cookies.title')));
     info.appendChild(el('h1', null, p.name[lang()] || p.name.en));
@@ -103,7 +106,7 @@
     const rows = ids.map(id => {
       const p = byId(id); const q = c[id]; const line = p.price * q; total += line;
       const r = el('div', 'cart-row');
-      const img = el('img'); img.src = p.img; img.alt = ''; r.appendChild(img);
+      const img = el('img'); img.src = src(p.img); img.alt = ''; r.appendChild(img);
       const mid = el('div', 'cart-mid');
       const name = el('a', 'cart-name', p.name[lang()] || p.name.en); name.href = 'product.html?id=' + encodeURIComponent(p.id); mid.appendChild(name);
       mid.appendChild(el('span', 'muted small', money(p.price) + ' ' + t('shop.each')));

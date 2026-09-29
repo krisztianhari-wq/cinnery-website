@@ -1,20 +1,23 @@
 # Cinnery – website
 
 Static website for **Cinnery**, a cinnamon roll bakery at Zwanestraat 29, Groningen (NL).
-Live at https://krisztianhari-wq.github.io/cinnery-website/
+Live at https://krisztianhari-wq.github.io/cinnery-website/ and https://rolls.sadrobot.eu/
 
 ## Structure
 
 ```
-index.html     the page
-style.css      styles (Fredoka + Inter, brand pink #F0A3AF / eggplant #614051)
+index.html          design chooser (links to the four variants)
+chooser.css         chooser styles
+v1/ v2/ v3/ v4/     the four design variants, each with index.html, product.html, cart.html, style.css
+                    1 Split · 2 Eggplant · 3 Pink · 4 Modern; the variant style.css only overrides assets/base.css
 assets/
-  i18n.js      translations: en (default), nl, hu – one key per text
-  app.js       shared behaviour: language switch, mobile nav, FAQ accordion,
-               "Open now / Closed now", inline roll icon
-  roll.svg     the cinnamon roll icon (favicon + inline)
-  fonts/       self-hosted Fredoka + Inter (woff2)
-  img/stock/   photos (Unsplash licence), self-hosted
+  base.css          shared styles (Fredoka + Inter, brand pink #F0A3AF / eggplant #614051)
+  products.js       product catalogue: id, category, price (EUR), photo, name and description in EN/NL
+  i18n.js           all other texts: en (default), nl
+  app.js            language switch, mobile nav, FAQ accordion, "Open now / Closed now", Google Maps on click
+  shop.js           menu cards, product page, cart (stored in the browser)
+  fonts/            self-hosted Fredoka + Inter (woff2)
+  img/              logo artwork (logo-*.png), own photos (own/), Unsplash photos (stock/), chooser previews (preview/)
 ```
 
 Privacy and security: no third-party requests on page load (fonts and photos are served from this
@@ -29,10 +32,11 @@ python3 -m http.server 8791
 
 ## Editing text
 
-All copy lives in `assets/i18n.js`. Each element in the HTML has a `data-i18n="key"`;
-change the value under `en`, `nl` and `hu`. Answers with HTML (lists) use `data-i18n-html`.
+Texts live in `assets/i18n.js` (`en` and `nl`), products and prices in `assets/products.js`.
+Each element in the HTML has a `data-i18n="key"`; answers with HTML (lists) use `data-i18n-html`.
+All four variants share these files, so a change shows up in every variant.
 
-The page always opens in English; visitors switch with the EN / NL / HU buttons.
+The page always opens in English; visitors switch with the EN / NL buttons.
 
 ## Deploying
 
