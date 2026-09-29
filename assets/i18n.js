@@ -80,7 +80,6 @@ window.CINNERY_I18N = {
     "story.p3": "Every single roll and cookie we make is crafted with love, high-quality ingredients and that cosy, home-cooked feeling. We can't wait to share our passion with you, one sweet bite at a time!",
     "story.stat1": "childhood friends",
     "story.stat2": "rolled by hand",
-    "story.stat3": "halal",
 
     "order.kicker": "Order online",
     "order.catering.title": "Planning something bigger?",
@@ -103,8 +102,6 @@ window.CINNERY_I18N = {
     "visit.maps": "Open in Google Maps",
     "visit.card.title": "Card only",
     "visit.card.d": "We're a cashless bakery. Card and contactless payments only (Pin only, no cash), for a fast, safe and hygienic counter.",
-    "visit.halal.title": "100% Halal",
-    "visit.halal.d": "All our cinnamon rolls are made without alcohol, pork products or gelatine.",
 
     "faq.kicker": "Good to know",
     "faq.title": "Questions & answers",
@@ -116,8 +113,6 @@ window.CINNERY_I18N = {
     "faq.a3": "<p>Best enjoyed fresh, but if you want to save some joy for later:</p><ul><li><strong>Storage:</strong> airtight container, up to 2 days at room temperature or up to 4 days in the fridge.</li><li><strong>Freezing:</strong> wrap tightly and freeze for up to 1 month. Thaw at room temperature for 20–30 minutes before reheating.</li></ul><p><strong>Reheat for that perfect gooey texture:</strong></p><ul><li><strong>Microwave (quickest):</strong> 800 W for about 30 seconds.</li><li><strong>Oven (oven-fresh taste):</strong> 160 °C, wrap loosely in foil, 5–7 minutes.</li><li><strong>Air fryer (crispy edge):</strong> 150 °C for 2–3 minutes.</li></ul>",
     "faq.q4": "Do you offer a loyalty program?",
     "faq.a4": "Yes! We have a digital stamp card. For every 9 cinnamon rolls you buy, your next one is on us. Ask our team at the counter during your next visit to start collecting your stamps.",
-    "faq.q5": "Are the cinnamon rolls Halal?",
-    "faq.a5": "Yes, all our cinnamon rolls are 100% Halal. They are made entirely without alcohol, pork products or gelatine.",
     "faq.q6": "What about allergens?",
 
     "footer.tag": "Fluffy, gooey cinnamon rolls in Groningen.",
@@ -205,7 +200,6 @@ window.CINNERY_I18N = {
     "story.p3": "Elke roll en elk koekje maken we met liefde, hoogwaardige ingrediënten en dat gezellige thuisgevoel. We kunnen niet wachten om onze passie met je te delen, hap voor hap!",
     "story.stat1": "jeugdvriendinnen",
     "story.stat2": "met de hand gerold",
-    "story.stat3": "halal",
 
     "order.kicker": "Online bestellen",
     "order.catering.title": "Iets groters gepland?",
@@ -228,8 +222,6 @@ window.CINNERY_I18N = {
     "visit.maps": "Open in Google Maps",
     "visit.card.title": "Alleen pinnen",
     "visit.card.d": "We zijn een cashloze bakkerij. Alleen pin- en contactloze betalingen (geen contant geld), voor een snelle, veilige en hygiënische balie.",
-    "visit.halal.title": "100% Halal",
-    "visit.halal.d": "Al onze cinnamon rolls worden gemaakt zonder alcohol, varkensproducten of gelatine.",
 
     "faq.kicker": "Handig om te weten",
     "faq.title": "Vragen & antwoorden",
@@ -241,8 +233,6 @@ window.CINNERY_I18N = {
     "faq.a3": "<p>Het lekkerst vers, maar wil je wat bewaren voor later:</p><ul><li><strong>Bewaren:</strong> luchtdichte doos, tot 2 dagen op kamertemperatuur of tot 4 dagen in de koelkast.</li><li><strong>Invriezen:</strong> goed inpakken en tot 1 maand invriezen. Laat 20–30 minuten op kamertemperatuur ontdooien voor het opwarmen.</li></ul><p><strong>Opwarmen voor die perfecte plakkerige textuur:</strong></p><ul><li><strong>Magnetron (snelst):</strong> 800 W, ongeveer 30 seconden.</li><li><strong>Oven (oven-vers):</strong> 160 °C, losjes in folie, 5–7 minuten.</li><li><strong>Airfryer (krokant randje):</strong> 150 °C, 2–3 minuten.</li></ul>",
     "faq.q4": "Hebben jullie een spaarprogramma?",
     "faq.a4": "Ja! We hebben een digitale stempelkaart. Bij elke 9 cinnamon rolls die je koopt, is de volgende van ons. Vraag ons team aan de balie om te beginnen met stempels sparen.",
-    "faq.q5": "Zijn de cinnamon rolls Halal?",
-    "faq.a5": "Ja, al onze cinnamon rolls zijn 100% Halal. Ze worden volledig zonder alcohol, varkensproducten of gelatine gemaakt.",
     "faq.q6": "Hoe zit het met allergenen?",
 
     "footer.tag": "Luchtige, plakkerige cinnamon rolls in Groningen.",
