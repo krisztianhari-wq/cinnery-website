@@ -1,1 +1,54 @@
-/* Variant 4 – the original "Modern" design: everything comes from assets/base.css */
+/* Variant 4 – the original "Modern" layout from assets/base.css with the pink palette of variant 3.
+   Colour overrides only; layout stays as in base.css. */
+:root { --bg: #FBE6E9; --tint: #FFFFFF; --line: rgba(97,64,81,.16); --ink: #3A2530; --ink-2: #6E4F5D; --pink-soft: #F7D3D9; }
+body { background: var(--bg); }
+h1, h2, h3 { color: var(--plum); }
+
+/* header: pink pill */
+.pill { background: rgba(240,163,175,.94); border-color: transparent; }
+.site-nav > a:not(.btn) { color: var(--plum); font-weight: 600; }
+.lang { background: rgba(255,255,255,.45); }
+.lang button { color: var(--plum); }
+.cart-link { background: rgba(255,255,255,.45); }
+.header-right .btn-pink { background: var(--plum); color: #fff; }
+.header-right .btn-pink:hover { background: #4B3040; }
+
+/* facts */
+.cell { background: #fff; border-color: transparent; }
+.cell-pink { background: var(--plum); color: #fff; }
+.cell-pink .cell-sub { color: rgba(255,255,255,.8); }
+.cell-plum { background: #fff; color: var(--ink); }
+.cell-plum strong { color: var(--plum); }
+.cell-plum .cell-sub { color: var(--ink-2); }
+
+/* sections */
+.section-tint { background: #fff; }
+.section-dark { background: var(--plum); }
+.section-dark h2 { color: #fff; }
+.drinks-list { color: var(--plum); }
+
+/* cards */
+.card { border-color: transparent; }
+.section-tint .card { background: var(--bg); }
+.card:hover { box-shadow: 0 16px 36px -26px rgba(97,64,81,.6); }
+
+.order-panel { background: var(--plum); }
+.mini { background: #fff; border-color: transparent; }
+.mini-pink { background: var(--pink); }
+.visit-card { background: var(--bg); border-color: transparent; }
+.map, .map-placeholder { background: var(--bg); }
+.faq summary::after { background: var(--pink); color: var(--plum); }
+
+/* sub pages */
+.summary-box { background: #fff; border-color: transparent; }
+.stepper { border-color: var(--line); }
+.section-tint .price-list a, .price-list a { color: var(--ink); }
+.opt-select { border-color: var(--line); }
+
+/* footer */
+.site-footer { background: var(--plum); }
+.footer-brand { color: var(--pink); }
+
+@media (max-width: 760px) {
+  .pill { background: var(--pink); }
+}
