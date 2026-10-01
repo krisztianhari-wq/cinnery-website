@@ -101,6 +101,10 @@
       'A creamy, vibrant and energizing treat that combines earthy matcha, sweet banana and a hint of rich vanilla.',
       'Een romige, frisse en energieke traktatie met aardse matcha, zoete banaan en een vleugje rijke vanille.'),
 
+    p('matcha-mango', 'matcha', 6.90, R + 'matcha-mango.jpg', 'Matcha Mango',
+      'Bright and tropical. Creamy iced matcha layered over a sweet, sunny mango purée.',
+      'Fris en tropisch. Romige iced matcha op een zoete, zonnige mangopuree.'),
+
     /* ---- coffees ---- */
     p('espresso', 'coffee', 3.50, null, 'Espresso', 'A short, intense shot of our house espresso.', 'Een korte, intense shot van onze huisespresso.'),
     p('americano', 'coffee', 3.50, null, 'Americano', 'Espresso lengthened with hot water.', 'Espresso aangelengd met heet water.'),
