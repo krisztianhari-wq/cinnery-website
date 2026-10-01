@@ -81,3 +81,6 @@ h1, h2, h3 { color: var(--plum); }
   .card-body, .card-sm .card-body { padding: 14px 16px; }
   .card-row { flex-wrap: wrap; gap: 8px; }
 }
+
+/* rows layout: no centred orphan card */
+.cards-3 > :last-child:nth-child(3n+1), .cards-3 > :last-child:nth-child(2n+1) { grid-column: auto; justify-self: stretch; width: auto; }

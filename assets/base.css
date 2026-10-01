@@ -201,6 +201,10 @@ address { font-style: normal; font-weight: 600; margin-bottom: 8px; }
 .ph { display: grid; place-items: center; width: 100%; aspect-ratio: 4 / 3; background: var(--pink-soft); color: var(--plum); }
 .card-sm .ph { aspect-ratio: 1; }
 .cards-2 .ph, .cards-2 img { aspect-ratio: 16 / 7; }
+.cards-2 > :only-child { grid-column: 1 / -1; }
+/* a lone last card in a 3-column grid sits in the middle instead of hanging on the left */
+.cards-3 > :last-child:nth-child(3n+1) { grid-column: 2; }
+.price-lists-extra { margin-top: 40px; }
 .ph .logo-icon { width: 34%; max-width: 110px; opacity: .85; }
 .ph-savory { background: #F3E6D6; color: #8A5A2B; }
 .ph-combo { background: var(--plum); color: var(--pink); }
@@ -293,6 +297,8 @@ address { font-style: normal; font-weight: 600; margin-bottom: 8px; }
 @media (max-width: 1000px) {
   .bento { grid-template-columns: 1fr 1fr; }
   .cards-3 { grid-template-columns: 1fr 1fr; }
+  .cards-3 > :last-child:nth-child(3n+1) { grid-column: auto; }
+  .cards-3 > :last-child:nth-child(2n+1) { grid-column: 1 / -1; justify-self: center; width: calc(50% - 11px); }
   .cards-5 { grid-template-columns: repeat(3, 1fr); }
   .cards-4 { grid-template-columns: repeat(2, 1fr); }
   .drinks, .story, .order, .faq-grid, .footer-top, .product, .cart-grid { grid-template-columns: 1fr; }
@@ -333,6 +339,7 @@ address { font-style: normal; font-weight: 600; margin-bottom: 8px; }
   .section-tint, .section-dark, .site-footer { margin: 0 8px; border-radius: var(--r); }
   .section-head { margin-bottom: 28px; }
   .cards-3 { grid-template-columns: 1fr; }
+  .cards-3 > :last-child:nth-child(2n+1) { grid-column: auto; justify-self: stretch; width: auto; }
   .scroller { overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; padding-bottom: 8px; }
   .scroller::-webkit-scrollbar { display: none; }
   .scroller .cards-5, .scroller .cards-4 { display: flex; gap: 14px; width: auto; padding: 0 16px; }

@@ -7,7 +7,7 @@
   const ROOT = SCRIPT ? new URL('..', SCRIPT) : new URL('./', location.href);
   const src = path => new URL(path, ROOT).href;
 
-  const CAT_TITLE = { roll: 'menu.title', savory: 'menu.savory.title', cookie: 'menu.cookies.title', combo: 'menu.offers.title',
+  const CAT_TITLE = { roll: 'menu.title', savory: 'menu.savory.title', cookie: 'menu.cookies.title', combo: 'menu.offers.title', extra: 'menu.extra.title',
     coffee: 'menu.coffee.title', hotchoco: 'menu.hotchoco.title', matcha: 'menu.matcha.title', soft: 'menu.soft.title' };
 
   const lang = () => document.documentElement.lang || 'en';
