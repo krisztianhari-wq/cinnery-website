@@ -48,3 +48,11 @@ GitHub Pages serves the `main` branch root. Any other static host works the same
 - Instagram: [@cinnery_rolls](https://www.instagram.com/cinnery_rolls/) · info@cinnery.nl
 
 Site by sadrobot.
+
+## Cache-busting
+
+Every local CSS, JS and image link in the HTML ends in `?v=<version>`, and product photos inherit the
+same version from the `shop.js` link. After changing any asset, bump the version in all pages at once:
+
+    sed -i '' 's/?v=OLD/?v=NEW/g' index.html v4/*.html v5/*.html
+

@@ -5,7 +5,8 @@
   const KEY = 'cinnery-cart';
   const SCRIPT = document.currentScript && document.currentScript.src;
   const ROOT = SCRIPT ? new URL('..', SCRIPT) : new URL('./', location.href);
-  const src = path => new URL(path, ROOT).href;
+  const VER = SCRIPT ? new URL(SCRIPT).search : '';   /* ?v=… cache-buster of this script, reused for product photos */
+  const src = path => new URL(path, ROOT).href + VER;
 
   const CAT_TITLE = { roll: 'menu.title', savory: 'menu.savory.title', cookie: 'menu.cookies.title', combo: 'menu.offers.title', extra: 'menu.extra.title',
     coffee: 'menu.coffee.title', hotchoco: 'menu.hotchoco.title', matcha: 'menu.matcha.title', soft: 'menu.soft.title' };
