@@ -2,7 +2,7 @@
    price: EUR. img: path relative to the site root (null = logo tile). tier: Classic | De Luxe | Signature.
    options (combos): each option lets the customer pick one product that matches `from`. */
 (function () {
-  const R = 'assets/img/own/', S = 'assets/img/stock/';
+  const R = 'assets/img/own/';
   const p = (id, cat, price, img, name, en, nl, extra) => Object.assign({ id, cat, price, img, name: { en: name, nl: name }, desc: { en, nl } }, extra || {});
 
   window.CINNERY_PRODUCTS = [
@@ -25,12 +25,12 @@
     p('pistachio', 'roll', 7.50, R + 'roll-pistachio.jpg', 'Pistachio',
       'Hand-rolled dough with cinnamon sugar, coated with rich pistachio cream and sprinkled with roasted pistachio pieces.',
       'Handgerold deeg met kaneelsuiker, bedekt met rijke pistachecrème en bestrooid met geroosterde pistachestukjes.', { tier: 'Signature' }),
-    p('salted-caramel-pecan', 'roll', 7.50, S + '1609126979532-0f514232d1a8.jpg', 'Salted Caramel Pecan',
+    p('salted-caramel-pecan', 'roll', 7.50, R + 'roll-salted-caramel-pecan.jpg', 'Salted Caramel Pecan',
       'Hand-rolled dough with cinnamon sugar, drizzled with rich salted caramel and topped with crunchy roasted pecans.',
       'Handgerold deeg met kaneelsuiker, overgoten met rijke gezouten karamel en getopt met knapperige geroosterde pecannoten.', { tier: 'Signature' }),
 
     /* ---- savory rolls ---- */
-    p('savory-weekly', 'savory', 7.50, R + 'roll-savory-goat-cheese.jpg', 'Savory Roll of the Week',
+    p('savory-weekly', 'savory', 7.50, R + 'roll-savory-week.jpg', 'Savory Roll of the Week',
       'Soft, hand-crafted dough filled with a unique flavour combination that changes every week, usually vegetarian. Check our Instagram to find out what it is this week.',
       'Zacht, ambachtelijk deeg gevuld met een unieke smaakcombinatie die elke week wisselt, meestal vegetarisch. Check onze Instagram om te zien welke het deze week is.'),
 
@@ -52,29 +52,29 @@
       'Zacht koekje gevuld met romige Biscoff-pasta en getopt met gekarameliseerde koekkruimels.', { tier: 'Signature' }),
 
     /* ---- offers ---- */
-    p('combo-sweet', 'combo', 9.90, R + 'combo-box.jpg', 'Sweet Combo',
+    p('combo-sweet', 'combo', 9.90, R + 'combo-sweet.jpg', 'Sweet Combo',
       'A Classic or De Luxe cinnamon roll or cookie, plus a soft drink. Signature drinks are not included.',
       'Een Classic of De Luxe cinnamon roll of koekje, plus een frisdrank. Signature-drankjes zijn niet inbegrepen.',
       { options: [ { key: 'item', label: { en: 'Roll or cookie', nl: 'Roll of koekje' }, from: { cats: ['roll', 'cookie'], tiers: ['Classic', 'De Luxe'] } },
                    { key: 'drink', label: { en: 'Drink', nl: 'Drankje' }, from: { cats: ['soft'] } } ] }),
-    p('combo-brunch', 'combo', 9.90, R + 'roll-savory-goat-cheese-2.jpg', 'Brunch Combo',
+    p('combo-brunch', 'combo', 9.90, R + 'combo-brunch.jpg', 'Brunch Combo',
       'The savory roll of the week plus a soft drink. Signature drinks are not included.',
       'De hartige roll van de week plus een frisdrank. Signature-drankjes zijn niet inbegrepen.',
       { options: [ { key: 'item', label: { en: 'Savory roll', nl: 'Hartige roll' }, from: { cats: ['savory'] } },
                    { key: 'drink', label: { en: 'Drink', nl: 'Drankje' }, from: { cats: ['soft'] } } ] }),
-    p('combo-duo', 'combo', 12.90, R + 'matcha-collection.jpg', 'Cinnery Duo',
+    p('combo-duo', 'combo', 12.90, R + 'combo-duo.jpg', 'Cinnery Duo',
       'A Classic or De Luxe cinnamon roll or cookie, plus a hot choco or iced matcha drink.',
       'Een Classic of De Luxe cinnamon roll of koekje, plus een hot choco of iced matcha.',
       { options: [ { key: 'item', label: { en: 'Roll or cookie', nl: 'Roll of koekje' }, from: { cats: ['roll', 'cookie'], tiers: ['Classic', 'De Luxe'] } },
                    { key: 'drink', label: { en: 'Drink', nl: 'Drankje' }, from: { cats: ['hotchoco', 'matcha'] } } ] }),
 
     /* ---- extras ---- */
-    p('extra-cream-cheese', 'extra', 2.00, null, 'Extra Classic Cream Cheese Icing',
+    p('extra-cream-cheese', 'extra', 2.00, R + 'extra-cream-cheese-icing.jpg', 'Extra Classic Cream Cheese Icing',
       'An extra portion of our classic cream cheese icing on your roll.',
       'Een extra portie van onze klassieke roomkaasglazuur op je roll.'),
 
     /* ---- hot choco collection ---- */
-    p('hot-choco', 'hotchoco', 5.90, R + 'hotchoco-collection-square.jpg', 'Hot Choco',
+    p('hot-choco', 'hotchoco', 5.90, R + 'hotchoco-hot-choco.jpg', 'Hot Choco',
       'Crafted from the finest premium Dutch cocoa for a rich, velvety chocolate experience.',
       'Gemaakt van de beste Nederlandse cacao voor een rijke, fluweelzachte chocoladebeleving.'),
     p('chocomellow', 'hotchoco', 6.90, R + 'hotchoco-chocomellow.jpg', 'Chocomellow',
@@ -100,10 +100,6 @@
     p('matcha-banana-float', 'matcha', 6.90, R + 'matcha-banana-float.jpg', 'Banana Matcha Float',
       'A creamy, vibrant and energizing treat that combines earthy matcha, sweet banana and a hint of rich vanilla.',
       'Een romige, frisse en energieke traktatie met aardse matcha, zoete banaan en een vleugje rijke vanille.'),
-
-    p('matcha-mango', 'matcha', 6.90, R + 'matcha-mango.jpg', 'Matcha Mango',
-      'Bright and tropical. Creamy iced matcha layered over a sweet, sunny mango purée.',
-      'Fris en tropisch. Romige iced matcha op een zoete, zonnige mangopuree.'),
 
     /* ---- coffees ---- */
     p('espresso', 'coffee', 3.50, null, 'Espresso', 'A short, intense shot of our house espresso.', 'Een korte, intense shot van onze huisespresso.'),

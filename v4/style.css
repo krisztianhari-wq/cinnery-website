@@ -1,17 +1,24 @@
-/* Variant 4 – the original "Modern" layout from assets/base.css with the pink palette of variant 3.
-   Colour overrides only; layout stays as in base.css. */
+/* Variant 4 – the "Modern" layout from assets/base.css with the pink palette of variant 3,
+   an eggplant header and the split hero (copy on pink, framed photo on the right). */
 :root { --bg: #FBE6E9; --tint: #FFFFFF; --line: rgba(97,64,81,.16); --ink: #3A2530; --ink-2: #6E4F5D; --pink-soft: #F7D3D9; }
 body { background: var(--bg); }
 h1, h2, h3 { color: var(--plum); }
 
-/* header: pink pill */
-.pill { background: rgba(240,163,175,.94); border-color: transparent; }
-.site-nav > a:not(.btn) { color: var(--plum); font-weight: 600; }
-.lang { background: rgba(255,255,255,.45); }
-.lang button { color: var(--plum); }
-.cart-link { background: rgba(255,255,255,.45); }
-.header-right .btn-pink { background: var(--plum); color: #fff; }
-.header-right .btn-pink:hover { background: #4B3040; }
+/* header: eggplant pill, pink type and logo */
+.pill { background: rgba(97,64,81,.96); border-color: transparent; }
+.brand { color: var(--pink); }
+.site-nav > a:not(.btn) { color: var(--pink); font-weight: 600; }
+.site-nav > a:not(.btn):hover { color: #fff; }
+.lang { background: rgba(255,255,255,.12); }
+.lang button { color: var(--pink); }
+.lang button.is-active { background: var(--pink); color: var(--plum); }
+.cart-link { background: rgba(255,255,255,.12); color: var(--pink); }
+.cart-link.is-current { background: rgba(240,163,175,.25); }
+.cart-count { background: var(--pink); color: var(--plum); }
+.header-right .btn-pink { background: var(--pink); color: var(--plum); }
+.header-right .btn-pink:hover { background: #F4B4BE; }
+.nav-toggle { background: var(--pink); }
+.nav-toggle span { background: var(--plum); }
 
 /* facts */
 .cell { background: #fff; border-color: transparent; }
@@ -42,7 +49,7 @@ h1, h2, h3 { color: var(--plum); }
 /* sub pages */
 .summary-box { background: #fff; border-color: transparent; }
 .stepper { border-color: var(--line); }
-.section-tint .price-list a, .price-list a { color: var(--ink); }
+.pl-row { color: var(--ink); }
 .opt-select { border-color: var(--line); }
 
 /* footer */
@@ -50,5 +57,8 @@ h1, h2, h3 { color: var(--plum); }
 .footer-brand { color: var(--pink); }
 
 @media (max-width: 760px) {
-  .pill { background: var(--pink); }
+  .pill { background: var(--plum); }
+  .site-nav { background: var(--plum); }
+  .site-nav > a:not(.btn) { color: var(--pink); }
+  .hero-split .hero-content { padding: 100px 0 40px; gap: 28px; }
 }

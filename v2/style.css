@@ -78,8 +78,6 @@ a { color: var(--pink); }
 .ph { background: #3A2632; color: var(--pink); }
 .ph-combo { background: #614051; }
 .pl-price { color: var(--pink); }
-.pl-add { background: var(--pink-soft); color: var(--pink); }
-.price-list a:hover .pl-add { background: var(--pink); color: #2B1C25; }
 .opt-select { background: var(--surface); color: var(--ink); border-color: var(--line); }
 .cart-picks { color: var(--ink-2); }
 

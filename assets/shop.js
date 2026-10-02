@@ -77,11 +77,17 @@
     });
     document.querySelectorAll('[data-pricelist]').forEach(list => {
       const cat = list.getAttribute('data-pricelist');
+      /* no photo, no product page: the row's button puts one item straight into the cart */
       list.replaceChildren(...P.filter(p => p.cat === cat).map(p => {
-        const li = el('li'); const a = el('a'); a.href = pageOf(p.id);
-        a.append(el('span', 'pl-name', nm(p)), el('span', 'pl-dots'), el('span', 'pl-price', money(p.price)), el('span', 'pl-add', '+'));
-        a.setAttribute('aria-label', nm(p) + ', ' + money(p.price) + ', ' + t('shop.order'));
-        li.appendChild(a); return li;
+        const li = el('li', 'pl-row');
+        const btn = el('button', 'btn btn-pink btn-sm pl-order', t('shop.order')); btn.type = 'button';
+        btn.setAttribute('aria-label', t('shop.order') + ': ' + nm(p) + ', ' + money(p.price));
+        btn.addEventListener('click', () => {
+          add(p.id, 1); btn.textContent = t('shop.added.short'); btn.classList.add('is-added');
+          clearTimeout(btn._t); btn._t = setTimeout(() => { btn.textContent = t('shop.order'); btn.classList.remove('is-added'); }, 1600);
+        });
+        li.append(el('span', 'pl-name', nm(p)), el('span', 'pl-dots'), el('span', 'pl-price', money(p.price)), btn);
+        return li;
       }));
     });
   }

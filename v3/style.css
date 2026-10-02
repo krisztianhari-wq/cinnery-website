@@ -59,7 +59,7 @@ h1, h2, h3 { color: var(--plum); }
 .summary-box { background: #fff; border-color: transparent; }
 .stepper { border-color: var(--line); }
 
-.section-tint .price-list a, .price-list a { color: var(--ink); }
+.pl-row { color: var(--ink); }
 .opt-select { border-color: var(--line); }
 
 /* footer */

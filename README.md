@@ -6,10 +6,12 @@ Live at https://krisztianhari-wq.github.io/cinnery-website/ and https://rolls.sa
 ## Structure
 
 ```
-index.html          design chooser (links to the four variants)
+index.html          chooser: version A (v5/, plate & logo photo) and version B (v4/, baking tray photo)
 chooser.css         chooser styles
-v1/ v2/ v3/ v4/     the four design variants, each with index.html, product.html, cart.html, style.css
-                    1 Split · 2 Eggplant · 3 Pink · 4 Modern; the variant style.css only overrides assets/base.css
+v4/ v5/             the live design: pink theme, eggplant header, split hero; v5 reuses v4/style.css
+                    and differs only in the opening photo
+v1/ v2/ v3/         earlier design variants (Split, Eggplant, Pink), kept for reference; their style.css
+                    only overrides assets/base.css
 assets/
   base.css          shared styles (Fredoka + Inter, brand pink #F0A3AF / eggplant #614051)
   products.js       product catalogue: id, category, price (EUR), photo, name and description in EN/NL
@@ -34,7 +36,7 @@ python3 -m http.server 8791
 
 Texts live in `assets/i18n.js` (`en` and `nl`), products and prices in `assets/products.js`.
 Each element in the HTML has a `data-i18n="key"`; answers with HTML (lists) use `data-i18n-html`.
-All four variants share these files, so a change shows up in every variant.
+All variants share these files, so a change shows up in every variant.
 
 The page always opens in English; visitors switch with the EN / NL buttons.
 
