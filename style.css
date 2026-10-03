@@ -1,4 +1,4 @@
-/* Cinnery design (used by v4/ and v5/): the layout from assets/base.css with a pink palette,
+/* Cinnery design: the layout from assets/base.css with a pink palette,
    an eggplant header and the split hero (copy on pink, framed photo on the right). */
 :root { --bg: #FBE6E9; --tint: #FFFFFF; --line: rgba(97,64,81,.16); --ink: #3A2530; --ink-2: #6E4F5D; --pink-soft: #F7D3D9; }
 body { background: var(--bg); }

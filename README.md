@@ -6,10 +6,10 @@ Live at https://krisztianhari-wq.github.io/cinnery-website/ and https://rolls.sa
 ## Structure
 
 ```
-index.html          chooser: version A (v5/, plate & logo photo) and version B (v4/, baking tray photo)
-chooser.css         chooser styles
-v4/ v5/             the design: pink theme, eggplant header, split hero; v5 reuses v4/style.css
-                    and differs only in the opening photo
+index.html          home page: menu, story, order, visit, FAQ
+product.html        product page (price, quantity, combo choices)
+cart.html           cart and pre-order
+style.css           design: pink theme, eggplant header, split hero (overrides assets/base.css)
 assets/
   base.css          shared styles (Fredoka + Inter, brand pink #F0A3AF / eggplant #614051)
   products.js       product catalogue: id, category, price (EUR), photo, name and description in EN/NL
@@ -17,7 +17,7 @@ assets/
   app.js            language switch, mobile nav, FAQ accordion, "Open now / Closed now", Google Maps on click
   shop.js           menu cards, product page, cart (stored in the browser)
   fonts/            self-hosted Fredoka + Inter (woff2)
-  img/              logo artwork (logo-*.png), own photos (own/), Unsplash photos (stock/), chooser previews (preview/)
+  img/              logo artwork (logo-*.png), own product and shop photos (own/)
 ```
 
 Privacy and security: no third-party requests on page load (fonts and photos are served from this
@@ -34,13 +34,15 @@ python3 -m http.server 8791
 
 Texts live in `assets/i18n.js` (`en` and `nl`), products and prices in `assets/products.js`.
 Each element in the HTML has a `data-i18n="key"`; answers with HTML (lists) use `data-i18n-html`.
-Both versions share these files, so a change shows up in both.
 
 The page always opens in English; visitors switch with the EN / NL buttons.
 
 ## Deploying
 
 GitHub Pages serves the `main` branch root. Any other static host works the same way.
+
+Earlier design versions are kept on the `archive/design-versions` branch (versions A/B with chooser)
+and the `archive-all-variants` tag (all five variants).
 
 ## Brand
 
@@ -54,5 +56,5 @@ Site by sadrobot.
 Every local CSS, JS and image link in the HTML ends in `?v=<version>`, and product photos inherit the
 same version from the `shop.js` link. After changing any asset, bump the version in all pages at once:
 
-    sed -i '' 's/?v=OLD/?v=NEW/g' index.html v4/*.html v5/*.html
+    sed -i '' 's/?v=OLD/?v=NEW/g' index.html product.html cart.html
 
