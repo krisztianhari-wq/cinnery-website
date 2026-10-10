@@ -12,12 +12,12 @@ Statikus weboldal + webshop-váz a Cinnery fahéjascsiga-pékségnek (Groningen)
 - `assets/i18n.js` – minden más szöveg (`en`, `nl`; azonos kulcsok). `assets/app.js` – nyelvváltás, mobil menü, GYIK, nyitva/zárva, Maps kattintásra. `assets/shop.js` – menükártyák, terméklap, kosár (localStorage).
 - `assets/img/logo-*.png` – az EREDETI logó, CSS mask-ként (currentColor). Soha ne rajzold újra SVG-be.
 - `assets/img/own/` – saját stúdiófotók (minden terméken); `assets/stock/` gitignore-olt, nem használt.
-- `.htaccess`, `robots.txt`, `sitemap.xml`, canonical/og → a végleges cinnery.nl domainre készült (Apache).
+- `robots.txt`, `sitemap.xml`, canonical/og a cinnery.nl-re mutat. A `.htaccess` csak Apache-tárhelyhez kell (a sadroboton a Caddy adja a fejléceket).
 
 ## Telepítés
 - GitHub Pages a `main` gyökeréből: push után 1–2 perc.
-- rolls.sadrobot.eu tükör: `git archive HEAD` mínusz README/.gitignore/.nojekyll → lásd /deploy-sadrobot skill (oldal: `cinnery-web`).
-- cinnery.nl feltöltő csomag + laikus útmutató: `dist/` (gitignore).
+- **Éles: cinnery.nl a sadrobot szerveren** (2026-10-11 óta; www és cinnery.eu oda irányít), tükör: rolls.sadrobot.eu – ugyanaz a `cinnery-web` oldal. Feltöltés: `git archive HEAD` mínusz README/.gitignore/.nojekyll/CLAUDE*.md → /deploy-sadrobot skill (`deploy-site.sh … cinnery-web <mappa>`).
+- `dist/` (gitignore): laikus útmutatók (Lightspeed-kulcsok, e-mail költöztetés), a régi ZXCS-feltöltő csomag már nem kell.
 - Cache-busting: minden helyi CSS/JS/kép link `?v=<verzió>` (most `20261003a`); a `shop.js` a saját `?v`-jét adja tovább a termékfotóknak. Minden asset-változásnál léptesd mindhárom oldalon: `sed -i '' 's/?v=OLD/?v=NEW/g' index.html product.html cart.html` – különben a böngésző új HTML-t régi CSS-sel kever.
 - Git identitás repo-szinten: GitHub noreply cím; céges e-mail nem kerülhet vissza a historyba.
 - Korábbi dizájnok: `archive/design-versions` ág (A/B + választó) és `archive-all-variants` tag (mind az öt).
