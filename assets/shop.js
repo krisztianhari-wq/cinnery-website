@@ -183,9 +183,11 @@
     const l1 = el('div', 'sum-row'); l1.append(el('span', null, n + ' ' + (n === 1 ? t('shop.item') : t('shop.items'))), el('span', null, money(total))); box2.appendChild(l1);
     const l2 = el('div', 'sum-row sum-total'); l2.append(el('strong', null, t('shop.total')), el('strong', null, money(total))); box2.appendChild(l2);
     box2.appendChild(el('p', 'muted small', t('shop.checkout.soon')));
-    const body = lines.join('\n') + '\n\n' + t('shop.total') + ': ' + money(total) + '\n\n' + t('shop.pickup.note');
+    /* pre-order e-mail: blanks for the customer to fill in, then the order and the pickup terms */
+    const body = [t('shop.mail.name') + ': ', t('shop.mail.time') + ': ', t('shop.mail.phone') + ': ', '',
+      ...lines, '', t('shop.total') + ': ' + money(total), '', t('shop.mail.pay'), t('shop.pickup.note')].join('\n');
     const mail = el('a', 'btn btn-pink', t('shop.checkout.email'));
-    mail.href = 'mailto:info@cinnery.nl?subject=' + encodeURIComponent('Cinnery pre-order') + '&body=' + encodeURIComponent(body);
+    mail.href = 'mailto:info@cinnery.nl?subject=' + encodeURIComponent(t('shop.mail.subject')) + '&body=' + encodeURIComponent(body);
     box2.appendChild(mail);
     box2.appendChild(el('p', 'muted small', t('shop.pickup.note')));
     sum.replaceChildren(box2);
