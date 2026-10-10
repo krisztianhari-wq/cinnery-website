@@ -68,21 +68,34 @@
     revealEls.forEach(el => io.observe(el));
   } else { revealEls.forEach(el => el.classList.add('is-visible')); }
 
-  /* ---- open now? (Europe/Amsterdam) ---- */
+  /* ---- open now? (Europe/Amsterdam) + opening-day banner ---- */
+  const OPENING = '2026-10-15';   /* first day of business; before it the shop shows as "opening soon" */
   const HOURS = { 0: [12, 17], 1: null, 2: [10, 18], 3: [10, 18], 4: [10, 18], 5: [10, 18], 6: [10, 18] };
-  const OPEN_TXT = { en: ['Open now', 'Closed now'], nl: ['Nu open', 'Nu gesloten'] };
+  const OPEN_TXT = { en: ['Open now', 'Closed now', 'Opening 15 October'], nl: ['Nu open', 'Nu gesloten', 'Opent 15 oktober'] };
   function updateOpen() {
-    const el = document.querySelector('.open-now'); if (!el) return;
     const now = new Date();
     const parts = new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/Amsterdam', weekday: 'short', hour: 'numeric', minute: 'numeric', hour12: false }).formatToParts(now);
+    const today = new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Amsterdam' }).format(now);   /* YYYY-MM-DD */
     const wd = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].indexOf(parts.find(p => p.type === 'weekday').value);
     const h = +parts.find(p => p.type === 'hour').value + (+parts.find(p => p.type === 'minute').value) / 60;
     const win = HOURS[wd];
-    const open = !!(win && h >= win[0] && h < win[1]);
+    const soon = today < OPENING;
+    const open = !soon && !!(win && h >= win[0] && h < win[1]);
     const lang = document.documentElement.lang || 'en';
-    el.textContent = (OPEN_TXT[lang] || OPEN_TXT.en)[open ? 0 : 1];
-    el.classList.toggle('is-open', open);
-    el.classList.toggle('is-closed', !open);
+    const txt = OPEN_TXT[lang] || OPEN_TXT.en;
+    document.querySelectorAll('.open-now').forEach(el => {
+      el.textContent = soon ? txt[2] : txt[open ? 0 : 1];
+      el.classList.toggle('is-open', open);
+      el.classList.toggle('is-closed', !open && !soon);
+      el.classList.toggle('is-soon', soon);
+    });
+    const banner = document.querySelector('[data-opening]');
+    if (banner) {
+      const key = soon ? 'opening.soon' : (today === OPENING ? 'opening.today' : null);
+      const dict = (window.CINNERY_I18N || {})[lang] || {};
+      banner.hidden = !key;
+      if (key) banner.innerHTML = dict[key] || '';
+    }
   }
   updateOpen();
   document.querySelectorAll('[data-lang]').forEach(b => b.addEventListener('click', updateOpen));

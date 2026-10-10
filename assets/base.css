@@ -98,6 +98,12 @@ p { margin: 0 0 1em; }
 .hero-split .btn-pink { background: var(--plum); color: #fff; }
 .hero-split .btn-pink:hover { background: var(--plum-deep); }
 .hero-split .btn-outline-dark:hover { background: rgba(255,255,255,.3); }
+/* opening-day banner in the hero (shown by app.js until the end of the opening day) */
+.opening-badge { display: inline-block; margin: 0 0 18px; padding: 9px 18px; border-radius: 999px; background: var(--plum); color: #fff; font-family: var(--font-display); font-weight: 500; font-size: 1.05rem; line-height: 1.35; }
+.opening-badge::before { content: ""; display: inline-block; width: 9px; height: 9px; margin-right: 9px; border-radius: 50%; background: var(--pink); vertical-align: 1px; }
+.opening-badge strong { font-weight: 700; color: var(--pink); }
+.opening-badge[hidden] { display: none; }
+.open-now.is-soon { color: var(--plum); }
 .hero-photo img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: var(--r-lg); box-shadow: 0 30px 60px -32px rgba(74,47,62,.55); }
 /* portrait photo (plate in front of the logo sign) */
 .hero-photo-tall { display: flex; justify-content: center; }
@@ -323,6 +329,7 @@ address { font-style: normal; font-weight: 600; margin-bottom: 8px; }
   .hero-content { grid-template-columns: 1fr; }
   .hero-logo { justify-content: flex-start; padding: 0 0 26px; order: -1; }
   .hero-split .hero-content { grid-template-columns: 1fr; gap: 36px; }
+  .opening-badge { font-size: .95rem; border-radius: 18px; }
   .hero-photo-tall img { width: 100%; height: auto; aspect-ratio: 4 / 5; }
   .hero-logo .logo-full { width: 200px; }
   .summary-box { position: static; }
