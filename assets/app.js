@@ -94,7 +94,7 @@
       const key = soon ? 'opening.soon' : (today === OPENING ? 'opening.today' : null);
       const dict = (window.CINNERY_I18N || {})[lang] || {};
       banner.hidden = !key;
-      if (key) banner.innerHTML = dict[key] || '';
+      if (key) banner.querySelector('.opening-badge').innerHTML = '<span>' + (dict[key] || '') + '</span>';
     }
   }
   updateOpen();
