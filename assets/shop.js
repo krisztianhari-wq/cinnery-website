@@ -3,6 +3,7 @@
   const P = window.CINNERY_PRODUCTS || [];
   const T = window.CINNERY_I18N || {};
   const KEY = 'cinnery-cart';
+  const LAST = 'cinnery-last-order';   /* copy of the cart at the moment the pre-order e-mail was opened */
   const SCRIPT = document.currentScript && document.currentScript.src;
   const ROOT = SCRIPT ? new URL('..', SCRIPT) : new URL('./', location.href);
   const VER = SCRIPT ? new URL(SCRIPT).search : '';   /* ?v=… cache-buster of this script, reused for product photos */
@@ -183,6 +184,25 @@
     if (also) also.replaceChildren(...P.filter(x => x.cat === p.cat && x.id !== p.id).slice(0, 3).map(x => card(x, false)));
   }
 
+  /* ---- after the pre-order e-mail was opened: thank-you state with "open again" and "restore" ---- */
+  function renderSent() {
+    const box = document.getElementById('cart'); const sum = document.getElementById('summary'); if (!box || !sum) return;
+    let last = null; try { last = JSON.parse(localStorage.getItem(LAST) || 'null'); } catch (e) {}
+    const wrap = el('div', 'sent-box');
+    wrap.appendChild(el('h2', null, t('shop.sent.title')));
+    wrap.appendChild(el('p', 'lead', t('shop.sent.text')));
+    const row = el('div', 'cta-row');
+    if (last && last.href) { const again = el('a', 'btn btn-pink', t('shop.sent.again')); again.href = last.href; row.appendChild(again); }
+    if (last && last.cart) {
+      const restore = el('button', 'btn btn-outline-dark', t('shop.sent.restore')); restore.type = 'button';
+      restore.addEventListener('click', () => { setCart(last.cart); try { localStorage.removeItem(LAST); } catch (e) {} renderCart(); });
+      row.appendChild(restore);
+    }
+    const menu = el('a', 'btn btn-outline-dark', t('shop.back')); menu.href = 'index.html#menu'; row.appendChild(menu);
+    wrap.appendChild(row);
+    box.replaceChildren(wrap); sum.replaceChildren();
+  }
+
   /* ---- cart page ---- */
   function renderCart() {
     const box = document.getElementById('cart'); const sum = document.getElementById('summary'); if (!box || !sum) return;
@@ -225,6 +245,12 @@
       ...lines, '', t('shop.total') + ': ' + money(total), '', t('shop.mail.pay'), t('shop.pickup.note')].join('\n');
     const mail = el('a', 'btn btn-pink', t('shop.checkout.email'));
     mail.href = 'mailto:info@cinnery.nl?subject=' + encodeURIComponent(t('shop.mail.subject')) + '&body=' + encodeURIComponent(body);
+    /* the mail app takes over from here: empty the cart, but keep a copy so the visitor can reopen the e-mail or restore the cart */
+    mail.addEventListener('click', () => {
+      try { localStorage.setItem(LAST, JSON.stringify({ cart: getCart(), href: mail.href })); } catch (e) {}
+      setCart({});
+      setTimeout(renderSent, 0);
+    });
     box2.appendChild(mail);
     box2.appendChild(el('p', 'muted small', t('shop.pickup.note')));
     sum.replaceChildren(box2);
