@@ -26,7 +26,7 @@
   function add(key, qty) { const c = getCart(); c[key] = Math.min(99, (c[key] || 0) + qty); setCart(c); }
   function setQty(key, qty) { const c = getCart(); if (qty <= 0) delete c[key]; else c[key] = Math.min(99, qty); setCart(c); }
   function count() { return Object.values(getCart()).reduce((a, b) => a + b, 0); }
-  function updateBadge() { const n = count(); document.querySelectorAll('.cart-count').forEach(b => { b.textContent = n; b.hidden = n === 0; }); }
+  function updateBadge() { const n = count(); document.querySelectorAll('.cart-count').forEach(b => { b.textContent = n; b.hidden = n === 0; }); updateBar(); }
   function parseKey(key) {
     const [id, ...picks] = key.split('|'); const p = byId(id); if (!p) return null;
     if (p.options && (picks.length !== p.options.length || picks.some(x => !byId(x)))) return null;
@@ -50,6 +50,38 @@
     return box.childNodes.length ? box : null;
   }
 
+  /* one-click "Add to cart" button with a short "Added ✓" confirmation */
+  function addButton(p, cls) {
+    const btn = el('button', cls + ' add-btn', t('shop.add')); btn.type = 'button';
+    btn.setAttribute('aria-label', t('shop.add') + ': ' + nm(p) + ', ' + money(p.price));
+    btn.addEventListener('click', () => {
+      add(p.id, 1); btn.textContent = t('shop.added.short'); btn.classList.add('is-added');
+      clearTimeout(btn._t); btn._t = setTimeout(() => { btn.textContent = t('shop.add'); btn.classList.remove('is-added'); }, 1600);
+    });
+    return btn;
+  }
+
+  /* ---- floating cart bar: item count, total and a link to the cart (not on the cart page itself) ---- */
+  function cartTotal() {
+    const c = getCart(); let n = 0, sum = 0;
+    Object.keys(c).forEach(k => { const r = parseKey(k); if (r) { n += c[k]; sum += r.p.price * c[k]; } });
+    return { n, sum };
+  }
+  function updateBar() {
+    if (document.getElementById('cart')) return;
+    let bar = document.querySelector('.cart-bar');
+    const { n, sum } = cartTotal();
+    if (!bar) {
+      bar = el('a', 'cart-bar'); bar.href = 'cart.html';
+      bar.append(el('span', 'cart-bar-sum'), el('span', 'cart-bar-go'));
+      document.body.appendChild(bar);
+    }
+    bar.querySelector('.cart-bar-sum').textContent = n + ' ' + (n === 1 ? t('shop.item') : t('shop.items')) + ' · ' + money(sum);
+    bar.querySelector('.cart-bar-go').textContent = t('shop.viewcart') + ' →';
+    bar.hidden = n === 0;
+    document.body.classList.toggle('has-cart-bar', n > 0);
+  }
+
   /* ---- product card ---- */
   function card(p, small) {
     const a = el('article', 'card' + (small ? ' card-sm' : '') + ' card-shop');
@@ -60,7 +92,12 @@
     body.appendChild(el('p', null, p.desc[lang()] || p.desc.en));
     const row = el('div', 'card-row');
     row.appendChild(el('span', 'price', money(p.price)));
-    const btn = el('a', 'btn btn-pink btn-sm', t('shop.order')); btn.href = pageOf(p.id);
+    let btn;
+    if (p.options) {   /* combos need choices: go to the product page */
+      btn = el('a', 'btn btn-pink btn-sm', t('shop.choose')); btn.href = pageOf(p.id);
+    } else {           /* everything else goes straight into the cart; the visitor stays on the menu */
+      btn = addButton(p, 'btn btn-pink btn-sm');
+    }
     row.appendChild(btn); body.appendChild(row); a.appendChild(body);
     return a;
   }
@@ -130,7 +167,7 @@
 
     const actions = el('div', 'cta-row');
     const addBtn = el('button', 'btn btn-pink', t('shop.add')); addBtn.type = 'button';
-    const cartBtn = el('a', 'btn btn-outline-dark', t('shop.cart')); cartBtn.href = 'cart.html';
+    const cartBtn = el('a', 'btn btn-outline-dark', t('shop.continue')); cartBtn.href = 'index.html#menu';
     const note = el('p', 'added muted small'); note.hidden = true;
     addBtn.addEventListener('click', () => {
       const key = [p.id, ...selects.map(s => s.value)].join('|');

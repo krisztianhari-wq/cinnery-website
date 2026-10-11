@@ -255,7 +255,14 @@ address { font-style: normal; font-weight: 600; margin-bottom: 8px; }
 .price-list li:last-child { border-bottom: 1px solid var(--line); }
 .pl-row { display: flex; align-items: center; gap: 12px; padding: 10px 2px; color: var(--ink); }
 .pl-order { flex: none; min-width: 112px; white-space: nowrap; }
-.pl-order.is-added { background: var(--plum); color: #fff; }
+.pl-order.is-added, .add-btn.is-added { background: var(--plum); color: #fff; }
+.add-btn { white-space: nowrap; }
+/* floating cart bar */
+.cart-bar { position: fixed; z-index: 45; left: 50%; transform: translateX(-50%); bottom: calc(14px + env(safe-area-inset-bottom)); width: min(560px, 100% - 20px); display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 8px 8px 8px 22px; border-radius: 999px; background: var(--plum); color: #fff; box-shadow: 0 18px 40px -18px rgba(43,28,37,.6); font-family: var(--font-display); font-weight: 600; }
+.cart-bar[hidden] { display: none; }
+.cart-bar-go { background: var(--pink); color: var(--plum); border-radius: 999px; padding: 10px 18px; white-space: nowrap; }
+.cart-bar:hover .cart-bar-go { background: #F4B4BE; }
+body.has-cart-bar { padding-bottom: 84px; }
 .pl-name { font-weight: 600; }
 .pl-dots { flex: 1; border-bottom: 1px dotted var(--line); transform: translateY(4px); }
 .pl-price { font-family: var(--font-display); font-weight: 600; color: var(--plum); }
@@ -358,7 +365,10 @@ address { font-style: normal; font-weight: 600; margin-bottom: 8px; }
   .cart-row img, .cart-row .ph { width: 72px; height: 72px; }
   .price-lists { grid-template-columns: 1fr; gap: 28px; }
   .cards-2 { grid-template-columns: 1fr; }
-  .cards-row .card { grid-template-columns: 120px 1fr; }
+  .cards-row .card { grid-template-columns: 104px 1fr; }
+  .cards-row .card-row { flex-wrap: wrap; gap: 8px; }
+  .cart-bar { padding-left: 16px; font-size: .9rem; }
+  .cart-bar-go { padding: 10px 14px; }
   .cart-right { grid-column: 2; flex-direction: row; justify-content: space-between; align-items: center; }
   .page-sub .sub-main { padding: 96px 0 60px; }
   .hero { min-height: 82vh; border-radius: 0 0 var(--r) var(--r); }
