@@ -18,11 +18,14 @@ Statikus weboldal + webshop-váz a Cinnery fahéjascsiga-pékségnek (Groningen)
 - GitHub Pages a `main` gyökeréből: push után 1–2 perc.
 - **Éles: cinnery.nl a sadrobot szerveren** (2026-10-11 óta; www és cinnery.eu oda irányít), tükör: rolls.sadrobot.eu – ugyanaz a `cinnery-web` oldal. Feltöltés: `git archive HEAD` mínusz README/.gitignore/.nojekyll/.htaccess/CLAUDE*.md → /deploy-sadrobot skill (`deploy-site.sh … cinnery-web <mappa>`).
 - `dist/` (gitignore): laikus útmutatók (Lightspeed-kulcsok, e-mail költöztetés), a régi ZXCS-feltöltő csomag már nem kell.
-- Cache-busting: minden helyi CSS/JS/kép link `?v=<verzió>` (most `20261012a`); a `shop.js` a saját `?v`-jét adja tovább a termékfotóknak. Minden asset-változásnál léptesd mindhárom oldalon: `sed -i '' 's/?v=OLD/?v=NEW/g' index.html product.html cart.html` – különben a böngésző új HTML-t régi CSS-sel kever.
+- Cache-busting: minden helyi CSS/JS/kép link `?v=<verzió>` (most `20261012c`); a `shop.js` a saját `?v`-jét adja tovább a termékfotóknak. Minden asset-változásnál léptesd mindhárom oldalon: `sed -i '' 's/?v=OLD/?v=NEW/g' index.html product.html cart.html` – különben a böngésző új HTML-t régi CSS-sel kever.
 - Git identitás repo-szinten: GitHub noreply cím; céges e-mail nem kerülhet vissza a historyba.
 - Korábbi dizájnok: `archive/design-versions` ág (A/B + választó) és `archive-all-variants` tag (mind az öt).
 
-## Döntések
+## Rendelés ki/be (kapcsoló)
+- 2026-10-12 óta **KI**: `<html lang="en" class="no-ordering">` az `index.html`, `product.html`, `cart.html` tetején. Ilyenkor csak árak látszanak: nincs kosár ikon, „Add to cart”/„Choose”/sor-gomb, lebegő kosársáv, rendelési panel és „order ahead” GYIK; a `cart.html` a menüre irányít; a fejlécben „See the menu” van.
+- **Visszakapcsolás** (Krisz ~2026-11 közepére tervezi): a három fájlból töröld a `class="no-ordering"`-t, léptesd a `?v=`-t, teszteld a kosarat és az e-mailes előrendelést, telepítsd. Kód: `ORDERING` a `shop.js`-ben, `.order-only` / `.menu-only` a `base.css`-ben. Bájtra pontos utolsó bekapcsolt állapot: `ordering-2026-10-12` tag.
+
 1. Mindig angolul nyílik (nincs mentett nyelv, böngészőnyelv figyelmen kívül); EN/NL váltó, magyar nincs. localStorage csak a kosárhoz.
 2. Adatvédelem: betöltéskor nulla harmadik feles kérés (fontok, képek helyben), Google Maps csak a „Show map” kattintásra, CSP meta az `index.html`-ben, külső linkek `noopener noreferrer`. Új külső erőforrás → CSP-t is bővíteni.
 3. Fizetés még nincs: a kosár mailto előrendelést nyit (info@cinnery.nl). Nincs házhozszállítás, nincs WhatsApp.

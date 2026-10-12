@@ -182,6 +182,12 @@ p { margin: 0 0 1em; }
 .order-panel .eyebrow { color: var(--pink); }
 .order-panel .lead { color: rgba(255,255,255,.78); }
 .order-aside { display: grid; gap: 22px; }
+/* ordering switch: <html class="no-ordering"> hides the cart, order buttons and order panel (remove the class to switch ordering back on) */
+.no-ordering .order-only { display: none !important; }
+html:not(.no-ordering) .menu-only { display: none !important; }
+.no-ordering .order { grid-template-columns: 1fr; }
+.no-ordering .hero .cta-row .btn-outline-dark { background: var(--plum); border-color: var(--plum); color: #fff; }
+.no-ordering .order-aside { grid-template-columns: 1fr 1fr; }
 .mini { background: #fff; border: 1px solid var(--line); border-radius: var(--r); padding: 28px; }
 .mini h3 { font-size: 1.25rem; }
 .mini p { color: var(--ink-2); font-size: .95rem; }
@@ -391,6 +397,7 @@ body.has-cart-bar { padding-bottom: 84px; }
   .scroller .card-sm { flex: 0 0 72vw; scroll-snap-align: start; }
   .drinks-img img:last-child, .story-imgs img:first-child { margin-top: 0; }
   .order-panel { padding: 32px 24px; }
+  .no-ordering .order-aside { grid-template-columns: 1fr; }
   .visit { grid-template-columns: 1fr; }
   .footer-cols { grid-template-columns: 1fr; }
 }

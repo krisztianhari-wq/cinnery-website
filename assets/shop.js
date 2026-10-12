@@ -2,6 +2,8 @@
 (function () {
   const P = window.CINNERY_PRODUCTS || [];
   const T = window.CINNERY_I18N || {};
+  /* ordering switch: <html class="no-ordering"> shows the menu with prices only (no cart, no order buttons) */
+  const ORDERING = !document.documentElement.classList.contains('no-ordering');
   const KEY = 'cinnery-cart';
   const LAST = 'cinnery-last-order';   /* copy of the cart at the moment the pre-order e-mail was opened */
   const SCRIPT = document.currentScript && document.currentScript.src;
@@ -69,7 +71,7 @@
     return { n, sum };
   }
   function updateBar() {
-    if (document.getElementById('cart')) return;
+    if (!ORDERING || document.getElementById('cart')) return;
     let bar = document.querySelector('.cart-bar');
     const { n, sum } = cartTotal();
     if (!bar) {
@@ -93,13 +95,15 @@
     body.appendChild(el('p', null, p.desc[lang()] || p.desc.en));
     const row = el('div', 'card-row');
     row.appendChild(el('span', 'price', money(p.price)));
-    let btn;
-    if (p.options) {   /* combos need choices: go to the product page */
+    let btn = null;
+    if (!ORDERING) {   /* menu only: price without a button */
+    } else if (p.options) {   /* combos need choices: go to the product page */
       btn = el('a', 'btn btn-pink btn-sm', t('shop.choose')); btn.href = pageOf(p.id);
     } else {           /* everything else goes straight into the cart; the visitor stays on the menu */
       btn = addButton(p, 'btn btn-pink btn-sm');
     }
-    row.appendChild(btn); body.appendChild(row); a.appendChild(body);
+    if (btn) row.appendChild(btn);
+    body.appendChild(row); a.appendChild(body);
     return a;
   }
 
@@ -125,7 +129,8 @@
           add(p.id, 1); btn.textContent = t('shop.added.short'); btn.classList.add('is-added');
           clearTimeout(btn._t); btn._t = setTimeout(() => { btn.textContent = t('shop.order'); btn.classList.remove('is-added'); }, 1600);
         });
-        li.append(el('span', 'pl-name', nm(p)), el('span', 'pl-dots'), el('span', 'pl-price', money(p.price)), btn);
+        li.append(el('span', 'pl-name', nm(p)), el('span', 'pl-dots'), el('span', 'pl-price', money(p.price)));
+        if (ORDERING) li.appendChild(btn);
         return li;
       }));
     });
@@ -144,6 +149,12 @@
     info.appendChild(el('h1', null, nm(p)));
     info.appendChild(el('p', 'lead', p.desc[lang()] || p.desc.en));
     info.appendChild(el('p', 'product-price', money(p.price)));
+    if (!ORDERING) {
+      box.replaceChildren(fig, info);
+      const also0 = document.getElementById('also');
+      if (also0) also0.replaceChildren(...P.filter(x => x.cat === p.cat && x.id !== p.id).slice(0, 3).map(x => card(x, false)));
+      return;
+    }
 
     /* combo choices */
     const selects = (p.options || []).map(o => {
@@ -206,6 +217,7 @@
   /* ---- cart page ---- */
   function renderCart() {
     const box = document.getElementById('cart'); const sum = document.getElementById('summary'); if (!box || !sum) return;
+    if (!ORDERING) { location.replace('index.html#menu'); return; }
     const c = getCart(); const keys = Object.keys(c).filter(parseKey);
     if (!keys.length) { box.replaceChildren(el('p', 'lead', t('shop.empty'))); sum.replaceChildren(); return; }
     let total = 0; const lines = [];
