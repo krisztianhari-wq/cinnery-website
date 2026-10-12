@@ -387,7 +387,7 @@ body.has-cart-bar { padding-bottom: 84px; }
   .cards-3 > :last-child:nth-child(2n+1) { grid-column: auto; justify-self: stretch; width: auto; }
   .scroller { overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; padding-bottom: 8px; }
   .scroller::-webkit-scrollbar { display: none; }
-  .scroller .cards-5, .scroller .cards-4 { display: flex; gap: 14px; width: auto; padding: 0 16px; }
+  .scroller .cards-5, .scroller .cards-4, .scroller .cards-3 { display: flex; gap: 14px; width: auto; padding: 0 16px; }
   .scroller .card-sm { flex: 0 0 72vw; scroll-snap-align: start; }
   .drinks-img img:last-child, .story-imgs img:first-child { margin-top: 0; }
   .order-panel { padding: 32px 24px; }
