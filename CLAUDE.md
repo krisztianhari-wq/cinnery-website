@@ -18,9 +18,12 @@ Statikus weboldal + webshop-váz a Cinnery fahéjascsiga-pékségnek (Groningen)
 - GitHub Pages a `main` gyökeréből: push után 1–2 perc.
 - **Éles: cinnery.nl a sadrobot szerveren** (2026-10-11 óta; www és cinnery.eu oda irányít), tükör: rolls.sadrobot.eu – ugyanaz a `cinnery-web` oldal. Feltöltés: `git archive HEAD` mínusz README/.gitignore/.nojekyll/.htaccess/CLAUDE*.md → /deploy-sadrobot skill (`deploy-site.sh … cinnery-web <mappa>`).
 - `dist/` (gitignore): laikus útmutatók (Lightspeed-kulcsok, e-mail költöztetés), a régi ZXCS-feltöltő csomag már nem kell.
-- Cache-busting: minden helyi CSS/JS/kép link `?v=<verzió>` (most `20261012c`); a `shop.js` a saját `?v`-jét adja tovább a termékfotóknak. Minden asset-változásnál léptesd mindhárom oldalon: `sed -i '' 's/?v=OLD/?v=NEW/g' index.html product.html cart.html` – különben a böngésző új HTML-t régi CSS-sel kever.
+- Cache-busting: minden helyi CSS/JS/kép link `?v=<verzió>` (most `20261017a`); a `shop.js` a saját `?v`-jét adja tovább a termékfotóknak. Minden asset-változásnál léptesd mindhárom oldalon: `sed -i '' 's/?v=OLD/?v=NEW/g' index.html product.html cart.html` – különben a böngésző új HTML-t régi CSS-sel kever.
 - Git identitás repo-szinten: GitHub noreply cím; céges e-mail nem kerülhet vissza a historyba.
 - Korábbi dizájnok: `archive/design-versions` ág (A/B + választó) és `archive-all-variants` tag (mind az öt).
+
+## Nyitvatartás
+- 2026-10-17 óta Krisz kérésére **nincs nyitvatartás a weboldalon** (sem a bento-kártyán, sem a Visit részben). Az `app.js` nyitva/zárva-logikája (`HOURS`, `.open-now`) bent maradt, elem híján nem csinál semmit; visszatételhez a `.open-now` elemeket és a `visit.hours`/`visit.mon`… szövegeket kell visszarakni (git-előzmény: `0283b06`).
 
 ## Rendelés ki/be (kapcsoló)
 - 2026-10-12 óta **KI**: `<html lang="en" class="no-ordering">` az `index.html`, `product.html`, `cart.html` tetején. Ilyenkor csak árak látszanak: nincs kosár ikon, „Add to cart”/„Choose”/sor-gomb, lebegő kosársáv, rendelési panel és „order ahead” GYIK; a `cart.html` a menüre irányít; a fejlécben „See the menu” van.
