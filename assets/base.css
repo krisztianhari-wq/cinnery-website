@@ -143,6 +143,14 @@ p { margin: 0 0 1em; }
 .card { position: relative; border-radius: var(--r); overflow: hidden; background: #fff; border: 1px solid var(--line); transition: transform .25s, box-shadow .25s; }
 .card:hover { transform: translateY(-4px); box-shadow: 0 24px 50px -30px rgba(43,28,37,.45); }
 .card img { width: 100%; aspect-ratio: 4/3; object-fit: cover; transition: transform .5s; }
+/* photo slideshow (e.g. the cookie of the day) */
+.slides { position: relative; width: 100%; aspect-ratio: 4 / 3; overflow: hidden; background: var(--pink-soft); }
+.slides img { position: absolute; inset: 0; width: 100%; height: 100%; aspect-ratio: auto; object-fit: cover; opacity: 0; transition: opacity .9s ease; }
+.slides img.is-on { opacity: 1; }
+.cards-2 .slides { aspect-ratio: 16 / 7; }
+[data-products="combo"].cards-2 img { aspect-ratio: 3 / 2; }
+.product-img .slides { aspect-ratio: 1; border-radius: var(--r-lg); }
+@media (prefers-reduced-motion: reduce) { .slides img { transition: none; } }
 .card:hover img { transform: scale(1.03); }
 .card-body { padding: 20px 22px 24px; }
 .card-body h3 { margin: 0 0 6px; }
@@ -255,7 +263,7 @@ address { font-style: normal; font-weight: 600; margin-bottom: 8px; }
 .sub-head { display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap; margin-top: 44px; margin-bottom: 18px; }
 .sub-head h3 { font-size: 1.5rem; margin: 0; }
 .sub-head p { margin: 0; }
-.price-lists { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 56px; }
+.price-lists { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; margin-top: 56px; }
 .price-lists h3 { font-size: 1.5rem; margin-bottom: 10px; }
 .price-list { list-style: none; margin: 0; padding: 0; }
 .price-list li { border-top: 1px solid var(--line); }
@@ -340,6 +348,7 @@ body.has-cart-bar { padding-bottom: 84px; }
 @media (max-width: 1000px) {
   .bento { grid-template-columns: 1fr 1fr; }
   .bento-3 { grid-template-columns: repeat(3, 1fr); }
+  .price-lists { grid-template-columns: 1fr 1fr; }
   .cards-3 { grid-template-columns: 1fr 1fr; }
   .cards-3 > :last-child:nth-child(3n+1) { grid-column: auto; }
   .cards-3 > :last-child:nth-child(2n+1) { grid-column: 1 / -1; justify-self: center; width: calc(50% - 11px); }

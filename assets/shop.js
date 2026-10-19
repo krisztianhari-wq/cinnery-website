@@ -12,7 +12,7 @@
   const src = path => new URL(path, ROOT).href + VER;
 
   const CAT_TITLE = { roll: 'menu.title', savory: 'menu.savory.title', cookie: 'menu.cookies.title', combo: 'menu.offers.title', extra: 'menu.extra.title',
-    coffee: 'menu.coffee.title', hotchoco: 'menu.hotchoco.title', matcha: 'menu.matcha.title', soft: 'menu.soft.title' };
+    coffee: 'menu.coffee.title', specialty: 'menu.specialty.title', hotchoco: 'menu.hotchoco.title', matcha: 'menu.matcha.title', soft: 'menu.soft.title' };
 
   const lang = () => document.documentElement.lang || 'en';
   const t = key => (T[lang()] && T[lang()][key]) || (T.en && T.en[key]) || key;
@@ -42,13 +42,24 @@
 
   /* photo, or a logo tile when the product has no photo yet */
   function media(p, cls) {
+    if (p.gallery && p.gallery.length > 1 && cls !== 'cart-media') return slides(p, cls);
     if (p.img) { const img = el('img', cls); img.src = src(p.img); img.alt = nm(p); img.loading = 'lazy'; return img; }
     const ph = el('div', 'ph ' + (cls || '') + ' ph-' + p.cat); ph.setAttribute('role', 'img'); ph.setAttribute('aria-label', nm(p));
     ph.appendChild(el('span', 'logo logo-icon')); return ph;
   }
+  /* several photos that take turns (cross-fade); the timer stops itself once the element is re-rendered away */
+  function slides(p, cls) {
+    const box = el('div', 'slides ' + (cls || '')); box.setAttribute('role', 'img'); box.setAttribute('aria-label', nm(p));
+    p.gallery.forEach((g, i) => { const im = el('img', i === 0 ? 'is-on' : null); im.src = src(g); im.alt = ''; im.loading = i === 0 ? 'lazy' : 'eager'; box.appendChild(im); });
+    let i = 0;
+    const timer = setInterval(() => {
+      if (!box.isConnected) { if (document.readyState === 'complete') clearInterval(timer); return; }
+      const ims = box.children; ims[i].classList.remove('is-on'); i = (i + 1) % ims.length; ims[i].classList.add('is-on');
+    }, 3500);
+    return box;
+  }
   function tags(p) {
-    const box = el('div', 'tags');
-    if (p.tier) box.appendChild(el('span', 'tier tier-' + p.tier.toLowerCase().replace(/\s+/g, ''), p.tier));
+    const box = el('div', 'tags');   /* the menu has no tiers any more: tier is only used to pick the Sweet Combo roll */
     if (p.badge === 'veg') box.appendChild(el('span', 'tier tier-veg', t('shop.veg')));
     return box.childNodes.length ? box : null;
   }
