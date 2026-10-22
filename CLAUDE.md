@@ -18,7 +18,7 @@ Statikus weboldal + webshop-váz a Cinnery fahéjascsiga-pékségnek (Groningen)
 - GitHub Pages a `main` gyökeréből: push után 1–2 perc.
 - **Éles: cinnery.nl a sadrobot szerveren** (2026-10-11 óta; www és cinnery.eu oda irányít), tükör: rolls.sadrobot.eu – ugyanaz a `cinnery-web` oldal. Feltöltés: `git archive HEAD` mínusz README/.gitignore/.nojekyll/.htaccess/CLAUDE*.md → /deploy-sadrobot skill (`deploy-site.sh … cinnery-web <mappa>`).
 - `dist/` (gitignore): laikus útmutatók (Lightspeed-kulcsok, e-mail költöztetés), a régi ZXCS-feltöltő csomag már nem kell.
-- Cache-busting: minden helyi CSS/JS/kép link `?v=<verzió>` (most `20261019a`); a `shop.js` a saját `?v`-jét adja tovább a termékfotóknak. Minden asset-változásnál léptesd mindhárom oldalon: `sed -i '' 's/?v=OLD/?v=NEW/g' index.html product.html cart.html` – különben a böngésző új HTML-t régi CSS-sel kever.
+- Cache-busting: minden helyi CSS/JS/kép link `?v=<verzió>` (most `20261022a`); a `shop.js` a saját `?v`-jét adja tovább a termékfotóknak. Minden asset-változásnál léptesd mindhárom oldalon: `sed -i '' 's/?v=OLD/?v=NEW/g' index.html product.html cart.html` – különben a böngésző új HTML-t régi CSS-sel kever.
 - Git identitás repo-szinten: GitHub noreply cím; céges e-mail nem kerülhet vissza a historyba.
 - Korábbi dizájnok: `archive/design-versions` ág (A/B + választó) és `archive-all-variants` tag (mind az öt).
 

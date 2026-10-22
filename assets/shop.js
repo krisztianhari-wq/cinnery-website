@@ -21,7 +21,7 @@
   const nm = p => p.name[lang()] || p.name.en;
   const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
   const pageOf = id => 'product.html?id=' + encodeURIComponent(id);
-  const choicesFor = f => P.filter(x => f.cats.includes(x.cat) && (!f.tiers || f.tiers.includes(x.tier)));
+  const choicesFor = f => P.filter(x => (f.ids || []).includes(x.id) || ((f.cats || []).includes(x.cat) && (!f.tiers || f.tiers.includes(x.tier))));
 
   /* ---- cart storage: key = "id" or "id|choice|choice" ---- */
   function getCart() { try { const c = JSON.parse(localStorage.getItem(KEY) || '{}'); return typeof c === 'object' && c ? c : {}; } catch (e) { return {}; } }
