@@ -18,7 +18,7 @@ Statikus weboldal + webshop-váz a Cinnery fahéjascsiga-pékségnek (Groningen)
 - GitHub Pages a `main` gyökeréből: push után 1–2 perc.
 - **Éles: cinnery.nl a sadrobot szerveren** (2026-10-11 óta; www és cinnery.eu oda irányít), tükör: rolls.sadrobot.eu – ugyanaz a `cinnery-web` oldal. Feltöltés: `git archive HEAD` mínusz README/.gitignore/.nojekyll/.htaccess/CLAUDE*.md → /deploy-sadrobot skill (`deploy-site.sh … cinnery-web <mappa>`).
 - `dist/` (gitignore): laikus útmutatók (Lightspeed-kulcsok, e-mail költöztetés), a régi ZXCS-feltöltő csomag már nem kell.
-- Cache-busting: minden helyi CSS/JS/kép link `?v=<verzió>` (most `20261022a`); a `shop.js` a saját `?v`-jét adja tovább a termékfotóknak. Minden asset-változásnál léptesd mindhárom oldalon: `sed -i '' 's/?v=OLD/?v=NEW/g' index.html product.html cart.html` – különben a böngésző új HTML-t régi CSS-sel kever.
+- Cache-busting: minden helyi CSS/JS/kép link `?v=<verzió>` (most `20261028a`); a `shop.js` a saját `?v`-jét adja tovább a termékfotóknak. Minden asset-változásnál léptesd mindhárom oldalon: `sed -i '' 's/?v=OLD/?v=NEW/g' index.html product.html cart.html` – különben a böngésző új HTML-t régi CSS-sel kever.
 - Git identitás repo-szinten: GitHub noreply cím; céges e-mail nem kerülhet vissza a historyba.
 - Korábbi dizájnok: `archive/design-versions` ág (A/B + választó) és `archive-all-variants` tag (mind az öt).
 
@@ -31,7 +31,7 @@ Statikus weboldal + webshop-váz a Cinnery fahéjascsiga-pékségnek (Groningen)
 
 1. Mindig angolul nyílik (nincs mentett nyelv, böngészőnyelv figyelmen kívül); EN/NL váltó, magyar nincs. localStorage csak a kosárhoz.
 2. Adatvédelem: betöltéskor nulla harmadik feles kérés (fontok, képek helyben), Google Maps csak a „Show map” kattintásra, CSP meta az `index.html`-ben, külső linkek `noopener noreferrer`. Új külső erőforrás → CSP-t is bővíteni.
-3. Fizetés még nincs: a kosár mailto előrendelést nyit (info@cinnery.nl). Nincs házhozszállítás, nincs WhatsApp.
+3. Fizetés még nincs: a kosár mailto előrendelést nyit (cinnery.nl@gmail.com). Nincs házhozszállítás, nincs WhatsApp.
 4. Halal-állítás sehol (a menüben volt bacon roll). A hero alatti kiemelés „Artisan”.
 5. Kávé és üdítő: árlista-sor közvetlen kosárba gombbal, terméklap nélkül (kérésre, bár van kávéfotó). Extrák: kompakt fotókártya (`.cards-row`).
 6. Dizájn: nincs matrica, animáció, gradiens; nagy lekerekített kártyák, sok fehér tér, Fredoka + Inter. Lábléc: „Site by sadrobot”.

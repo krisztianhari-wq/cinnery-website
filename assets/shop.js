@@ -267,7 +267,7 @@
     const body = [t('shop.mail.name') + ': ', t('shop.mail.time') + ': ', t('shop.mail.phone') + ': ', '',
       ...lines, '', t('shop.total') + ': ' + money(total), '', t('shop.mail.pay'), t('shop.pickup.note')].join('\n');
     const mail = el('a', 'btn btn-pink', t('shop.checkout.email'));
-    mail.href = 'mailto:info@cinnery.nl?subject=' + encodeURIComponent(t('shop.mail.subject')) + '&body=' + encodeURIComponent(body);
+    mail.href = 'mailto:cinnery.nl@gmail.com?subject=' + encodeURIComponent(t('shop.mail.subject')) + '&body=' + encodeURIComponent(body);
     /* the mail app takes over from here: empty the cart, but keep a copy so the visitor can reopen the e-mail or restore the cart */
     mail.addEventListener('click', () => {
       try { localStorage.setItem(LAST, JSON.stringify({ cart: getCart(), href: mail.href })); } catch (e) {}

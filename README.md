@@ -47,7 +47,7 @@ and the `archive-all-variants` tag (all five variants).
 ## Brand
 
 - Pink `#F0A3AF` (Pantone 494 C) · Eggplant `#614051` (Pantone 7659 C)
-- Instagram: [@cinnery_rolls](https://www.instagram.com/cinnery_rolls/) · info@cinnery.nl
+- Instagram: [@cinnery_rolls](https://www.instagram.com/cinnery_rolls/) · cinnery.nl@gmail.com
 
 Site by sadrobot.
 
