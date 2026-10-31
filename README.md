@@ -24,11 +24,24 @@ Privacy and security: no third-party requests on page load (fonts and photos are
 repo), the Google Maps embed loads only after the visitor clicks "Show map", external links open
 with `noopener noreferrer`, and a Content Security Policy is set in `index.html`.
 
-No build step. Open `index.html` in a browser, or serve the folder:
+No framework. Open `index.html` in a browser, or serve the folder:
 
 ```bash
 python3 -m http.server 8791
 ```
+
+## Search engines and AI assistants
+
+`index.html` ships pre-rendered: the menu, prices and all English texts are in the HTML itself, so crawlers that
+do not run JavaScript (most AI crawlers) see the full page. It also carries Schema.org JSON-LD (Bakery + menu with
+prices), and `llms.txt` gives AI assistants a plain-text summary. All three are generated from `assets/products.js`
+and `assets/i18n.js`:
+
+```bash
+node tools/build.mjs
+```
+
+Run it after every change to the menu, the texts or `index.html` (needs Node 18+ and Google Chrome).
 
 ## Editing text
 

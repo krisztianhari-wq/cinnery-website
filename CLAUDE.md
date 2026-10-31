@@ -3,7 +3,8 @@
 Statikus weboldal + webshop-váz a Cinnery fahéjascsiga-pékségnek (Groningen). Szerkezet és szerkesztés: README.md.
 
 ## Indítás és ellenőrzés
-- Nincs build, nincs keretrendszer. `python3 -m http.server 8791` a repó gyökeréből (launch config: `cinnery`).
+- Nincs keretrendszer. `python3 -m http.server 8791` a repó gyökeréből (launch config: `cinnery`).
+- **Generálás (kötelező minden menü-/szöveg-/index.html-változás után):** `node tools/build.mjs` – JSON-LD (Bakery + teljes menü árakkal) az `index.html` `<head>`-jébe, `llms.txt`, és az `index.html` előrenderelése headless Chrome-mal (a menü, árak, angol szövegek benne vannak a HTML-ben JS nélkül is; az AI-lánctalpasok nagy része nem futtat JS-t). Idempotens; a böngészőben a JS ugyanúgy újrarajzol. A `?v=` léptetése ELŐTT/UTÁN is futtasd, mert a generált képcímek is tartalmazzák.
 - Ellenőrzés: asztali nézet + 320/390/700/882/1024/1150 px (hajtogatható telefon), konzolhiba nélkül; a menü tördelődjön, ne zsugorodjon el.
 
 ## Felépítés
@@ -16,9 +17,9 @@ Statikus weboldal + webshop-váz a Cinnery fahéjascsiga-pékségnek (Groningen)
 
 ## Telepítés
 - GitHub Pages a `main` gyökeréből: push után 1–2 perc.
-- **Éles: cinnery.nl a sadrobot szerveren** (2026-10-11 óta; www és cinnery.eu oda irányít), tükör: rolls.sadrobot.eu – ugyanaz a `cinnery-web` oldal. Feltöltés: `git archive HEAD` mínusz README/.gitignore/.nojekyll/.htaccess/CLAUDE*.md → /deploy-sadrobot skill (`deploy-site.sh … cinnery-web <mappa>`).
+- **Éles: cinnery.nl a sadrobot szerveren** (2026-10-11 óta; www és cinnery.eu oda irányít), tükör: rolls.sadrobot.eu – ugyanaz a `cinnery-web` oldal. Feltöltés: `git archive HEAD` mínusz README/.gitignore/.nojekyll/.htaccess/CLAUDE*.md/tools/ → /deploy-sadrobot skill (`deploy-site.sh … cinnery-web <mappa>`).
 - `dist/` (gitignore): laikus útmutatók (Lightspeed-kulcsok, e-mail költöztetés), a régi ZXCS-feltöltő csomag már nem kell.
-- Cache-busting: minden helyi CSS/JS/kép link `?v=<verzió>` (most `20261028a`); a `shop.js` a saját `?v`-jét adja tovább a termékfotóknak. Minden asset-változásnál léptesd mindhárom oldalon: `sed -i '' 's/?v=OLD/?v=NEW/g' index.html product.html cart.html` – különben a böngésző új HTML-t régi CSS-sel kever.
+- Cache-busting: minden helyi CSS/JS/kép link `?v=<verzió>` (most `20261031a`); a `shop.js` a saját `?v`-jét adja tovább a termékfotóknak. Minden asset-változásnál léptesd mindhárom oldalon: `sed -i '' 's/?v=OLD/?v=NEW/g' index.html product.html cart.html` – különben a böngésző új HTML-t régi CSS-sel kever.
 - Git identitás repo-szinten: GitHub noreply cím; céges e-mail nem kerülhet vissza a historyba.
 - Korábbi dizájnok: `archive/design-versions` ág (A/B + választó) és `archive-all-variants` tag (mind az öt).
 
