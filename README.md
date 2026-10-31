@@ -32,9 +32,9 @@ python3 -m http.server 8791
 
 ## Search engines and AI assistants
 
-`index.html` ships pre-rendered: the menu, prices and all English texts are in the HTML itself, so crawlers that
+`index.html` (English) and `nl/index.html` (Dutch, generated from the English page) ship pre-rendered: the menu, prices and all English texts are in the HTML itself, so crawlers that
 do not run JavaScript (most AI crawlers) see the full page. It also carries Schema.org JSON-LD (Bakery + menu with
-prices), and `llms.txt` gives AI assistants a plain-text summary. All three are generated from `assets/products.js`
+prices), and `llms.txt` gives AI assistants a plain-text summary; `sitemap.xml` links both languages with hreflang. All three are generated from `assets/products.js`
 and `assets/i18n.js`:
 
 ```bash

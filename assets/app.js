@@ -4,8 +4,14 @@
   const T = window.CINNERY_I18N || {};
 
   /* ---- language ---- */
-  /* Always start in English, regardless of browser language or previous visits. */
-  function pickLang() { return 'en'; }
+  /* Start language: the page's own (index.html = English, nl/index.html = Dutch), or ?lang=nl on product/cart pages
+     opened from the Dutch home page. Never the browser language or a stored preference. */
+  const HTML = document.documentElement;
+  function pickLang() {
+    const q = new URLSearchParams(location.search).get('lang');
+    if (LANGS.includes(q)) return q;
+    return HTML.getAttribute('data-lang-default') || 'en';
+  }
   function apply(lang) {
     const dict = T[lang] || T.en;
     document.documentElement.lang = lang;
@@ -27,9 +33,26 @@
       b.classList.toggle('is-active', on);
       b.setAttribute('aria-pressed', on ? 'true' : 'false');
     });
+    /* product/cart pages: links back to the home page go to the home page of the same language */
+    if (!HTML.hasAttribute('data-url-en')) {
+      document.querySelectorAll('a[href^="index.html"], a[data-home]').forEach(a => {
+        if (!a.dataset.home) a.dataset.home = a.getAttribute('href');
+        a.setAttribute('href', lang === 'nl' ? a.dataset.home.replace(/^index\.html/, 'nl/') : a.dataset.home);
+      });
+    }
+    document.querySelectorAll('a.cart-link').forEach(a => {
+      const base = a.getAttribute('href').split('?')[0];
+      a.setAttribute('href', lang === 'nl' ? base + '?lang=nl' : base);
+    });
     document.dispatchEvent(new CustomEvent('cinnery:lang', { detail: lang }));
   }
-  document.querySelectorAll('[data-lang]').forEach(b => b.addEventListener('click', () => apply(b.getAttribute('data-lang'))));
+  /* on the two home pages the switch goes to the other language's own URL (each language has an address of its own) */
+  document.querySelectorAll('[data-lang]').forEach(b => b.addEventListener('click', () => {
+    const lang = b.getAttribute('data-lang');
+    const url = HTML.getAttribute('data-url-' + lang);
+    if (url && lang !== HTML.getAttribute('data-lang-default')) { location.href = url + location.hash; return; }
+    apply(lang);
+  }));
   apply(pickLang());
 
   /* ---- mobile nav ---- */

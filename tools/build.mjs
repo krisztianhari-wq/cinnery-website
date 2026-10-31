@@ -2,19 +2,21 @@
 //
 //   node tools/build.mjs
 //
-// 1. Writes the Schema.org JSON-LD (Bakery + full menu with prices) into index.html.
-// 2. Writes llms.txt (plain summary of the bakery and the menu for AI assistants).
-// 3. Pre-renders index.html: runs the page's own JavaScript in headless Chrome and saves the filled-in HTML,
-//    so the menu, prices and all English texts are in the file itself. In the browser the scripts still run
-//    and re-render everything (language switch, ordering), so nothing changes for visitors.
+// 1. Writes Schema.org JSON-LD (Bakery + full menu with prices) into index.html (English) and nl/index.html (Dutch).
+// 2. Pre-renders both home pages: runs the page's own JavaScript in headless Chrome and saves the filled-in HTML,
+//    so the menu, prices and texts are in the files themselves. In the browser the scripts still run and re-render
+//    everything (language switch, ordering), so nothing changes for visitors.
+// 3. Creates nl/index.html from index.html: Dutch text, its own canonical URL, hreflang to the English page.
+// 4. Writes llms.txt (plain summary for AI assistants) and sitemap.xml (both languages).
 //
-// Source of truth stays assets/products.js and assets/i18n.js: edit those, then run this script.
+// Source of truth stays index.html (English page structure), assets/products.js and assets/i18n.js:
+// edit those, then run this script. Never edit nl/index.html by hand.
 
-import { readFileSync, writeFileSync, mkdtempSync, rmSync, existsSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdtempSync, rmSync, existsSync, mkdirSync } from 'node:fs';
 import { join, extname, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createServer } from 'node:http';
-import { execFileSync } from 'node:child_process';
+import { execFile } from 'node:child_process';
 import { tmpdir } from 'node:os';
 import vm from 'node:vm';
 
@@ -22,11 +24,11 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const SITE = 'https://cinnery.nl';
 const CHROME = process.env.CHROME || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 
-// ---- load the data the site itself uses ----
+// ---- the data the site itself uses ----
 const ctx = { window: {} };
 vm.createContext(ctx);
 for (const f of ['assets/i18n.js', 'assets/products.js']) vm.runInContext(readFileSync(join(ROOT, f), 'utf8'), ctx);
-const T = ctx.window.CINNERY_I18N.en;
+const I18N = ctx.window.CINNERY_I18N;
 const P = ctx.window.CINNERY_PRODUCTS;
 
 const SECTIONS = [   // menu sections in page order: [category, title key]
@@ -34,51 +36,135 @@ const SECTIONS = [   // menu sections in page order: [category, title key]
   ['extra', 'menu.extra.title'], ['hotchoco', 'menu.hotchoco.title'], ['coffee', 'menu.coffee.title'],
   ['specialty', 'menu.specialty.title'], ['soft', 'menu.soft.title'],
 ];
-const name = p => p.name.en;
-const price = n => n.toFixed(2);
-const img = p => p.img ? `${SITE}/${p.img}` : undefined;
-
-// ---- 1. JSON-LD ----
-const ld = {
-  '@context': 'https://schema.org',
-  '@type': 'Bakery',
-  name: 'Cinnery',
-  description: T['hero.sub'] ? `${T['hero.h']} ${T['hero.sub']}` : T['hero.h'],
-  url: `${SITE}/`,
-  image: `${SITE}/assets/img/own/sign-roll.jpg`,
-  logo: `${SITE}/assets/img/apple-touch-icon.png`,
-  email: 'cinnery.nl@gmail.com',
-  address: { '@type': 'PostalAddress', streetAddress: 'Zwanestraat 29', postalCode: '9712 CJ', addressLocality: 'Groningen', addressCountry: 'NL' },
-  sameAs: ['https://www.instagram.com/cinnery_rolls/'],
-  servesCuisine: ['Cinnamon rolls', 'Cookies', 'Coffee'],
-  priceRange: '€',
-  currenciesAccepted: 'EUR',
-  paymentAccepted: 'Debit card, Credit card, Contactless',
-  hasMenu: {
-    '@type': 'Menu',
-    name: 'Cinnery menu',
-    inLanguage: 'en',
-    hasMenuSection: SECTIONS.map(([cat, key]) => ({
-      '@type': 'MenuSection',
-      name: T[key] || cat,
-      hasMenuItem: P.filter(p => p.cat === cat).map(p => ({
-        '@type': 'MenuItem',
-        name: name(p),
-        description: p.desc.en,
-        ...(img(p) ? { image: img(p) } : {}),
-        offers: { '@type': 'Offer', price: price(p.price), priceCurrency: 'EUR' },
-      })),
-    })).filter(s => s.hasMenuItem.length),
-  },
+const PAGES = {
+  en: { file: 'index.html', url: `${SITE}/`, prefix: '', locale: 'en_GB',
+        description: 'Soft, fluffy cinnamon rolls, cookies and specialty coffee, baked fresh every day at Zwanestraat 29, Groningen.',
+        og: 'Soft, fluffy cinnamon rolls, cookies and specialty coffee in the heart of Groningen.' },
+  nl: { file: 'nl/index.html', url: `${SITE}/nl/`, prefix: '../', locale: 'nl_NL',
+        description: 'Zachte, luchtige cinnamon rolls, koekjes en specialty koffie, elke dag vers gebakken aan de Zwanestraat 29 in Groningen.',
+        og: 'Zachte, luchtige cinnamon rolls, koekjes en specialty koffie in het hart van Groningen.' },
 };
-const ldBlock = `<!-- ld+json:start (generated by tools/build.mjs) -->\n  <script type="application/ld+json">${JSON.stringify(ld).replace(/</g, '\\u003c')}</script>\n  <!-- ld+json:end -->`;
+const price = n => n.toFixed(2);
 
-let html = readFileSync(join(ROOT, 'index.html'), 'utf8');
-if (html.includes('<!-- ld+json:start')) html = html.replace(/<!-- ld\+json:start[\s\S]*?<!-- ld\+json:end -->/, ldBlock);
-else html = html.replace('</head>', `  ${ldBlock}\n</head>`);
-writeFileSync(join(ROOT, 'index.html'), html);
+// ---- JSON-LD ----
+function ldBlock(lang) {
+  const T = I18N[lang];
+  const ld = {
+    '@context': 'https://schema.org',
+    '@type': 'Bakery',
+    name: 'Cinnery',
+    description: `${T['hero.h']} ${T['hero.sub'] || ''}`.trim(),
+    url: PAGES[lang].url,
+    image: `${SITE}/assets/img/own/sign-roll.jpg`,
+    logo: `${SITE}/assets/img/apple-touch-icon.png`,
+    email: 'cinnery.nl@gmail.com',
+    address: { '@type': 'PostalAddress', streetAddress: 'Zwanestraat 29', postalCode: '9712 CJ', addressLocality: 'Groningen', addressCountry: 'NL' },
+    sameAs: ['https://www.instagram.com/cinnery_rolls/'],
+    servesCuisine: ['Cinnamon rolls', 'Cookies', 'Coffee'],
+    priceRange: '€',
+    currenciesAccepted: 'EUR',
+    paymentAccepted: 'Debit card, Credit card, Contactless',
+    hasMenu: {
+      '@type': 'Menu',
+      name: lang === 'nl' ? 'Cinnery menu' : 'Cinnery menu',
+      inLanguage: lang,
+      hasMenuSection: SECTIONS.map(([cat, key]) => ({
+        '@type': 'MenuSection',
+        name: T[key] || cat,
+        hasMenuItem: P.filter(p => p.cat === cat).map(p => ({
+          '@type': 'MenuItem',
+          name: p.name[lang] || p.name.en,
+          description: p.desc[lang] || p.desc.en,
+          ...(p.img ? { image: `${SITE}/${p.img}` } : {}),
+          offers: { '@type': 'Offer', price: price(p.price), priceCurrency: 'EUR' },
+        })),
+      })).filter(s => s.hasMenuItem.length),
+    },
+  };
+  return `<!-- ld+json:start (generated by tools/build.mjs) -->\n  <script type="application/ld+json">${JSON.stringify(ld).replace(/</g, '\\u003c')}</script>\n  <!-- ld+json:end -->`;
+}
+function withLd(html, lang) {
+  return html.includes('<!-- ld+json:start')
+    ? html.replace(/<!-- ld\+json:start[\s\S]*?<!-- ld\+json:end -->/, ldBlock(lang))
+    : html.replace('</head>', `  ${ldBlock(lang)}\n</head>`);
+}
 
-// ---- 2. llms.txt ----
+// ---- headless Chrome pre-render through a throwaway local server ----
+const TYPES = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.css': 'text/css', '.jpg': 'image/jpeg', '.png': 'image/png', '.woff2': 'font/woff2', '.webp': 'image/webp', '.txt': 'text/plain' };
+const server = createServer((req, res) => {
+  let p = decodeURIComponent(new URL(req.url, 'http://x').pathname);
+  if (p.endsWith('/')) p += 'index.html';
+  const f = join(ROOT, p);
+  if (!f.startsWith(ROOT) || !existsSync(f)) { res.writeHead(404); return res.end(); }
+  res.writeHead(200, { 'Content-Type': TYPES[extname(f)] || 'application/octet-stream' });
+  res.end(readFileSync(f));
+});
+await new Promise(r => server.listen(0, '127.0.0.1', r));
+const ORIGIN = `http://127.0.0.1:${server.address().port}/`;
+
+function dumpDom(path) {
+  const profile = mkdtempSync(join(tmpdir(), 'cinnery-build-'));
+  return new Promise((ok, fail) => execFile(CHROME, [
+    '--headless=new', '--disable-gpu', '--no-first-run', `--user-data-dir=${profile}`,
+    '--virtual-time-budget=5000', '--dump-dom', ORIGIN + path,
+  ], { maxBuffer: 20 * 1024 * 1024 }, (err, out) => { rmSync(profile, { recursive: true, force: true }); err ? fail(err) : ok(out); }));
+}
+function clean(dom, prefix) {
+  dom = dom.replace(/<a class="cart-bar"[\s\S]*?<\/a>/g, '');            // depends on the visitor's cart
+  dom = dom.split(ORIGIN).join(prefix);                                    // shop.js builds absolute URLs from its own location
+  dom = dom.replace(/<div class="slides[^"]*"[^>]*>[\s\S]*?<\/div>/g, block => {   // slideshows: save with the first photo showing
+    let first = true;
+    return block.replace(/<img([^>]*)>/g, (m, attrs) => {
+      attrs = attrs.replace(/\sclass="[^"]*"/, '');
+      const out = first ? `<img class="is-on"${attrs}>` : `<img${attrs}>`;
+      first = false;
+      return out;
+    });
+  });
+  const body = dom.trim().replace(/^<!DOCTYPE html>\s*/i, '').replace(/\s*<\/body>\s*<\/html>$/, '\n</body></html>');
+  return '<!DOCTYPE html>\n' + body + '\n';
+}
+function check(out, lang) {
+  const must = [...P.filter(p => ['roll', 'coffee'].includes(p.cat)).map(p => p.name[lang] || p.name.en), I18N[lang]['menu.offers.note'], 'application/ld+json'];
+  const missing = must.filter(s => s && !out.includes(s) && !out.includes(s.replace(/&/g, '&amp;')));
+  if (missing.length) throw new Error(`pre-render check failed for ${lang}, nothing written. Missing: ${missing.join(' | ')}`);
+}
+
+// the Dutch page: same structure as the English one, its own URL, language and relative paths one folder down
+function toDutch(html) {
+  const pg = PAGES.nl, en = PAGES.en;
+  const rep = (from, to) => { if (!html.includes(from)) throw new Error('nl: not found: ' + from); html = html.split(from).join(to); };
+  html = html.replace(/<html[^>]*>/, m => m.replace('lang="en"', 'lang="nl"').replace('data-lang-default="en"', 'data-lang-default="nl"')
+    .replace('data-url-en="./"', 'data-url-en="../"').replace('data-url-nl="nl/"', 'data-url-nl="./"'));
+  rep(`<link rel="canonical" href="${en.url}">`, `<link rel="canonical" href="${pg.url}">`);
+  rep(`<meta property="og:url" content="${en.url}">`, `<meta property="og:url" content="${pg.url}">`);
+  rep(`<meta name="description" content="${en.description}">`, `<meta name="description" content="${pg.description}">`);
+  rep(`<meta property="og:description" content="${en.og}">`, `<meta property="og:description" content="${pg.og}">`);
+  rep('<meta property="og:locale" content="en_GB">', '<meta property="og:locale" content="nl_NL">');
+  rep('<meta property="og:locale:alternate" content="nl_NL">', '<meta property="og:locale:alternate" content="en_GB">');
+  // relative links and assets are one folder up from nl/
+  html = html.replace(/\s(src|href)="(?!https?:|mailto:|tel:|#|\/|data:|\.\.\/)([^"]*)"/g, (m, attr, v) => ` ${attr}="../${v}"`);
+  return withLd(html, 'nl');
+}
+
+try {
+  // English
+  writeFileSync(join(ROOT, 'index.html'), withLd(readFileSync(join(ROOT, 'index.html'), 'utf8'), 'en'));
+  const en = clean(await dumpDom('index.html'), '');
+  check(en, 'en');
+  writeFileSync(join(ROOT, 'index.html'), en);
+  // Dutch
+  mkdirSync(join(ROOT, 'nl'), { recursive: true });
+  writeFileSync(join(ROOT, 'nl/index.html'), toDutch(en));
+  const nl = clean(await dumpDom('nl/'), '../');
+  check(nl, 'nl');
+  writeFileSync(join(ROOT, 'nl/index.html'), nl);
+} finally {
+  server.close();
+}
+
+// ---- llms.txt ----
+const T = I18N.en;
 const lines = [
   '# Cinnery',
   '',
@@ -90,7 +176,7 @@ const lines = [
   `- ${T['visit.card.title'] || 'Card only'}: ${T['visit.card.d'] || ''}`.trim(),
   '- E-mail: cinnery.nl@gmail.com (catering, large orders, custom flavours)',
   '- Instagram: https://www.instagram.com/cinnery_rolls/',
-  '- Website: https://cinnery.nl/ (English and Dutch)',
+  '- Website: https://cinnery.nl/ (English), https://cinnery.nl/nl/ (Dutch)',
   '',
   '## Menu',
   '',
@@ -100,58 +186,20 @@ for (const [cat, key] of SECTIONS) {
   const items = P.filter(p => p.cat === cat);
   if (!items.length) continue;
   lines.push('', `### ${T[key] || cat}`, '');
-  for (const p of items) lines.push(`- ${name(p)}: €${price(p.price)} – ${p.desc.en}`);
+  for (const p of items) lines.push(`- ${p.name.en}: €${price(p.price)} – ${p.desc.en}`);
 }
 if (T['menu.offers.note']) lines.push('', T['menu.offers.note']);
 if (T['menu.note']) lines.push(T['menu.note']);
 lines.push('', '## Allergens', '', T['faq.a6'] || '');
 writeFileSync(join(ROOT, 'llms.txt'), lines.join('\n').replace(/<[^>]+>/g, '') + '\n');
 
-// ---- 3. pre-render index.html with the page's own scripts ----
-const TYPES = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.css': 'text/css', '.jpg': 'image/jpeg', '.png': 'image/png', '.woff2': 'font/woff2', '.webp': 'image/webp', '.txt': 'text/plain' };
-const server = createServer((req, res) => {
-  const p = decodeURIComponent(new URL(req.url, 'http://x').pathname);
-  const f = join(ROOT, p === '/' ? 'index.html' : p);
-  if (!f.startsWith(ROOT) || !existsSync(f)) { res.writeHead(404); return res.end(); }
-  res.writeHead(200, { 'Content-Type': TYPES[extname(f)] || 'application/octet-stream' });
-  res.end(readFileSync(f));
-});
-await new Promise(r => server.listen(0, '127.0.0.1', r));
-const port = server.address().port;
-const profile = mkdtempSync(join(tmpdir(), 'cinnery-build-'));
-let dom;
-try {
-  dom = await new Promise((resolveDom, reject) => {
-    // execFileSync would block the event loop the server needs, so run Chrome asynchronously
-    import('node:child_process').then(({ execFile }) => execFile(CHROME, [
-      '--headless=new', '--disable-gpu', '--no-first-run', `--user-data-dir=${profile}`,
-      '--virtual-time-budget=5000', '--dump-dom', `http://127.0.0.1:${port}/index.html`,
-    ], { maxBuffer: 20 * 1024 * 1024 }, (err, out) => err ? reject(err) : resolveDom(out)));
-  });
-} finally {
-  server.close();
-  rmSync(profile, { recursive: true, force: true });
-}
+// ---- sitemap.xml (both languages, linked to each other) ----
+const alt = `<xhtml:link rel="alternate" hreflang="en" href="${PAGES.en.url}"/><xhtml:link rel="alternate" hreflang="nl" href="${PAGES.nl.url}"/><xhtml:link rel="alternate" hreflang="x-default" href="${PAGES.en.url}"/>`;
+writeFileSync(join(ROOT, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url><loc>${PAGES.en.url}</loc>${alt}<changefreq>monthly</changefreq><priority>1.0</priority></url>
+  <url><loc>${PAGES.nl.url}</loc>${alt}<changefreq>monthly</changefreq><priority>0.9</priority></url>
+</urlset>
+`);
 
-// keep only what belongs in the static file: no floating cart bar (it depends on the visitor's cart)
-dom = dom.replace(/<a class="cart-bar"[\s\S]*?<\/a>/g, '');
-// shop.js builds absolute image URLs from its own location: make them relative again
-dom = dom.split(`http://127.0.0.1:${port}/`).join('');
-// photo slideshows: always save with the first photo showing (the timer may have moved on during the render)
-dom = dom.replace(/<div class="slides[^"]*"[^>]*>[\s\S]*?<\/div>/g, block => {
-  let first = true;
-  return block.replace(/<img([^>]*)>/g, (m, attrs) => {
-    attrs = attrs.replace(/\sclass="[^"]*"/, '');
-    const out = first ? `<img class="is-on"${attrs}>` : `<img${attrs}>`;
-    first = false;
-    return out;
-  });
-});
-const body = dom.trim().replace(/^<!DOCTYPE html>\s*/i, '').replace(/\s*<\/body>\s*<\/html>$/, '\n</body></html>');
-const out = '<!DOCTYPE html>\n' + body + '\n';
-
-const must = [...P.filter(p => ['roll', 'coffee'].includes(p.cat)).map(name), T['menu.offers.note'], 'application/ld+json'];
-const missing = must.filter(s => s && !out.includes(s.replace(/&/g, '&amp;')) && !out.includes(s));
-if (missing.length) { console.error('pre-render check failed, index.html not written. Missing:', missing); process.exit(1); }
-writeFileSync(join(ROOT, 'index.html'), out);
-console.log(`ok: index.html pre-rendered (${out.length} bytes), llms.txt (${lines.length} lines), JSON-LD with ${P.length} menu items`);
+console.log(`ok: index.html + nl/index.html pre-rendered, JSON-LD (${P.length} menu items each), llms.txt, sitemap.xml`);

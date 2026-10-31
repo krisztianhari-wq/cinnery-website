@@ -20,7 +20,12 @@
   const byId = id => P.find(p => p.id === id);
   const nm = p => p.name[lang()] || p.name.en;
   const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
-  const pageOf = id => 'product.html?id=' + encodeURIComponent(id);
+  /* links are built from the site root, so they also work from nl/index.html; Dutch pages keep ?lang=nl */
+  const href = path => new URL(path, ROOT).href;
+  const nlq = () => lang() === 'nl' ? 'lang=nl' : '';
+  const pageOf = id => href('product.html?id=' + encodeURIComponent(id) + (nlq() ? '&' + nlq() : ''));
+  const menuHref = () => href(lang() === 'nl' ? 'nl/#menu' : 'index.html#menu');
+  const cartHref = () => href('cart.html' + (nlq() ? '?' + nlq() : ''));
   const choicesFor = f => P.filter(x => (f.ids || []).includes(x.id) || ((f.cats || []).includes(x.cat) && (!f.tiers || f.tiers.includes(x.tier))));
 
   /* ---- cart storage: key = "id" or "id|choice|choice" ---- */
@@ -86,10 +91,11 @@
     let bar = document.querySelector('.cart-bar');
     const { n, sum } = cartTotal();
     if (!bar) {
-      bar = el('a', 'cart-bar'); bar.href = 'cart.html';
+      bar = el('a', 'cart-bar');
       bar.append(el('span', 'cart-bar-sum'), el('span', 'cart-bar-go'));
       document.body.appendChild(bar);
     }
+    bar.href = cartHref();
     bar.querySelector('.cart-bar-sum').textContent = n + ' ' + (n === 1 ? t('shop.item') : t('shop.items')) + ' · ' + money(sum);
     bar.querySelector('.cart-bar-go').textContent = t('shop.viewcart') + ' →';
     bar.hidden = n === 0;
@@ -190,7 +196,7 @@
 
     const actions = el('div', 'cta-row');
     const addBtn = el('button', 'btn btn-pink', t('shop.add')); addBtn.type = 'button';
-    const cartBtn = el('a', 'btn btn-outline-dark', t('shop.continue')); cartBtn.href = 'index.html#menu';
+    const cartBtn = el('a', 'btn btn-outline-dark', t('shop.continue')); cartBtn.href = menuHref();
     const note = el('p', 'added muted small'); note.hidden = true;
     addBtn.addEventListener('click', () => {
       const key = [p.id, ...selects.map(s => s.value)].join('|');
@@ -220,7 +226,7 @@
       restore.addEventListener('click', () => { setCart(last.cart); try { localStorage.removeItem(LAST); } catch (e) {} renderCart(); });
       row.appendChild(restore);
     }
-    const menu = el('a', 'btn btn-outline-dark', t('shop.back')); menu.href = 'index.html#menu'; row.appendChild(menu);
+    const menu = el('a', 'btn btn-outline-dark', t('shop.back')); menu.href = menuHref(); row.appendChild(menu);
     wrap.appendChild(row);
     box.replaceChildren(wrap); sum.replaceChildren();
   }
@@ -228,7 +234,7 @@
   /* ---- cart page ---- */
   function renderCart() {
     const box = document.getElementById('cart'); const sum = document.getElementById('summary'); if (!box || !sum) return;
-    if (!ORDERING) { location.replace('index.html#menu'); return; }
+    if (!ORDERING) { location.replace(menuHref()); return; }
     const c = getCart(); const keys = Object.keys(c).filter(parseKey);
     if (!keys.length) { box.replaceChildren(el('p', 'lead', t('shop.empty'))); sum.replaceChildren(); return; }
     let total = 0; const lines = [];
