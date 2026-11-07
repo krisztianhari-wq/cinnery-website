@@ -38,9 +38,13 @@ const SECTIONS = [   // menu sections in page order: [category, title key]
 ];
 const PAGES = {
   en: { file: 'index.html', url: `${SITE}/`, prefix: '', locale: 'en_GB',
+        title: 'Cinnery – Cinnamon rolls in Groningen',
+        imgAlt: 'Cinnamon roll on a pink plate in front of the Cinnery sign',
         description: 'Soft, fluffy cinnamon rolls, cookies and specialty coffee, baked fresh every day at Zwanestraat 29, Groningen.',
         og: 'Soft, fluffy cinnamon rolls, cookies and specialty coffee in the heart of Groningen.' },
   nl: { file: 'nl/index.html', url: `${SITE}/nl/`, prefix: '../', locale: 'nl_NL',
+        title: 'Cinnery – Verse cinnamon rolls in Groningen',
+        imgAlt: 'Cinnamon roll op een roze bord voor het Cinnery-uithangbord',
         description: 'Zachte, luchtige cinnamon rolls, koekjes en specialty koffie, elke dag vers gebakken aan de Zwanestraat 29 in Groningen.',
         og: 'Zachte, luchtige cinnamon rolls, koekjes en specialty koffie in het hart van Groningen.' },
 };
@@ -59,6 +63,7 @@ function ldBlock(lang) {
     logo: `${SITE}/assets/img/apple-touch-icon.png`,
     email: 'cinnery.nl@gmail.com',
     address: { '@type': 'PostalAddress', streetAddress: 'Zwanestraat 29', postalCode: '9712 CJ', addressLocality: 'Groningen', addressCountry: 'NL' },
+    hasMap: 'https://www.google.com/maps/search/?api=1&query=Zwanestraat+29+9712+CJ+Groningen',
     sameAs: ['https://www.instagram.com/cinnery_rolls/'],
     servesCuisine: ['Cinnamon rolls', 'Cookies', 'Coffee'],
     priceRange: '€',
@@ -76,7 +81,7 @@ function ldBlock(lang) {
           name: p.name[lang] || p.name.en,
           description: p.desc[lang] || p.desc.en,
           ...(p.img ? { image: `${SITE}/${p.img}` } : {}),
-          offers: { '@type': 'Offer', price: price(p.price), priceCurrency: 'EUR' },
+          offers: { '@type': 'Offer', price: price(p.price), priceCurrency: 'EUR', availability: 'https://schema.org/InStoreOnly' },
         })),
       })).filter(s => s.hasMenuItem.length),
     },
@@ -121,8 +126,27 @@ function clean(dom, prefix) {
       return out;
     });
   });
+  if (/<html[^>]*class="[^"]*\bno-ordering\b/.test(dom)) dom = blankOrderOnly(dom);
   const body = dom.trim().replace(/^<!DOCTYPE html>\s*/i, '').replace(/\s*<\/body>\s*<\/html>$/, '\n</body></html>');
   return '<!DOCTYPE html>\n' + body + '\n';
+}
+// Ordering paused: crawlers that skip CSS/JS must not read "Order now" / "order online" promises.
+// The .order-only elements stay (so switching ordering back on needs no markup work), only their
+// translated texts are emptied; app.js refills every [data-i18n] in the browser.
+function blankOrderOnly(dom) {
+  const open = /<([a-z0-9]+)\b[^>]*\bclass="[^"]*\border-only\b[^"]*"[^>]*>/g;
+  let out = '', last = 0, m;
+  while ((m = open.exec(dom))) {
+    const tag = m[1], start = m.index;
+    const re = new RegExp(`<(/?)${tag}\\b[^>]*>`, 'g');
+    re.lastIndex = start + m[0].length;
+    let depth = 1, end = dom.length, t;
+    while (depth && (t = re.exec(dom))) { depth += t[1] ? -1 : 1; if (!depth) end = re.lastIndex; }
+    const block = dom.slice(start, end).replace(/(<[^>]*\bdata-i18n="[^"]+"[^>]*>)[^<]*(?=<)/g, '$1');
+    out += dom.slice(last, start) + block;
+    last = open.lastIndex = end;
+  }
+  return out + dom.slice(last);
 }
 function check(out, lang) {
   const must = [...P.filter(p => ['roll', 'coffee'].includes(p.cat)).map(p => p.name[lang] || p.name.en), I18N[lang]['menu.offers.note'], 'application/ld+json'];
@@ -136,6 +160,10 @@ function toDutch(html) {
   const rep = (from, to) => { if (!html.includes(from)) throw new Error('nl: not found: ' + from); html = html.split(from).join(to); };
   html = html.replace(/<html[^>]*>/, m => m.replace('lang="en"', 'lang="nl"').replace('data-lang-default="en"', 'data-lang-default="nl"')
     .replace('data-url-en="./"', 'data-url-en="../"').replace('data-url-nl="nl/"', 'data-url-nl="./"'));
+  rep(`<title>${en.title}</title>`, `<title>${pg.title}</title>`);
+  rep(`<meta property="og:title" content="${en.title}">`, `<meta property="og:title" content="${pg.title}">`);
+  rep(`<meta name="twitter:title" content="${en.title}">`, `<meta name="twitter:title" content="${pg.title}">`);
+  rep(`<meta property="og:image:alt" content="${en.imgAlt}">`, `<meta property="og:image:alt" content="${pg.imgAlt}">`);
   rep(`<link rel="canonical" href="${en.url}">`, `<link rel="canonical" href="${pg.url}">`);
   rep(`<meta property="og:url" content="${en.url}">`, `<meta property="og:url" content="${pg.url}">`);
   rep(`<meta name="description" content="${en.description}">`, `<meta name="description" content="${pg.description}">`);
@@ -146,6 +174,14 @@ function toDutch(html) {
   html = html.replace(/\s(src|href)="(?!https?:|mailto:|tel:|#|\/|data:|\.\.\/)([^"]*)"/g, (m, attr, v) => ` ${attr}="../${v}"`);
   return withLd(html, 'nl');
 }
+
+// sitemap lastmod: only moves when the pre-rendered page itself changes (keeps the build idempotent)
+const before = Object.fromEntries(Object.entries(PAGES).map(([k, pg]) => [k, existsSync(join(ROOT, pg.file)) ? readFileSync(join(ROOT, pg.file), 'utf8') : '']));
+const oldMod = Object.fromEntries(Object.entries(PAGES).map(([k, pg]) => {
+  const sm = existsSync(join(ROOT, 'sitemap.xml')) ? readFileSync(join(ROOT, 'sitemap.xml'), 'utf8') : '';
+  const m = sm.match(new RegExp(`<loc>${pg.url.replace(/[.\/]/g, '\\$&')}</loc>[\\s\\S]*?<lastmod>([^<]+)</lastmod>`));
+  return [k, m && m[1]];
+}));
 
 try {
   // English
@@ -194,11 +230,13 @@ lines.push('', '## Allergens', '', T['faq.a6'] || '');
 writeFileSync(join(ROOT, 'llms.txt'), lines.join('\n').replace(/<[^>]+>/g, '') + '\n');
 
 // ---- sitemap.xml (both languages, linked to each other) ----
+const today = new Date().toISOString().slice(0, 10);
+const lastmod = k => `<lastmod>${readFileSync(join(ROOT, PAGES[k].file), 'utf8') === before[k] && oldMod[k] ? oldMod[k] : today}</lastmod>`;
 const alt = `<xhtml:link rel="alternate" hreflang="en" href="${PAGES.en.url}"/><xhtml:link rel="alternate" hreflang="nl" href="${PAGES.nl.url}"/><xhtml:link rel="alternate" hreflang="x-default" href="${PAGES.en.url}"/>`;
 writeFileSync(join(ROOT, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
-  <url><loc>${PAGES.en.url}</loc>${alt}<changefreq>monthly</changefreq><priority>1.0</priority></url>
-  <url><loc>${PAGES.nl.url}</loc>${alt}<changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>${PAGES.en.url}</loc>${lastmod('en')}${alt}</url>
+  <url><loc>${PAGES.nl.url}</loc>${lastmod('nl')}${alt}</url>
 </urlset>
 `);
 

@@ -28,7 +28,7 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; letter-spacing:
 h1 { font-size: clamp(2.6rem, 6vw, 5.2rem); font-weight: 700; }
 h2 { font-size: clamp(2rem, 3.8vw, 3.1rem); }
 h3 { font-size: 1.35rem; }
-h4 { font-family: var(--font-body); font-size: .74rem; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-2); margin: 0 0 10px; font-weight: 600; }
+h4, h3.label { font-family: var(--font-body); font-size: .74rem; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-2); margin: 0 0 10px; font-weight: 600; line-height: inherit; }
 p { margin: 0 0 1em; }
 .wrap { width: min(1200px, 100% - 40px); margin-inline: auto; }
 .lead { font-size: 1.08rem; color: var(--ink-2); max-width: 54ch; }
@@ -205,8 +205,8 @@ html:not(.no-ordering) .menu-only { display: none !important; }
 /* visit */
 .visit { display: grid; grid-template-columns: 1fr .8fr 1.2fr; gap: 22px; }
 .visit-card { background: #fff; border: 1px solid var(--line); border-radius: var(--r); padding: 30px; }
-.visit-card h4 { margin-top: 26px; }
-.visit-card h4:first-child { margin-top: 0; }
+.visit-card h4, .visit-card h3.label { margin-top: 26px; }
+.visit-card h4:first-child, .visit-card h3.label:first-child { margin-top: 0; }
 .hours { display: grid; grid-template-columns: 1fr auto; gap: 6px 18px; margin: 0; font-size: .95rem; }
 .hours dt { color: var(--ink-2); }
 .hours dd { margin: 0; font-weight: 600; }
@@ -335,7 +335,7 @@ body.has-cart-bar { padding-bottom: 84px; }
 
 .footer-brand p { margin: 4px 0 0; }
 .footer-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
-.site-footer h4 { color: var(--pink); }
+.site-footer h4, .site-footer h3.label { color: var(--pink); }
 .site-footer a { color: #fff; font-weight: 500; }
 .site-footer .lang { background: rgba(255,255,255,.1); }
 .site-footer .lang button { color: rgba(255,255,255,.75); }
