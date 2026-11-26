@@ -70,3 +70,9 @@ h1, h2, h3 { color: var(--plum); }
 .game-band h2 { margin-bottom: .2em; }
 .game-band p { max-width: 52ch; }
 @media (max-width: 560px) { .game-band { flex-direction: column; align-items: flex-start; margin-block: 40px 0; } .game-band-img, .game-band img { width: 100%; max-width: 360px; } }
+
+/* live menu: items that are off today */
+.not-now .notnow-list { max-width: 640px; }
+.not-now .pl-name, .not-now .pl-price { color: var(--ink-2); font-weight: 500; }
+.notnow-note { margin: 4px 0 16px; padding: 10px 14px; border-radius: 14px; background: var(--tint); font-weight: 600; }
+.section[hidden], .cards[hidden], .scroller[hidden], .sub-head[hidden], .price-lists > div[hidden] { display: none !important; }

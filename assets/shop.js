@@ -1,6 +1,8 @@
 /* Cinnery – shop skeleton: menu cards, price lists, product page (incl. combo choices), cart (localStorage, first-party only) */
 (function () {
-  const P = window.CINNERY_PRODUCTS || [];
+  /* live menu from the Planner (/api/menu): replaces this list in place; products.js stays the fallback and the copy for crawlers */
+  const P = (window.CINNERY_PRODUCTS || []).slice();
+  const on = p => p.available !== false;
   const T = window.CINNERY_I18N || {};
   /* ordering switch: <html class="no-ordering"> shows the menu with prices only (no cart, no order buttons) */
   const ORDERING = !document.documentElement.classList.contains('no-ordering');
@@ -9,7 +11,7 @@
   const SCRIPT = document.currentScript && document.currentScript.src;
   const ROOT = SCRIPT ? new URL('..', SCRIPT) : new URL('./', location.href);
   const VER = SCRIPT ? new URL(SCRIPT).search : '';   /* ?v=… cache-buster of this script, reused for product photos */
-  const src = path => new URL(path, ROOT).href + VER;
+  const src = path => /^\/api\//.test(path) ? new URL(path, location.origin).href : new URL(path, ROOT).href + VER;
 
   const CAT_TITLE = { roll: 'menu.title', savory: 'menu.savory.title', cookie: 'menu.cookies.title', combo: 'menu.offers.title', extra: 'menu.extra.title',
     coffee: 'menu.coffee.title', specialty: 'menu.specialty.title', hotchoco: 'menu.hotchoco.title', matcha: 'menu.matcha.title', soft: 'menu.soft.title' };
@@ -26,7 +28,7 @@
   const pageOf = id => href('product.html?id=' + encodeURIComponent(id) + (nlq() ? '&' + nlq() : ''));
   const menuHref = () => href(lang() === 'nl' ? 'nl/#menu' : 'index.html#menu');
   const cartHref = () => href('cart.html' + (nlq() ? '?' + nlq() : ''));
-  const choicesFor = f => P.filter(x => (f.ids || []).includes(x.id) || ((f.cats || []).includes(x.cat) && (!f.tiers || f.tiers.includes(x.tier))));
+  const choicesFor = f => P.filter(x => on(x) && ((f.ids || []).includes(x.id) || ((f.cats || []).includes(x.cat) && (!f.tiers || f.tiers.includes(x.tier)))));
 
   /* ---- cart storage: key = "id" or "id|choice|choice" ---- */
   function getCart() { try { const c = JSON.parse(localStorage.getItem(KEY) || '{}'); return typeof c === 'object' && c ? c : {}; } catch (e) { return {}; } }
@@ -129,7 +131,9 @@
     document.querySelectorAll('[data-products]').forEach(grid => {
       const cat = grid.getAttribute('data-products');
       const small = grid.hasAttribute('data-small');
-      grid.replaceChildren(...P.filter(p => p.cat === cat).map((p, i) => {
+      const items = P.filter(p => p.cat === cat && on(p));
+      showBlock(grid, items.length > 0);
+      grid.replaceChildren(...items.map((p, i) => {
         const c = card(p, small);
         if (cat === 'roll') c.prepend(el('span', 'num', String(i + 1).padStart(2, '0')));
         return c;
@@ -138,7 +142,9 @@
     document.querySelectorAll('[data-pricelist]').forEach(list => {
       const cat = list.getAttribute('data-pricelist');
       /* no photo, no product page: the row's button puts one item straight into the cart */
-      list.replaceChildren(...P.filter(p => p.cat === cat).map(p => {
+      const items = P.filter(p => p.cat === cat && on(p));
+      showBlock(list.parentElement, items.length > 0);
+      list.replaceChildren(...items.map(p => {
         const li = el('li', 'pl-row');
         const btn = el('button', 'btn btn-pink btn-sm pl-order', t('shop.order')); btn.type = 'button';
         btn.setAttribute('aria-label', t('shop.order') + ': ' + nm(p) + ', ' + money(p.price));
@@ -151,6 +157,28 @@
         return li;
       }));
     });
+    /* items that are off today: one quiet list ("Not on the menu right now"), name and price only */
+    const off = P.filter(p => !on(p));
+    document.querySelectorAll('[data-unavailable]').forEach(list => {
+      list.replaceChildren(...off.map(p => {
+        const li = el('li', 'pl-row');
+        li.append(el('span', 'pl-name', nm(p)), el('span', 'pl-dots'), el('span', 'pl-price', money(p.price)));
+        return li;
+      }));
+      const sec = list.closest('section'); if (sec) sec.hidden = off.length === 0;
+    });
+    /* a whole menu section with nothing on today is hidden */
+    document.querySelectorAll('section').forEach(sec => {
+      const blocks = sec.querySelectorAll('[data-products], [data-pricelist]');
+      if (blocks.length) sec.hidden = [...blocks].every(b => !b.children.length);
+    });
+  }
+  /* a grid or price list (and its own sub-heading) disappears when none of its items are on today */
+  function showBlock(node, show) {
+    const box = node.closest('.scroller') || node;
+    box.hidden = !show;
+    const prev = box.previousElementSibling;
+    if (prev && prev.classList.contains('sub-head')) prev.hidden = !show;
   }
 
   /* ---- product page ---- */
@@ -166,10 +194,11 @@
     info.appendChild(el('h1', null, nm(p)));
     info.appendChild(el('p', 'lead', p.desc[lang()] || p.desc.en));
     info.appendChild(el('p', 'product-price', money(p.price)));
-    if (!ORDERING) {
+    if (!on(p)) info.appendChild(el('p', 'notnow-note', t('shop.notnow')));
+    if (!ORDERING || !on(p)) {
       box.replaceChildren(fig, info);
       const also0 = document.getElementById('also');
-      if (also0) also0.replaceChildren(...P.filter(x => x.cat === p.cat && x.id !== p.id).slice(0, 3).map(x => card(x, false)));
+      if (also0) also0.replaceChildren(...P.filter(x => x.cat === p.cat && x.id !== p.id && on(x)).slice(0, 3).map(x => card(x, false)));
       return;
     }
 
@@ -209,7 +238,7 @@
     box.replaceChildren(fig, info);
 
     const also = document.getElementById('also');
-    if (also) also.replaceChildren(...P.filter(x => x.cat === p.cat && x.id !== p.id).slice(0, 3).map(x => card(x, false)));
+    if (also) also.replaceChildren(...P.filter(x => x.cat === p.cat && x.id !== p.id && on(x)).slice(0, 3).map(x => card(x, false)));
   }
 
   /* ---- after the pre-order e-mail was opened: thank-you state with "open again" and "restore" ---- */
@@ -287,5 +316,25 @@
 
   function renderAll() { updateBadge(); renderMenus(); renderProduct(); renderCart(); }
   renderAll();
+
+  /* today's menu from the Planner. Photos that are already in the site (assets/img/menu/<id>.jpg, written by tools/build.mjs)
+     are used from there, so nothing is downloaded twice; newer photos come straight from /api/menu/img/. */
+  function loadLive() {
+    if (!/^https?:$/.test(location.protocol)) return;
+    const local = new Set(P.flatMap(p => [p.img, ...(p.gallery || [])]).filter(Boolean));
+    const pic = u => { const m = /^\/api\/menu\/img\/(\d+)\.jpg$/.exec(u || ''); const f = m && 'assets/img/menu/' + m[1] + '.jpg'; return f && local.has(f) ? f : u; };
+    const ctl = typeof AbortController === 'function' ? new AbortController() : null;
+    const timer = ctl && setTimeout(() => ctl.abort(), 5000);
+    fetch(new URL('api/menu', ROOT).href, { cache: 'no-cache', signal: ctl && ctl.signal })
+      .then(r => r.ok ? r.json() : Promise.reject(r.status))
+      .then(d => {
+        if (!d || !Array.isArray(d.items) || !d.items.length) return;
+        P.splice(0, P.length, ...d.items.map(x => Object.assign(x, { img: pic(x.img), gallery: x.gallery && x.gallery.map(pic) })));
+        renderAll();
+      })
+      .catch(() => {})   /* offline, mirror without the API, or Planner down: the built-in menu stays */
+      .finally(() => clearTimeout(timer));
+  }
+  loadLive();
   document.addEventListener('cinnery:lang', renderAll);
 })();

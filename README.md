@@ -12,7 +12,7 @@ cart.html           cart and pre-order
 style.css           design: pink theme, eggplant header, split hero (overrides assets/base.css)
 assets/
   base.css          shared styles (Fredoka + Inter, brand pink #F0A3AF / eggplant #614051)
-  products.js       product catalogue: id, category, price (EUR), photo, name and description in EN/NL
+  products.js       product catalogue, generated from the Planner by tools/build.mjs (do not edit by hand)
   i18n.js           all other texts: en (default), nl
   app.js            language switch, mobile nav, FAQ accordion, "Open now / Closed now", Google Maps on click
   shop.js           menu cards, product page, cart (stored in the browser)
@@ -45,7 +45,7 @@ Run it after every change to the menu, the texts or `index.html` (needs Node 18+
 
 ## Editing text
 
-Texts live in `assets/i18n.js` (`en` and `nl`), products and prices in `assets/products.js`.
+Texts live in `assets/i18n.js` (`en` and `nl`), products and prices in the Planner (Website); `node tools/build.mjs` copies them into `assets/products.js`.
 Each element in the HTML has a `data-i18n="key"`; answers with HTML (lists) use `data-i18n-html`.
 
 The page always opens in English; visitors switch with the EN / NL buttons.

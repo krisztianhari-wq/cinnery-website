@@ -9,7 +9,15 @@ Statikus weboldal + webshop-váz a Cinnery fahéjascsiga-pékségnek (Groningen)
 
 ## Felépítés
 - `index.html` (főoldal), `product.html?id=…` és `cart.html` (noindex), `style.css` (csak az `assets/base.css`-t írja felül), `404.html`.
-- `assets/products.js` – termékkatalógus (id, cat, price EUR, img, name/desc EN+NL, tier Classic/De Luxe/Signature, kombóknál options). A menü, terméklap és kosár innen épül; kombó kosárkulcsa `id|pick|pick`.
+- **A menü forrása 2026-11-26 óta a Planner** (cinnery-rota, Website ág, csak admin): elemek, árak, szövegek EN+NL, fotók, heti/napi elérhetőség.
+  `assets/products.js` GENERÁLT (ne szerkeszd kézzel): a `node tools/build.mjs` első lépése a `https://cinnery.nl/api/menu`-ból írja (más forrás:
+  `CINNERY_MENU_URL=…`, kihagyás: `--offline`; ha nem elérhető, a meglévő marad), a fotók `assets/img/menu/<id>.jpg`-be kerülnek. Minden elem
+  elérhetőként kerül bele, így a JS nélküli robotok (JSON-LD, előrenderelés, llms.txt) mindig a teljes menüt látják. Új elem vagy árváltozás a robotoknál a következő build+telepítéskor jelenik meg.
+- Böngészőben a `shop.js` először a beépített `products.js`-ből rajzol, majd lekéri a `/api/menu`-t (Caddy → rota konténer), és újrarajzol: a ma nem elérhető elemek a
+  „Not on the menu right now – maybe next time” (`#not-now`) listába kerülnek; az üressé vált blokk/szekció elrejtődik; terméklapon nincs kosár-gomb; a kombó-választóban nem szerepel.
+  A már letöltött fotót helyben használja (`assets/img/menu/<id>.jpg`), csak az újat kéri az API-ról. Hiba/tükör (GitHub Pages) esetén a beépített menü marad.
+  Helyi próba élő menüvel: `tools/dev-live.mjs` (launch `cinnery-live` a rota repóban, 8793 → Planner-demó).
+- Termékadat: id, cat, price EUR, img, gallery, name/desc EN+NL, kombóknál options (kosárkulcs `id|pick|pick`).
 - `assets/i18n.js` – minden más szöveg (`en`, `nl`; azonos kulcsok). `assets/app.js` – nyelvváltás, mobil menü, GYIK, nyitva/zárva, Maps kattintásra. `assets/shop.js` – menükártyák, terméklap, kosár (localStorage).
 - `assets/img/logo-*.png` – az EREDETI logó, CSS mask-ként (currentColor). Soha ne rajzold újra SVG-be.
 - `assets/img/own/` – saját stúdiófotók (minden terméken); `assets/stock/` gitignore-olt, nem használt.
@@ -19,7 +27,7 @@ Statikus weboldal + webshop-váz a Cinnery fahéjascsiga-pékségnek (Groningen)
 - GitHub Pages a `main` gyökeréből: push után 1–2 perc.
 - **Éles: cinnery.nl a sadrobot szerveren** (2026-10-11 óta; www és cinnery.eu oda irányít), tükör: rolls.sadrobot.eu – ugyanaz a `cinnery-web` oldal. Feltöltés: `git archive HEAD` mínusz README/.gitignore/.nojekyll/.htaccess/CLAUDE*.md/tools/ → /deploy-sadrobot skill (`deploy-site.sh … cinnery-web <mappa>`).
 - `dist/` (gitignore): laikus útmutatók (Lightspeed-kulcsok, e-mail költöztetés), a régi ZXCS-feltöltő csomag már nem kell.
-- Cache-busting: minden helyi CSS/JS/kép link `?v=<verzió>` (most `20261126e`); a `shop.js` a saját `?v`-jét adja tovább a termékfotóknak. Minden asset-változásnál léptesd az összes oldalon: `sed -i '' 's/?v=OLD/?v=NEW/g' index.html product.html cart.html game/index.html nl/spel/index.html` (a játékoldalakon a `data-v`-t is) – különben a böngésző új HTML-t régi CSS-sel kever.
+- Cache-busting: minden helyi CSS/JS/kép link `?v=<verzió>` (most `20261126f`); a `shop.js` a saját `?v`-jét adja tovább a termékfotóknak. Minden asset-változásnál léptesd az összes oldalon: `sed -i '' 's/?v=OLD/?v=NEW/g' index.html product.html cart.html game/index.html nl/spel/index.html` (a játékoldalakon a `data-v`-t is) – különben a böngésző új HTML-t régi CSS-sel kever.
 - Git identitás repo-szinten: GitHub noreply cím; céges e-mail nem kerülhet vissza a historyba.
 - Korábbi dizájnok: `archive/design-versions` ág (A/B + választó) és `archive-all-variants` tag (mind az öt).
 
