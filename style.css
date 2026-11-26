@@ -64,8 +64,9 @@ h1, h2, h3 { color: var(--plum); }
 }
 
 /* home: mini-game band */
-.game-band { display: flex; align-items: center; gap: clamp(20px, 4vw, 48px); margin-block: 70px; padding: clamp(20px, 3vw, 36px); background: var(--pink-soft); border-radius: var(--r-lg); }
+.game-band { display: flex; align-items: center; gap: clamp(20px, 4vw, 48px); margin-block: 56px 0; padding: clamp(20px, 3vw, 36px); background: var(--pink-soft); border-radius: var(--r-lg); }
+.game-band-img { flex: none; }
 .game-band img { width: clamp(110px, 22vw, 240px); aspect-ratio: 1; object-fit: cover; border-radius: var(--r); flex: none; }
 .game-band h2 { margin-bottom: .2em; }
 .game-band p { max-width: 52ch; }
-@media (max-width: 560px) { .game-band { flex-direction: column; align-items: flex-start; margin-block: 48px; } }
+@media (max-width: 560px) { .game-band { flex-direction: column; align-items: flex-start; margin-block: 40px 0; } .game-band-img, .game-band img { width: 100%; max-width: 360px; } }

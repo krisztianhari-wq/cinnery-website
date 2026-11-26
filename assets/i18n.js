@@ -139,7 +139,7 @@ window.CINNERY_I18N = {
     "footer.credit": "Site by",
     "footer.game": "Play Roll Run, our mini-game",
     "game.band.eyebrow": "New · mini-game",
-    "game.band.title": "Roll Run",
+    "game.band.title": "Help Us Roll Run",
     "game.band.text": "Jump through Amsterdam, The Hague and Groningen, collect the ingredients and let our machine bake your cinnamon rolls.",
     "game.band.cta": "Play the game"
   },
@@ -281,7 +281,7 @@ window.CINNERY_I18N = {
     "footer.credit": "Site door",
     "footer.game": "Speel Roll Run, onze minigame",
     "game.band.eyebrow": "Nieuw · minigame",
-    "game.band.title": "Roll Run",
+    "game.band.title": "Help Us Roll Run",
     "game.band.text": "Spring door Amsterdam, Den Haag en Groningen, verzamel de ingrediënten en laat onze machine je kaneelbroodjes bakken.",
     "game.band.cta": "Speel de game"
   }
