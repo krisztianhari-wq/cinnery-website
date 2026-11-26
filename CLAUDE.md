@@ -19,11 +19,11 @@ Statikus weboldal + webshop-váz a Cinnery fahéjascsiga-pékségnek (Groningen)
 - GitHub Pages a `main` gyökeréből: push után 1–2 perc.
 - **Éles: cinnery.nl a sadrobot szerveren** (2026-10-11 óta; www és cinnery.eu oda irányít), tükör: rolls.sadrobot.eu – ugyanaz a `cinnery-web` oldal. Feltöltés: `git archive HEAD` mínusz README/.gitignore/.nojekyll/.htaccess/CLAUDE*.md/tools/ → /deploy-sadrobot skill (`deploy-site.sh … cinnery-web <mappa>`).
 - `dist/` (gitignore): laikus útmutatók (Lightspeed-kulcsok, e-mail költöztetés), a régi ZXCS-feltöltő csomag már nem kell.
-- Cache-busting: minden helyi CSS/JS/kép link `?v=<verzió>` (most `20261126b`); a `shop.js` a saját `?v`-jét adja tovább a termékfotóknak. Minden asset-változásnál léptesd az összes oldalon: `sed -i '' 's/?v=OLD/?v=NEW/g' index.html product.html cart.html game/index.html nl/spel/index.html` (a játékoldalakon a `data-v`-t is) – különben a böngésző új HTML-t régi CSS-sel kever.
+- Cache-busting: minden helyi CSS/JS/kép link `?v=<verzió>` (most `20261126c`); a `shop.js` a saját `?v`-jét adja tovább a termékfotóknak. Minden asset-változásnál léptesd az összes oldalon: `sed -i '' 's/?v=OLD/?v=NEW/g' index.html product.html cart.html game/index.html nl/spel/index.html` (a játékoldalakon a `data-v`-t is) – különben a böngésző új HTML-t régi CSS-sel kever.
 - Git identitás repo-szinten: GitHub noreply cím; céges e-mail nem kerülhet vissza a historyba.
 - Korábbi dizájnok: `archive/design-versions` ág (A/B + választó) és `archive-all-variants` tag (mind az öt).
 
-## Mini-játék (Roll Run, `game-v0.1` ág)
+## Mini-játék (Help Us – Roll Run, `game-v0.1` ág)
 - `/game/` (EN) és `/nl/spel/` (NL): kézzel írt statikus oldalak (a holland NEM generált, szöveget mindkettőben javíts). Motor: `assets/game/game.js` (canvas, nincs hang, nincs külső kérés), stílus: `assets/game/game.css`. Főoldali sáv `.game-band` + lábléc-link (`game.band.*`, `footer.game`); a build a holland főoldalon `game/` → `spel/`.
 - Grafika: `tools/game/gen.py` (Gemini, Keychain `cr-jack-gemini`), nyers képek a gitignore-olt `tools/game/raw/`-ban (kontaktlap: `raw/index.html`). Jóváhagyott kép → `assets/game/<név>.png` + a nevét a `game.js` `ART` listájába; ami nincs benne, azt helyettesítő rajz pótolja. Terv: `tools/game/CONCEPT.md`.
 - Teszt: `/game/#fast=40` (40× gyorsítás). A rekord a `cinnery-game-record` localStorage-kulcsban van (a kosáron kívül egyedül ez).

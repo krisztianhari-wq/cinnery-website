@@ -214,7 +214,7 @@ const lines = [
   '- E-mail: cinnery.nl@gmail.com (catering, large orders, custom flavours)',
   '- Instagram: https://www.instagram.com/cinnery_rolls/',
   '- Website: https://cinnery.nl/ (English), https://cinnery.nl/nl/ (Dutch)',
-  '- Mini-game "Roll Run": https://cinnery.nl/game/ (English), https://cinnery.nl/nl/spel/ (Dutch) – free browser platformer: collect cinnamon roll ingredients in Amsterdam, The Hague and Groningen and bake rolls at the bakery',
+  '- Mini-game "Help Us – Roll Run": https://cinnery.nl/game/ (English), https://cinnery.nl/nl/spel/ (Dutch) – free browser platformer: collect cinnamon roll ingredients in Amsterdam, The Hague and Groningen and bake rolls at the bakery',
   '',
   '## Menu',
   '',
