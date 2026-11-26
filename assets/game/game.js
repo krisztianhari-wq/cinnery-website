@@ -56,10 +56,23 @@
     creamcheese: '#FFF6EA', cocoa: '#8A3B3B', biscoff: '#C9853F', pistachio: '#93B65A', caramel: '#D99A3A', blueberry: '#4F5DA8' };
 
   /* ---------- art (sprites that exist in BASE; everything else is drawn as a placeholder) ---------- */
-  const ART = [];                                 // file names (without .png) in assets/game/, filled in as the art is approved
+  const ART = ['flour', 'sugar', 'butter', 'egg', 'yeast', 'cinnamon', 'creamcheese', 'cocoa', 'biscoff', 'pistachio', 'caramel', 'blueberry'].map(k => 'ing-' + k)
+    .concat(['run1', 'run2', 'run3', 'run4', 'jump', 'fall', 'hit', 'pour'].map(k => 'baker-' + k),
+      ['bike', 'cobble', 'tulip', 'tram', 'pigeon', 'gull', 'puddle', 'canal', 'bakery', 'bake-room', 'machine'],
+      ['amsterdam', 'denhaag', 'groningen'].flatMap(c => ['bg-' + c + '-far', 'bg-' + c + '-near']));                                 // file names (without .png) in assets/game/, filled in as the art is approved
   const IMG = {};
   ART.forEach(n => { const im = new Image(); im.src = BASE + n + '.png' + VER; IMG[n] = im; });
   const img = n => { const im = IMG[n]; return im && im.complete && im.naturalWidth ? im : null; };
+  const aspect = n => { const im = img(n); return im ? im.naturalWidth / im.naturalHeight : 1; };
+  // the real Cinnery wordmark, tinted pink, for the bakery sign (the generated sign board is empty)
+  const LOGO = new Image(); LOGO.src = SITE + 'assets/img/logo-word.png' + VER;
+  let logoTint = null;
+  function tintedLogo() {
+    if (logoTint || !LOGO.complete || !LOGO.naturalWidth) return logoTint;
+    const c = document.createElement('canvas'); c.width = LOGO.naturalWidth; c.height = LOGO.naturalHeight;
+    const x = c.getContext('2d'); x.drawImage(LOGO, 0, 0); x.globalCompositeOperation = 'source-in'; x.fillStyle = '#F0A3AF'; x.fillRect(0, 0, c.width, c.height);
+    return (logoTint = c);
+  }
 
   /* ---------- world constants (logical units; height is always 360) ---------- */
   const H = 360, GROUND = 304;
@@ -108,7 +121,7 @@
         if (sp) special(x + 230, GROUND - 26);
         x += 160;
       } else if (p === 'tulip' || p === 'tram') {
-        const w = p === 'tram' ? 230 : 92, h = p === 'tram' ? 80 : 46;
+        const w = p === 'tram' ? 230 : 92, im = img(p), h = im ? Math.round(w / (im.naturalWidth / im.naturalHeight)) : p === 'tram' ? 80 : 46;
         add({ type: p, x, y: GROUND - h, w, h, block: true });
         for (let i = 0; i < 3; i++) item(x + w * (i + 1) / 4, GROUND - h - 26, basic());
         if (sp) special(x + w / 2, GROUND - h - 110);
@@ -157,9 +170,10 @@
 
   function run(dt) {
     const px = W * 0.24;
-    const doorX = length + 260;                    // bakery door, world x
-    if (cam + px < doorX - 40) cam += speed * dt;
-    else { endT += dt; P.x += 120 * dt; if (endT > 1.4) { state = 'bake'; bakeT = 0; } }
+    const doorX = length + 120 + (img('bakery') ? 0.6 * 250 * aspect('bakery') : 155);   // bakery door, world x
+    if (cam + px < doorX - 220) cam += speed * dt;
+    else if (cam + px + P.x < doorX || !P.ground) P.x += 170 * dt;
+    else { endT += dt; if (endT > 0.6) { state = 'bake'; bakeT = 0; } }
     const wx = cam + px + P.x;
     // jump
     buffer -= dt; coyote = P.ground ? 0.09 : coyote - dt;
@@ -265,7 +279,7 @@
     if (c === 1 && !REDUCED) drawRain();
     drawBakery(length + 120 - cam);
     for (const o of objs) { const sx = o.x - cam; if (sx > -260 && sx < W + 40) drawObj(o, sx); }
-    for (const it of items) { const sx = it.x - cam; if (!it.got && sx > -30 && sx < W + 30) drawIng(it.kind, sx, it.y + (REDUCED ? 0 : Math.sin((it.x + performance.now() / 4) / 60) * 3), 30); }
+    for (const it of items) { const sx = it.x - cam; if (!it.got && sx > -30 && sx < W + 30) drawIng(it.kind, sx, it.y + (REDUCED ? 0 : Math.sin((it.x + performance.now() / 4) / 60) * 3), 36); }
     drawPlayer(px + P.x);
     for (const p of parts) {
       ctx.globalAlpha = Math.min(1, p.t * 2);
@@ -282,7 +296,7 @@
   function drawCity(c, off, depth) {
     const name = 'bg-' + ['amsterdam', 'denhaag', 'groningen'][c] + (depth < 1 ? '-far' : '-near'), im = img(name);
     if (im) {
-      const h = depth < 1 ? GROUND : GROUND * 0.7, w = im.naturalWidth / im.naturalHeight * h;
+      const h = depth < 1 ? GROUND : GROUND * 0.6, w = im.naturalWidth / im.naturalHeight * h;
       for (let x = -(off % w); x < W; x += w) ctx.drawImage(im, x, GROUND - h, w, h);
       return;
     }
@@ -321,7 +335,12 @@
   function drawBakery(sx) {
     if (sx > W + 20 || sx < -360) return;
     const im = img('bakery');
-    if (im) { const h = 250, w = im.naturalWidth / im.naturalHeight * h; ctx.drawImage(im, sx, GROUND - h, w, h); return; }
+    if (im) {
+      const h = 250, w = im.naturalWidth / im.naturalHeight * h; ctx.drawImage(im, sx, GROUND - h, w, h);
+      const lg = tintedLogo();   // sign board: x 0.12–0.88, y 0.01–0.15 of the image
+      if (lg) { const bh = h * 0.14 * 0.62, bw = Math.min(w * 0.7, bh * lg.width / lg.height); ctx.drawImage(lg, sx + w / 2 - bw / 2, GROUND - h + h * 0.08 - bw * lg.height / lg.width / 2, bw, bw * lg.height / lg.width); }
+      return;
+    }
     ctx.fillStyle = COL.cream; ctx.strokeStyle = COL.ink; ctx.lineWidth = 3;
     rect(sx, GROUND - 230, 300, 230, true);
     ctx.fillStyle = COL.plum; rect(sx - 10, GROUND - 250, 320, 44, true);
@@ -333,7 +352,12 @@
 
   function drawObj(o, sx) {
     const im = img(o.type);
-    if (im) { const h = o.type === 'canal' || o.type === 'puddle' ? 18 : o.h + 8, w = im.naturalWidth / im.naturalHeight * h; ctx.drawImage(im, sx + o.w / 2 - w / 2, o.y + o.h - h + (o.water ? 6 : 0), w, h); return; }
+    if (im) {
+      const ar = im.naturalWidth / im.naturalHeight, byW = o.block || o.water;
+      const w = byW ? o.w * (o.water ? 1.15 : 1.04) : (o.h + (o.fly ? 16 : 8)) * ar, h = w / ar;
+      const bottom = o.water ? GROUND + h * 0.45 : o.y + o.h + (o.block ? 2 : 3);
+      ctx.drawImage(im, sx + o.w / 2 - w / 2, bottom - h, w, h); return;
+    }
     ctx.lineWidth = 2.5; ctx.strokeStyle = COL.ink;
     switch (o.type) {
       case 'bike':
@@ -358,7 +382,7 @@
 
   function drawIng(k, x, y, s) {
     const im = img('ing-' + k);
-    if (im) return ctx.drawImage(im, x - s / 2, y - s / 2, s, s);
+    if (im) { const k = s * 1.15 / Math.max(im.naturalWidth, im.naturalHeight), w = im.naturalWidth * k, h = im.naturalHeight * k; return ctx.drawImage(im, x - w / 2, y - h / 2, w, h); }
     const sp = SPECIAL.includes(k);
     if (sp) { ctx.fillStyle = 'rgba(240,163,175,.45)'; ctx.beginPath(); ctx.arc(x, y, s * .62, 0, 7); ctx.fill(); }
     ctx.fillStyle = ING_COL[k]; ctx.strokeStyle = COL.ink; ctx.lineWidth = 2;
@@ -372,11 +396,10 @@
 
   function drawPlayer(x) {
     const blink = hitT > 0 && (REDUCED ? true : Math.floor(hitT * 10) % 2 === 0);
-    ctx.globalAlpha = blink ? 0.45 : 1;
-    const name = state === 'run' && endT > 0 ? 'baker-run' + (1 + Math.floor(P.frame) % 4)
-      : hitT > 1 ? 'baker-hit' : !P.ground ? (P.vy < 0 ? 'baker-jump' : 'baker-fall') : 'baker-run' + (1 + Math.floor(P.frame) % 4);
+    ctx.globalAlpha = endT > 0 ? Math.max(0, 1 - endT / 0.6) : blink ? 0.45 : 1;
+    const name = hitT > 1 ? 'baker-hit' : !P.ground ? (P.vy < 0 ? 'baker-jump' : 'baker-fall') : 'baker-run' + (1 + Math.floor(P.frame) % 4);
     const im = img(name);
-    if (im) { const s = 84; ctx.drawImage(im, x - s / 2, P.y + PH - s + 4, s, s); }
+    if (im) { const h = 80, w = im.naturalWidth / im.naturalHeight * h; ctx.drawImage(im, x - w / 2, P.y + PH - h + 3, w, h); }
     else {
       const y = P.y, step = P.ground ? Math.sin(P.frame * Math.PI / 2) * 6 : 0;
       ctx.strokeStyle = COL.ink; ctx.lineWidth = 2.5;
@@ -419,52 +442,66 @@
   function roundRect(x, y, w, h, r) { ctx.beginPath(); ctx.roundRect ? ctx.roundRect(x, y, w, h, r) : ctx.rect(x, y, w, h); }
 
   /* ---------- bakery machine scene ---------- */
+  const MACHINE = { st: [0.25, 0.43, 0.64, 0.78], belt: 0.55, hop: 0.11 };   // station centres etc. as fractions of the machine image
   function drawBake() {
     const t = bakeT, s = result || score();
-    ctx.fillStyle = COL.soft; ctx.fillRect(0, 0, W, H);
-    ctx.fillStyle = '#E8D3CC'; ctx.fillRect(0, GROUND, W, H - GROUND);
-    ctx.fillStyle = COL.deep; ctx.fillRect(0, GROUND, W, 3);
-    const m0 = Math.max(W * 0.3, 150), mw = W - m0 - 30, st = mw / 4;
-    // machine body
+    const room = img('bake-room');
+    if (room) { const k = Math.max(W / room.naturalWidth, H / room.naturalHeight); ctx.drawImage(room, (W - room.naturalWidth * k) / 2, H - room.naturalHeight * k, room.naturalWidth * k, room.naturalHeight * k); }
+    else { ctx.fillStyle = COL.soft; ctx.fillRect(0, 0, W, H); ctx.fillStyle = '#E8D3CC'; ctx.fillRect(0, GROUND, W, H - GROUND); ctx.fillStyle = COL.deep; ctx.fillRect(0, GROUND, W, 3); }
+    let m0 = Math.max(W * 0.3, 150), mw = W - m0 - 30, top, belt, hop, xs;
+    const mach = img('machine');
     ctx.strokeStyle = COL.ink; ctx.lineWidth = 3;
-    ctx.fillStyle = COL.plum; rect(m0, GROUND - 150, mw, 110, true);
-    ctx.fillStyle = COL.deep; rect(m0, GROUND - 40, mw, 40, true);
-    ctx.fillStyle = COL.pink; ctx.beginPath(); ctx.moveTo(m0 + 10, GROUND - 150); ctx.lineTo(m0 + 70, GROUND - 150); ctx.lineTo(m0 + 56, GROUND - 190); ctx.lineTo(m0 - 4, GROUND - 190); ctx.closePath(); ctx.fill(); ctx.stroke();
+    if (mach) {
+      let mh = mw * mach.naturalHeight / mach.naturalWidth;
+      if (mh > 170) { mh = 170; mw = mh * mach.naturalWidth / mach.naturalHeight; m0 = W - 30 - mw; }
+      top = GROUND - mh; ctx.drawImage(mach, m0, top, mw, mh);
+      xs = MACHINE.st.map(f => m0 + mw * f); belt = top + mh * MACHINE.belt; hop = [m0 + mw * MACHINE.hop, top + 6];
+    } else {
+      const st = mw / 4; top = GROUND - 190;
+      ctx.fillStyle = COL.plum; rect(m0, GROUND - 150, mw, 110, true);
+      ctx.fillStyle = COL.deep; rect(m0, GROUND - 40, mw, 40, true);
+      ctx.fillStyle = COL.pink; ctx.beginPath(); ctx.moveTo(m0 + 10, GROUND - 150); ctx.lineTo(m0 + 70, GROUND - 150); ctx.lineTo(m0 + 56, GROUND - 190); ctx.lineTo(m0 - 4, GROUND - 190); ctx.closePath(); ctx.fill(); ctx.stroke();
+      xs = [0, 1, 2, 3].map(i => m0 + st * i + st / 2); belt = GROUND - 98; hop = [m0 + 30, GROUND - 190];
+      xs.forEach(x => { ctx.fillStyle = COL.cream; rect(x - st * .36, GROUND - 130, st * .72, 54, true); });
+    }
     const phase = Math.min(3, Math.floor((t - 1.4) / 1.2));
-    ctx.font = '600 13px Fredoka, sans-serif'; ctx.textAlign = 'center';
+    // station names: small pills above the machine, the active one highlighted
+    ctx.font = '600 12px Fredoka, sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.lineWidth = 2;
     T.stations.forEach((name, i) => {
-      const x = m0 + st * i + st / 2, on = t > 1.4 && phase === i;
-      ctx.fillStyle = on ? COL.butter : COL.cream; rect(x - st * .36, GROUND - 130, st * .72, 54, true);
-      ctx.fillStyle = on ? COL.butter : COL.soft; ctx.beginPath(); ctx.arc(x, GROUND - 150, 7, 0, 7); ctx.fill(); ctx.stroke();
-      ctx.fillStyle = COL.cream; ctx.fillText(name, x, GROUND - 58);
+      const on = t > 1.4 && t < 6.2 && phase === i, w = ctx.measureText(name).width + 14;
+      ctx.fillStyle = on ? COL.butter : 'rgba(255,252,250,.9)'; roundRect(xs[i] - w / 2, top - 26, w, 18, 9); ctx.fill(); ctx.stroke();
+      ctx.fillStyle = COL.ink; ctx.fillText(name, xs[i], top - 16);
     });
+    ctx.textBaseline = 'alphabetic'; ctx.lineWidth = 3;
     // baker pours
-    const bx = Math.max(60, m0 - 70);
+    const bx = Math.max(50, m0 - 60);
     const im = img(t < 1.6 ? 'baker-pour' : 'baker-run1');
-    if (im) ctx.drawImage(im, bx - 50, GROUND - 96, 96, 96); else { P.y = GROUND - PH; P.ground = true; P.frame = 0; hitT = 0; drawPlayer(bx); }
+    if (im) { const h = 100, w = im.naturalWidth / im.naturalHeight * h; ctx.drawImage(im, bx - w / 2, GROUND - h + 4, w, h); }
+    else { P.y = GROUND - PH; P.ground = true; P.frame = 0; hitT = 0; drawPlayer(bx); }
     if (t < 1.4) {
       const list = [...BASIC, ...SPECIAL].filter(k => got[k]);
-      list.forEach((k, i) => { const f = ((t * 1.4 + i / list.length) % 1); drawIng(k, bx + 20 + (m0 + 30 - bx - 20) * f, GROUND - 70 - Math.sin(f * Math.PI) * 120, 22); });
+      list.forEach((k, i) => { const f = ((t * 1.4 + i / list.length) % 1); drawIng(k, bx + 20 + (hop[0] - bx - 20) * f, GROUND - 70 + (hop[1] - GROUND + 70) * f - Math.sin(f * Math.PI) * 90, 22); });
     } else if (t < 6.2 && s.rolls) {
-      const f = Math.min(1, (t - 1.4) / 4.8), x = m0 + st / 2 + (mw - st) * f;
+      const f = Math.min(1, (t - 1.4) / 4.8), x = xs[0] + (xs[3] - xs[0]) * f, y = belt;
       ctx.fillStyle = phase < 2 ? '#F6E3C8' : COL.brown; ctx.beginPath();
-      if (phase === 0) ctx.ellipse(x, GROUND - 92, 18 + (REDUCED ? 0 : Math.sin(t * 20) * 3), 12, 0, 0, 7);
-      else ctx.arc(x, GROUND - 98, 14, 0, 7);
+      if (phase === 0) ctx.ellipse(x, y + 4, 18 + (REDUCED ? 0 : Math.sin(t * 20) * 3), 12, 0, 0, 7);
+      else ctx.arc(x, y, 14, 0, 7);
       ctx.fill(); ctx.stroke();
-      if (phase >= 1) { ctx.beginPath(); ctx.arc(x, GROUND - 98, 8, 0, 5); ctx.stroke(); }
-      if (phase === 3) { ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(x, GROUND - 104, 9, Math.PI, 0); ctx.fill(); }
+      if (phase >= 1) { ctx.beginPath(); ctx.arc(x, y, 8, 0, 5); ctx.stroke(); }
+      if (phase === 3) { ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(x, y - 6, 9, Math.PI, 0); ctx.fill(); }
     }
     // tray of rolls
     if (t > 6.2) {
-      const n = Math.min(s.rolls, Math.floor((t - 6.2) * 12)), cols = Math.min(10, Math.max(1, s.rolls));
-      ctx.fillStyle = COL.cream; rect(m0 + mw - 20 - cols * 20, GROUND - 210, cols * 20 + 16, 12, true);
+      const n = Math.min(s.rolls, Math.floor((t - 6.2) * 12)), cols = Math.min(10, Math.max(1, s.rolls)), ty = top - 44;
+      ctx.fillStyle = COL.cream; rect(m0 + mw - 20 - cols * 20, ty, cols * 20 + 16, 12, true);
       for (let i = 0; i < Math.min(n, 30); i++) {
-        const x = m0 + mw - 14 - (i % cols) * 20 - 6, y = GROUND - 220 - Math.floor(i / cols) * 16;
+        const x = m0 + mw - 20 - (i % cols) * 20, y = ty - 10 - Math.floor(i / cols) * 16;
         ctx.fillStyle = COL.brown; ctx.beginPath(); ctx.arc(x, y, 8, 0, 7); ctx.fill(); ctx.stroke();
         ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(x, y - 2, 4, 0, 7); ctx.fill();
       }
-      ctx.font = '700 34px Fredoka, sans-serif'; ctx.fillStyle = COL.plum; ctx.textAlign = 'center';
-      ctx.fillText('× ' + n, W / 2, 70);
+      ctx.font = '700 34px Fredoka, sans-serif'; ctx.textAlign = 'center';
+      ctx.lineWidth = 6; ctx.strokeStyle = COL.cream; ctx.strokeText('× ' + n, W / 2, 56);
+      ctx.fillStyle = COL.plum; ctx.fillText('× ' + n, W / 2, 56);
     }
     for (const p of parts) { ctx.fillStyle = p.color || COL.pink; ctx.beginPath(); ctx.arc(p.x, p.y, 3, 0, 7); ctx.fill(); }
   }

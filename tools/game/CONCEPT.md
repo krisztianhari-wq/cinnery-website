@@ -1,6 +1,6 @@
 # Cinnery mini-játék – koncepció (2026-11-26)
 
-Állapot: **terv, az interjú (4 kör) alapján.** Ág: `game-v0.1`. Belső jegyzet a `tools/` alatt, ezért nem települ.
+Állapot: **v0.1 végleges grafikával a `game-v0.1` ágon (2026-11-26), élesítés Krisz jóváhagyására vár.** Gemini-költés eddig kb. 11 $ (84 kép). Ág: `game-v0.1`. Belső jegyzet a `tools/` alatt, ezért nem települ.
 Minta: CR Jack babgyűjtő (`crackerjack-website`, `jatek-v0.1` ág). Onnan csak a felépítést vesszük át, márkás elemet nem.
 
 ## Döntések (Krisz, interjú)
@@ -56,3 +56,6 @@ Csigák száma: minden 6 alapanyagból álló teljes „adag” (mind a 6 alapb�
 3. **Oldalak:** `/game/`, `/nl/spel/`, főoldali sáv, lábléc, build-bővítés, cache-bust.
 4. **Grafika beillesztése:** vágás, átlátszóság, talpvonal, sprite-lapok.
 5. Helyi teszt → Krisz jóváhagyása → telepítés (`/deploy-sadrobot`).
+
+## Kiválasztott képek (2026-11-26)
+Pék: `baker-sheet-a` modell (Krisz). A többit két alágens-ellenőrzés javasolta, Krisz felülbírálhatja: a lista a `tools/game/cut.py` `PICK` szótárában van, csere után `python3 tools/game/cut.py`.

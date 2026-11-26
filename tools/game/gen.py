@@ -31,7 +31,7 @@ Hair in a high bun tucked under a pink headscarf (#F0A3AF) tied at the top. Crea
 (#614051) with a small cinnamon-roll swirl badge on the chest (a simple spiral, no text), rolled-up sleeves,
 dark-plum trousers, pink sneakers. A small cream canvas tote bag over her shoulder for collecting ingredients."""
 
-POSE = "\n\nKeep her exactly as in the attached model sheet (same face, outfit, colours, proportions). One single full figure, side view facing RIGHT, centred, feet on an invisible ground line, nothing else in the picture. Square 1:1."
+POSE = "\n\nKeep her exactly as in the attached model sheet (same face, outfit, colours, proportions). One single full figure, side view facing RIGHT, centred, feet on an invisible ground line, nothing else in the picture. No ground line, no shadow. Square 1:1."
 
 ING = "\n\nDraw ONE single game pickup icon, centred, filling about 70% of a square 1:1 canvas, slightly tilted, nothing else: "
 INGREDIENTS = {
@@ -58,16 +58,55 @@ front, three-quarter, side facing right, back. Neutral standing pose. Nothing el
     "baker-run2": dict(prompt="running, passing pose, both legs under the body, slight bounce up"),
     "baker-run3": dict(prompt="running, left leg forward, right arm forward, contact pose"),
     "baker-run4": dict(prompt="running, passing pose, opposite to the previous passing pose"),
-    "baker-jump": dict(prompt="jumping upward, knees tucked, arms up, happy face"),
+    "baker-jump": dict(prompt="STRICT side profile facing right (we see her left side, one eye visible), jumping upward, knees tucked, arms up, happy face"),
     "baker-fall": dict(prompt="falling down after a jump, legs reaching down for landing, arms out for balance"),
-    "baker-hit": dict(prompt="stumbling backwards after bumping into something, surprised face, a couple of ingredients flying out of her tote bag"),
-    "baker-pour": dict(prompt="standing and happily tipping her tote bag forward to pour ingredients into something in front of her (draw only her and the bag, nothing in front)"),
+    "baker-hit": dict(prompt="STRICT side profile facing right (we see her left side, one eye visible), stumbling backwards after bumping into something, surprised face, a couple of ingredients flying out of her tote bag"),
+    "baker-pour": dict(prompt="STRICT side profile facing right (we see her left side, one eye visible), standing and happily tipping her tote bag forward to pour ingredients into something in front of her (draw only her and the bag, nothing in front)"),
 }
 for k, v in JOBS.items():
     if k.startswith("baker-") and k != "baker-sheet":
         v.update(ratio="1:1", ref=True, prompt=STYLE + "\n\n" + BAKER + POSE + "\nPose: " + v["prompt"])
 for k, v in INGREDIENTS.items():
     JOBS[f"ing-{k}"] = dict(ratio="1:1", ref=False, prompt=STYLE + ING + v)
+
+# props and scenery: the chosen model sheet is attached only as a style reference
+STYLEREF = "\n\nThe attached image is ONLY a style reference: match its line weight, flat colouring and palette. Do NOT draw the character.\n\n"
+SIDE = "Side view, as seen from the street by a side-scrolling game camera, standing on an invisible ground line at the bottom. One single object, centred, nothing else. "
+PROPS = {
+    "bike": ("16:9", SIDE + "A classic upright Dutch city bicycle, parked, plum frame, cream mudguards, a small pink basket on the front."),
+    "pigeon": ("1:1", SIDE + "A plump grey city pigeon walking to the left (facing LEFT), cute, small."),
+    "gull": ("16:9", "A white seagull flying to the left (facing LEFT), wings spread wide, seen from the side, cute cartoon, nothing else."),
+    "cobble": ("1:1", SIDE + "One single grey cobblestone sticking up out of the pavement (just the stone and a tiny bit of pavement around it), small."),
+    "puddle": ("21:9", "A flat rain puddle on the street seen from a low side angle: a thin wide light-blue water shape with a few ripples and a white highlight, very flat (height about 1/8 of the width)."),
+    "canal": ("21:9", "A gap in the street showing canal water, seen from the side: two brick quay edges at left and right, blue water with small waves between them, very flat (height about 1/5 of the width)."),
+    "tulip": ("16:9", SIDE + "A long low wooden planter box full of tulips in pink, red and white, with green leaves. The top of the tulips is fairly even so a person could stand on it."),
+    "tram": ("21:9", SIDE + "A modern Dutch city tram facing LEFT, cream body with a plum stripe and pink doors, big windows, nobody inside, flat roof with a small pantograph."),
+}
+for k, (r, p) in PROPS.items():
+    JOBS[k] = dict(ratio=r, ref=True, prompt=STYLE + STYLEREF + p)
+
+SCENE = """Seamless horizontally tileable game background (the left edge must continue the right edge), wide 21:9, straight-on side
+view, flat street level at the very bottom edge, no people, no cars, no text or signs with letters. """
+CITIES = {
+    "amsterdam": "Amsterdam: narrow tall canal houses with step and bell gables in plum, pink, cream and brick tones, white window frames, a hoisting beam at the top",
+    "denhaag": "The Hague: elegant 19th-century city houses and, in the middle, the Binnenhof with the Ridderzaal (two slim towers, gothic gable), a few trees",
+    "groningen": "Groningen: the Martinitoren church tower prominent, surrounded by gabled brick houses of the Grote Markt and a few bicycles leaning on walls",
+}
+for k, desc in CITIES.items():
+    JOBS[f"bg-{k}-far"] = dict(ratio="21:9", ref=True, prompt=STYLE + STYLEREF + SCENE +
+        f"FAR layer: soft pale pastel skyline silhouette of {desc}, low contrast, few details, under a soft pink-cream sky with two or three simple clouds. Fill the whole canvas (this layer is opaque).")
+    JOBS[f"bg-{k}-near"] = dict(ratio="21:9", ref=True, prompt=STYLE + STYLEREF + SCENE +
+        f"NEAR layer: a continuous row of building facades of {desc}, bold and colourful, the rooftops reaching about 3/4 of the image height. Everything above the rooftops is plain pure white (#FFFFFF) with no sky, so it can be cut out.")
+
+JOBS["bakery"] = dict(ratio="4:3", ref=True, prompt=STYLE + STYLEREF + SIDE +
+    "A cosy small bakery shop front: cream facade, big plum awning with pink stripes, a large shop window with cinnamon rolls on a tray, a plum door in the middle, a pot of pink flowers. Above the awning an EMPTY plain plum sign board (no letters, the logo is added later).")
+JOBS["bake-room"] = dict(ratio="16:9", ref=True, prompt=STYLE + STYLEREF +
+    "Interior background of the same bakery, straight-on view: soft pink tiled back wall, wooden shelves with jars and flour bags, a pendant lamp, a cream tiled floor strip at the bottom. Leave the middle and lower right area calm and empty (a machine is drawn there later). Fill the whole canvas.")
+JOBS["machine"] = dict(ratio="21:9", ref=True, prompt=STYLE + STYLEREF +
+    """A cheerful cartoon cinnamon-roll baking machine, side view, one long plum machine on short legs with a pink funnel hopper on the
+far LEFT top, and a conveyor belt running left to right through FOUR evenly spaced, clearly separate stations of equal width:
+1) a kneading bowl with a dough hook, 2) a rolling pin that rolls the dough into a spiral, 3) a small oven with a round window and a warm glow,
+4) a glazing nozzle dripping white icing. A little output tray on the far right. Round gauges and buttons, no text or numbers.""")
 
 
 _cache, _lock = {}, threading.Lock()
