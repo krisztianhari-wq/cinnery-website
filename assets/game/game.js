@@ -90,8 +90,8 @@
   /* ---------- level ---------- */
   function build() {
     rng = seedRng((Date.now() ^ 0x5eed) >>> 0);
-    speed = slow ? 215 : 300;
-    length = 300 * 70;                               // same course in slow mode, it just takes longer
+    speed = slow ? 170 : 230;
+    length = 230 * 72;                               // same course in slow mode, it just takes longer
     objs = []; items = [];
     let x = 700, b = 0;
     const basic = () => BASIC[b++ % BASIC.length];
@@ -271,6 +271,7 @@
     drawSky(c);
     drawCity(c, REDUCED ? 0 : cam * 0.25, 0.55);
     drawCity(c, cam * 0.6, 1);
+    ctx.fillStyle = 'rgba(255,252,250,.38)'; ctx.fillRect(0, 0, W, GROUND);   // soft veil: the baker and pickups pop out of the street
     // ground
     ctx.fillStyle = ['#D9C7C0', '#CFC7C9', '#D6C4B4'][c]; ctx.fillRect(0, GROUND, W, H - GROUND);
     ctx.fillStyle = 'rgba(43,28,37,.12)';
@@ -399,7 +400,11 @@
     ctx.globalAlpha = endT > 0 ? Math.max(0, 1 - endT / 0.6) : blink ? 0.45 : 1;
     const name = hitT > 1 ? 'baker-hit' : !P.ground ? (P.vy < 0 ? 'baker-jump' : 'baker-fall') : 'baker-run' + (1 + Math.floor(P.frame) % 4);
     const im = img(name);
-    if (im) { const h = 80, w = im.naturalWidth / im.naturalHeight * h; ctx.drawImage(im, x - w / 2, P.y + PH - h + 3, w, h); }
+    if (state === 'run') {   // ground shadow, smaller while in the air
+      const k = Math.max(0.35, 1 - (GROUND - P.y - PH) / 200);
+      ctx.fillStyle = 'rgba(43,28,37,.28)'; ctx.beginPath(); ctx.ellipse(x, GROUND + 2, 24 * k, 6 * k, 0, 0, 7); ctx.fill();
+    }
+    if (im) { const h = 92, w = im.naturalWidth / im.naturalHeight * h; ctx.drawImage(im, x - w / 2, P.y + PH - h + 6, w, h); }
     else {
       const y = P.y, step = P.ground ? Math.sin(P.frame * Math.PI / 2) * 6 : 0;
       ctx.strokeStyle = COL.ink; ctx.lineWidth = 2.5;

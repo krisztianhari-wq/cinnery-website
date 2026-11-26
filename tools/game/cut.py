@@ -47,6 +47,17 @@ def cutout(im, tol=28, crop=True):
     return out.crop(out.getbbox()) if crop else out
 
 
+def sticker(im, r):
+    """Thick white outline around the figure, so she stands out against the busy street."""
+    pad = Image.new("RGBA", (im.width + 2 * r, im.height + 2 * r), (0, 0, 0, 0))
+    pad.paste(im, (r, r))
+    ring = pad.getchannel("A").point(lambda v: 255 if v > 40 else 0).filter(ImageFilter.MaxFilter(2 * r + 1)).filter(ImageFilter.GaussianBlur(0.8))
+    out = Image.new("RGBA", pad.size, (255, 255, 255, 0))
+    out.putalpha(ring)
+    out.alpha_composite(pad)
+    return out
+
+
 def main(names):
     OUT.mkdir(exist_ok=True)
     # baker frames share one crop box, so scale and foot line stay identical between frames
@@ -62,6 +73,8 @@ def main(names):
             im = im.convert("RGB") if opaque else cutout(im)
         w = round(im.width * h / im.height)
         im = im.resize((w, h), Image.LANCZOS)
+        if name.startswith(("baker-", "ing-")):
+            im = sticker(im, 7 if name.startswith("baker-") else 4)
         if h > 150:   # flat art: a palette keeps the big files small
             im = im.quantize(colors=192, method=Image.Quantize.FASTOCTREE, dither=Image.Dither.NONE)
         im.save(OUT / f"{name}.png", optimize=True)
