@@ -1,4 +1,4 @@
-/* Cinnery mini-game: run through Amsterdam, Den Haag and Groningen, collect cinnamon-roll ingredients,
+/* Cinnery mini-game: run through Amsterdam and Groningen, collect cinnamon-roll ingredients,
    then the bakery machine bakes the rolls. Vanilla JS + canvas, no external requests, no sound.
    Settings come from data-* attributes on #game (CSP: no inline script). */
 (function () {
@@ -17,7 +17,7 @@
   /* ---------- text ---------- */
   const T = {
     en: {
-      cities: ['Amsterdam', 'Den Haag', 'Groningen'], bakery: 'Cinnery bakery',
+      cities: ['Amsterdam', 'Groningen'], bakery: 'Cinnery bakery',
       stations: ['Knead', 'Roll', 'Bake', 'Glaze'],
       baked: n => n === 1 ? 'You baked 1 cinnamon roll!' : `You baked ${n} cinnamon rolls!`,
       none: 'No rolls this time…',
@@ -28,7 +28,7 @@
         creamcheese: 'cream cheese', cocoa: 'cocoa', biscoff: 'Biscoff biscuits', pistachio: 'pistachios', caramel: 'caramel & pecans', blueberry: 'blueberries' },
     },
     nl: {
-      cities: ['Amsterdam', 'Den Haag', 'Groningen'], bakery: 'Bakkerij Cinnery',
+      cities: ['Amsterdam', 'Groningen'], bakery: 'Bakkerij Cinnery',
       stations: ['Kneden', 'Rollen', 'Bakken', 'Glazuren'],
       baked: n => n === 1 ? 'Je hebt 1 kaneelbroodje gebakken!' : `Je hebt ${n} kaneelbroodjes gebakken!`,
       none: 'Deze keer geen broodjes…',
@@ -49,7 +49,7 @@
     'salted-caramel-pecan': 'Salted Caramel Pecan', 'blueberry-crumble': 'Blueberry Crumble', classic: 'Classic Naked' };
   const ROLL_IMG = { 'classic-cream-cheese': 'roll-classic-cream-cheese', 'red-velvet': 'roll-red-velvet', biscoff: 'roll-biscoff', pistachio: 'roll-pistachio',
     'salted-caramel-pecan': 'roll-salted-caramel-pecan', 'blueberry-crumble': 'roll-blueberry-crumble', classic: 'roll-classic-naked' };
-  const CITY_SPECIALS = [['creamcheese', 'biscoff'], ['cocoa', 'caramel'], ['pistachio', 'blueberry']];
+  const CITY_SPECIALS = [['creamcheese', 'biscoff', 'cocoa'], ['pistachio', 'blueberry', 'caramel']];
   const COL = { ink: '#2B1C25', plum: '#614051', deep: '#4A2F3E', pink: '#F0A3AF', soft: '#FBE3E6', cream: '#FFFCFA',
     brown: '#A8643A', butter: '#F4C95D', green: '#5E9C6B', blue: '#6FA8C7' };
   const ING_COL = { flour: '#FFFFFF', sugar: '#F3F0FF', butter: COL.butter, egg: '#C98B5A', yeast: '#E8D9A8', cinnamon: COL.brown,
@@ -59,7 +59,7 @@
   const ART = ['flour', 'sugar', 'butter', 'egg', 'yeast', 'cinnamon', 'creamcheese', 'cocoa', 'biscoff', 'pistachio', 'caramel', 'blueberry'].map(k => 'ing-' + k)
     .concat(['run1', 'run2', 'run3', 'run4', 'jump', 'fall', 'hit', 'pour'].map(k => 'baker-' + k),
       ['bike', 'cobble', 'tulip', 'tram', 'pigeon', 'gull', 'puddle', 'canal', 'bakery', 'bake-room', 'machine'],
-      ['amsterdam', 'denhaag', 'groningen'].flatMap(c => ['bg-' + c + '-far', 'bg-' + c + '-near']));                                 // file names (without .png) in assets/game/, filled in as the art is approved
+      ['amsterdam', 'groningen'].flatMap(c => ['bg-' + c + '-far', 'bg-' + c + '-near']));                                 // file names (without .png) in assets/game/, filled in as the art is approved
   const IMG = {};
   ART.forEach(n => { const im = new Image(); im.src = BASE + n + '.png' + VER; IMG[n] = im; });
   const img = n => { const im = IMG[n]; return im && im.complete && im.naturalWidth ? im : null; };
@@ -91,7 +91,7 @@
   function build() {
     rng = seedRng((Date.now() ^ 0x5eed) >>> 0);
     speed = slow ? 170 : 230;
-    length = 230 * 72;                               // same course in slow mode, it just takes longer
+    length = 230 * 48;                               // same course in slow mode, it just takes longer
     objs = []; items = [];
     let x = 700, b = 0;
     const basic = () => BASIC[b++ % BASIC.length];
@@ -101,7 +101,7 @@
     let n = 0;
     while (x < length - 500) {
       const c = city(x), pats = ['bike', 'cobble', 'pigeon', 'gull', 'tulip', 'air', 'water'];
-      if (c < 2) pats.push('tram');
+      if (c === 0) pats.push('tram');           // Groningen has no trams
       const p = pick(pats), sp = ++n % 3 === 0;
       if (p === 'bike' || p === 'cobble' || p === 'pigeon') {
         const w = p === 'bike' ? 58 : p === 'cobble' ? 28 : 30, h = p === 'bike' ? 42 : p === 'cobble' ? 16 : 24;
@@ -110,8 +110,8 @@
         if (sp) special(x + w / 2, GROUND - 150);
         x += w;
       } else if (p === 'water') {
-        const w = c === 1 ? 70 : 104;
-        add({ type: c === 1 ? 'puddle' : 'canal', x, y: GROUND - 4, w, h: 8, hazard: true, water: true });
+        const pud = rng() < .4, w = pud ? 70 : 104;
+        add({ type: pud ? 'puddle' : 'canal', x, y: GROUND - 4, w, h: 8, hazard: true, water: true });
         for (let i = 0; i < 3; i++) item(x + w / 2 + (i - 1) * 40, GROUND - 90 - (i === 1 ? 24 : 0), basic());
         if (sp) special(x + w / 2, GROUND - 160);
         x += w;
@@ -134,7 +134,7 @@
       x += rr(330, 520);
     }
   }
-  const city = x => Math.min(2, Math.floor(x / (length / 3)));
+  const city = x => x < length / 2 ? 0 : 1;          // 0 Amsterdam, 1 Groningen
 
   function reset() {
     build();
@@ -273,11 +273,10 @@
     drawCity(c, cam * 0.6, 1);
     ctx.fillStyle = 'rgba(255,252,250,.38)'; ctx.fillRect(0, 0, W, GROUND);   // soft veil: the baker and pickups pop out of the street
     // ground
-    ctx.fillStyle = ['#D9C7C0', '#CFC7C9', '#D6C4B4'][c]; ctx.fillRect(0, GROUND, W, H - GROUND);
+    ctx.fillStyle = ['#D9C7C0', '#D6C4B4'][c]; ctx.fillRect(0, GROUND, W, H - GROUND);
     ctx.fillStyle = 'rgba(43,28,37,.12)';
     for (let x = -((cam) % 40); x < W; x += 40) ctx.fillRect(x, GROUND + 14, 22, 3);
     ctx.fillStyle = COL.deep; ctx.fillRect(0, GROUND, W, 3);
-    if (c === 1 && !REDUCED) drawRain();
     drawBakery(length + 120 - cam);
     for (const o of objs) { const sx = o.x - cam; if (sx > -260 && sx < W + 40) drawObj(o, sx); }
     for (const it of items) { const sx = it.x - cam; if (!it.got && sx > -30 && sx < W + 30) drawIng(it.kind, sx, it.y + (REDUCED ? 0 : Math.sin((it.x + performance.now() / 4) / 60) * 3), 36); }
@@ -292,10 +291,10 @@
   }
 
   function drawSky(c) {
-    ctx.fillStyle = ['#FBE3E6', '#E9EEF3', '#FCEBDD'][c]; ctx.fillRect(0, 0, W, GROUND);
+    ctx.fillStyle = ['#FBE3E6', '#FCEBDD'][c]; ctx.fillRect(0, 0, W, GROUND);
   }
   function drawCity(c, off, depth) {
-    const name = 'bg-' + ['amsterdam', 'denhaag', 'groningen'][c] + (depth < 1 ? '-far' : '-near'), im = img(name);
+    const name = 'bg-' + ['amsterdam', 'groningen'][c] + (depth < 1 ? '-far' : '-near'), im = img(name);
     if (im) {
       const h = depth < 1 ? GROUND : GROUND * 0.6, w = im.naturalWidth / im.naturalHeight * h;
       for (let x = -(off % w); x < W; x += w) ctx.drawImage(im, x, GROUND - h, w, h);
@@ -303,35 +302,22 @@
     }
     // placeholder skyline
     const unit = depth < 1 ? 70 : 54, base = GROUND;
-    ctx.fillStyle = depth < 1 ? 'rgba(97,64,81,.18)' : ['#C98F9E', '#9FA9B8', '#C9A58A'][c];
+    ctx.fillStyle = depth < 1 ? 'rgba(97,64,81,.18)' : ['#C98F9E', '#C9A58A'][c];
     const start = Math.floor(off / unit);
     for (let i = start - 1; i < start + W / unit + 2; i++) {
       const x = i * unit - off, h = (depth < 1 ? 120 : 70) + ((i * 37) % 5) * 14;
       if (c === 0 && depth === 1) { // canal houses with step gables
         ctx.fillRect(x + 4, base - h, unit - 8, h);
         ctx.fillRect(x + 12, base - h - 12, unit - 24, 12); ctx.fillRect(x + 20, base - h - 22, unit - 40, 10);
-      } else if (c === 2 && i % 9 === 0 && depth < 1) { // Martinitoren
+      } else if (c === 1 && i % 9 === 0 && depth < 1) { // Martinitoren
         ctx.fillRect(x, base - 230, 34, 230); ctx.fillRect(x + 6, base - 262, 22, 32); ctx.fillRect(x + 13, base - 285, 8, 24);
-      } else if (c === 1 && i % 7 === 0 && depth < 1) { // Binnenhof
-        ctx.fillRect(x, base - 150, 90, 150);
-        ctx.beginPath(); ctx.moveTo(x + 10, base - 150); ctx.lineTo(x + 45, base - 200); ctx.lineTo(x + 80, base - 150); ctx.fill();
       } else ctx.fillRect(x + 3, base - h, unit - 6, h);
       if (depth === 1) {
         ctx.fillStyle = 'rgba(255,252,250,.7)';
         for (let wy = base - h + 14; wy < base - 18; wy += 22) ctx.fillRect(x + unit / 2 - 8, wy, 16, 12);
-        ctx.fillStyle = ['#C98F9E', '#9FA9B8', '#C9A58A'][c];
+        ctx.fillStyle = ['#C98F9E', '#C9A58A'][c];
       }
     }
-  }
-  let rain = [];
-  function drawRain() {
-    if (!rain.length) rain = Array.from({ length: 50 }, () => [Math.random() * 1200, Math.random() * GROUND]);
-    ctx.strokeStyle = 'rgba(111,168,199,.55)'; ctx.lineWidth = 1.5; ctx.beginPath();
-    for (const r of rain) {
-      r[1] = (r[1] + 9) % GROUND; const x = (r[0] - cam * 0.2) % W; const sx = x < 0 ? x + W : x;
-      ctx.moveTo(sx, r[1]); ctx.lineTo(sx - 3, r[1] + 10);
-    }
-    ctx.stroke();
   }
   function drawBakery(sx) {
     if (sx > W + 20 || sx < -360) return;
@@ -423,7 +409,7 @@
     ctx.fillStyle = 'rgba(255,252,250,.85)'; roundRect(bx - 8, 8, bw + 16, 18, 9); ctx.fill();
     ctx.fillStyle = COL.soft; roundRect(bx, 13, bw, 8, 4); ctx.fill();
     ctx.fillStyle = COL.plum; roundRect(bx, 13, Math.max(8, bw * prog), 8, 4); ctx.fill();
-    ctx.fillStyle = COL.deep; for (let i = 1; i < 3; i++) ctx.fillRect(bx + bw * i / 3 - 1, 11, 2, 12);
+    ctx.fillStyle = COL.deep; ctx.fillRect(bx + bw / 2 - 1, 11, 2, 12);
     // basics (left) and specials (below)
     const s = 22, y = 46;
     ctx.font = '600 15px Fredoka, sans-serif'; ctx.textAlign = 'left'; ctx.textBaseline = 'middle';

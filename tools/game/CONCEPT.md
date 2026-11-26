@@ -7,7 +7,7 @@ Minta: CR Jack babgyűjtő (`crackerjack-website`, `jatek-v0.1` ág). Onnan csak
 | Téma | Döntés |
 |---|---|
 | Játékmenet | Automatikus futás, **csak ugrás** (koppintás / szóköz / ↑), hosszan nyomva nagyobbat ugrik. Mobilon egy ujjal játszható. |
-| Pálya | Egy folyamatos kör, **60–90 mp**, 3 szakasz: **Amsterdam → Den Haag → Groningen**, a végén a groningeni Cinnery pékség. |
+| Pálya | 2026-11-26 óta (a lányok szerint túl hosszú volt) **kb. 50 mp, 2 szakasz: Amsterdam → Groningen**; Den Haag kimaradt (a képei a `raw/`-ban megvannak), a végén a groningeni Cinnery pékség. |
 | Alapanyagok | **Alap** (1 pont): liszt, cukor, vaj, tojás, élesztő, fahéj. **Különleges** (5 pont, a menü ízei): krémsajt, Biscoff-keksz, pisztácia, áfonya, kakaó (red velvet), karamell + pekándió (a menü 6 ízes csigája szerint; Cookies & Cream csiga nincs a menüben). |
 | Akadályok | Bicikli (parkoló/guruló), galamb és sirály (repül), csatorna/tócsa és eső, villamos, kiálló kockakő, tulipánláda (emelvénynek is). |
 | Ütközés | **Nincs halál:** ütközéskor elhullat néhány alapanyagot, a kör mindig végigmegy. |

@@ -27,8 +27,8 @@ PICK = {
     "baker-hit": ("baker-hit-d", 256, False), "baker-pour": ("baker-pour-d", 256, False),
     "bike": ("bike-a", 160, False), "cobble": ("cobble-b", 80, False), "tulip": ("tulip-a", 160, False), "tram": ("tram-a", 240, False),
     "pigeon": ("pigeon-a", 96, False), "gull": ("gull-a", 110, False), "puddle": ("puddle-a", 60, False), "canal": ("canal-a", 90, False),
-    "bg-amsterdam-far": ("bg-amsterdam-far-b", 600, True), "bg-denhaag-far": ("bg-denhaag-far-b", 600, True), "bg-groningen-far": ("bg-groningen-far-a", 600, True),
-    "bg-amsterdam-near": ("bg-amsterdam-near-a", 440, False), "bg-denhaag-near": ("bg-denhaag-near-a", 440, False), "bg-groningen-near": ("bg-groningen-near-a", 440, False),
+    "bg-amsterdam-far": ("bg-amsterdam-far-b", 600, True), "bg-groningen-far": ("bg-groningen-far-a", 600, True),
+    "bg-amsterdam-near": ("bg-amsterdam-near-a", 440, False), "bg-groningen-near": ("bg-groningen-near-a", 440, False),
     "bakery": ("bakery-a", 500, False), "bake-room": ("bake-room-b", 600, True), "machine": ("machine-a", 340, False),
 }
 
