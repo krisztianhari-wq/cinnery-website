@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Roll Run – the Cinnery cinnamon roll game</title>
+  <meta name="description" content="Free mini-game: run through Amsterdam, The Hague and Groningen, jump over bikes and canals, collect flour, butter and cinnamon, and bake cinnamon rolls at the Cinnery bakery.">
+  <meta name="theme-color" content="#614051">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:; base-uri 'self'; form-action 'self'">
+  <link rel="canonical" href="https://cinnery.nl/game/">
+  <link rel="alternate" hreflang="en" href="https://cinnery.nl/game/">
+  <link rel="alternate" hreflang="nl" href="https://cinnery.nl/nl/spel/">
+  <link rel="alternate" hreflang="x-default" href="https://cinnery.nl/game/">
+  <meta property="og:title" content="Roll Run – the Cinnery cinnamon roll game">
+  <meta property="og:description" content="Jump through Amsterdam, The Hague and Groningen, collect the ingredients and bake cinnamon rolls.">
+  <meta property="og:url" content="https://cinnery.nl/game/">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://cinnery.nl/assets/img/own/rolls-frosted.jpg">
+  <meta property="og:site_name" content="Cinnery">
+  <meta property="og:locale" content="en_GB">
+  <meta property="og:locale:alternate" content="nl_NL">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="../assets/img/favicon.png?v=20261126a" type="image/png">
+  <link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.png?v=20261126a">
+  <link rel="stylesheet" href="../assets/fonts/fonts.css?v=20261126a">
+  <link rel="stylesheet" href="../assets/base.css?v=20261126a">
+  <link rel="stylesheet" href="../assets/game/game.css?v=20261126a">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"VideoGame","name":"Roll Run","url":"https://cinnery.nl/game/","inLanguage":"en","description":"Free browser mini-game: run through Amsterdam, The Hague and Groningen, collect cinnamon roll ingredients and bake rolls at the Cinnery bakery.","genre":"Platformer","gamePlatform":"Web browser","playMode":"SinglePlayer","applicationCategory":"Game","operatingSystem":"Any","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"EUR"},"publisher":{"@type":"Bakery","name":"Cinnery","url":"https://cinnery.nl/"}}</script>
+</head>
+<body class="game-page">
+
+<header class="game-head wrap">
+  <a href="../" class="game-brand" aria-label="Cinnery home"><span class="logo logo-icon" aria-hidden="true"></span><span class="logo logo-word" aria-hidden="true"></span></a>
+  <nav class="game-nav" aria-label="Main">
+    <a href="../#menu">Menu</a>
+    <a href="../nl/spel/" hreflang="nl" lang="nl">NL</a>
+  </nav>
+</header>
+
+<main class="wrap">
+  <h1>Roll Run</h1>
+  <p class="lead">Help our baker collect everything a cinnamon roll needs – from Amsterdam’s canals via The Hague to our bakery in Groningen.</p>
+
+  <div id="game" class="game" data-base="../assets/game/" data-site="../" data-v="20261126a">
+    <canvas tabindex="0" aria-label="Game: tap, Space or the up arrow to jump"></canvas>
+    <div class="game-start">
+      <p class="game-how">Tap, press <kbd>Space</kbd> or <kbd>↑</kbd> to jump. Hold for a higher jump.</p>
+      <button type="button" class="btn btn-pink game-play">Play</button>
+      <label class="game-slow"><input type="checkbox"> Slow mode</label>
+    </div>
+    <div class="game-result" hidden aria-live="polite">
+      <img class="res-img" src="../assets/img/own/roll-classic-naked.jpg?v=20261126a" alt="" width="160" height="160">
+      <div>
+        <h2 class="res-title"></h2>
+        <p class="res-flavour"></p>
+        <p class="res-short small muted"></p>
+        <p class="res-record small"></p>
+        <div class="res-actions">
+          <button type="button" class="btn btn-pink res-again">Play again</button>
+          <button type="button" class="btn btn-outline-dark res-share">Share</button>
+          <a class="link res-link" href="../#menu">Taste it for real</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section class="game-info">
+    <div>
+      <h2>How to play</h2>
+      <p>The baker runs by herself – you only jump. Tap the game, press Space or the up arrow; hold it down to jump higher. Bump into something and a few ingredients fall out of her bag, but the run always goes on.</p>
+      <p>Look out for parked bikes, pigeons, seagulls, puddles and canals, cobblestones and trams. Tulip boxes and trams are safe to land on.</p>
+    </div>
+    <div>
+      <h2>The ingredients</h2>
+      <p>Every roll needs one of each: <strong>flour, sugar, butter, egg, yeast and cinnamon</strong>. Special ingredients decide the flavour that comes out of the machine:</p>
+      <ul>
+        <li>cream cheese – <a href="../product.html?id=classic-cream-cheese">Classic Cream Cheese</a></li>
+        <li>cocoa – <a href="../product.html?id=red-velvet">Red Velvet</a></li>
+        <li>Biscoff biscuits – <a href="../product.html?id=biscoff">Biscoff</a></li>
+        <li>pistachios – <a href="../product.html?id=pistachio">Pistachio</a></li>
+        <li>caramel and pecans – <a href="../product.html?id=salted-caramel-pecan">Salted Caramel Pecan</a></li>
+        <li>blueberries – <a href="../product.html?id=blueberry-crumble">Blueberry Crumble</a></li>
+      </ul>
+      <p>No special ingredient? Then it’s a <a href="../product.html?id=classic">Classic Naked</a>. The real ones are baked fresh every day at Zwanestraat 29, Groningen – <a href="../#menu">see the menu</a>.</p>
+    </div>
+  </section>
+  <p class="small muted">Free to play, no sign-up, no ads. Your best score stays in your own browser only.</p>
+</main>
+
+<footer class="game-foot wrap">
+  <p class="small">© 2026 Cinnery · Zwanestraat 29, 9712 CJ Groningen · <a href="../">cinnery.nl</a> · Site by sadrobot</p>
+</footer>
+
+<script src="../assets/game/game.js?v=20261126a"></script>
+</body></html>

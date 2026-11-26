@@ -19,9 +19,14 @@ Statikus weboldal + webshop-váz a Cinnery fahéjascsiga-pékségnek (Groningen)
 - GitHub Pages a `main` gyökeréből: push után 1–2 perc.
 - **Éles: cinnery.nl a sadrobot szerveren** (2026-10-11 óta; www és cinnery.eu oda irányít), tükör: rolls.sadrobot.eu – ugyanaz a `cinnery-web` oldal. Feltöltés: `git archive HEAD` mínusz README/.gitignore/.nojekyll/.htaccess/CLAUDE*.md/tools/ → /deploy-sadrobot skill (`deploy-site.sh … cinnery-web <mappa>`).
 - `dist/` (gitignore): laikus útmutatók (Lightspeed-kulcsok, e-mail költöztetés), a régi ZXCS-feltöltő csomag már nem kell.
-- Cache-busting: minden helyi CSS/JS/kép link `?v=<verzió>` (most `20261107a`); a `shop.js` a saját `?v`-jét adja tovább a termékfotóknak. Minden asset-változásnál léptesd mindhárom oldalon: `sed -i '' 's/?v=OLD/?v=NEW/g' index.html product.html cart.html` – különben a böngésző új HTML-t régi CSS-sel kever.
+- Cache-busting: minden helyi CSS/JS/kép link `?v=<verzió>` (most `20261126a`); a `shop.js` a saját `?v`-jét adja tovább a termékfotóknak. Minden asset-változásnál léptesd az összes oldalon: `sed -i '' 's/?v=OLD/?v=NEW/g' index.html product.html cart.html game/index.html nl/spel/index.html` (a játékoldalakon a `data-v`-t is) – különben a böngésző új HTML-t régi CSS-sel kever.
 - Git identitás repo-szinten: GitHub noreply cím; céges e-mail nem kerülhet vissza a historyba.
 - Korábbi dizájnok: `archive/design-versions` ág (A/B + választó) és `archive-all-variants` tag (mind az öt).
+
+## Mini-játék (Roll Run, `game-v0.1` ág)
+- `/game/` (EN) és `/nl/spel/` (NL): kézzel írt statikus oldalak (a holland NEM generált, szöveget mindkettőben javíts). Motor: `assets/game/game.js` (canvas, nincs hang, nincs külső kérés), stílus: `assets/game/game.css`. Főoldali sáv `.game-band` + lábléc-link (`game.band.*`, `footer.game`); a build a holland főoldalon `game/` → `spel/`.
+- Grafika: `tools/game/gen.py` (Gemini, Keychain `cr-jack-gemini`), nyers képek a gitignore-olt `tools/game/raw/`-ban (kontaktlap: `raw/index.html`). Jóváhagyott kép → `assets/game/<név>.png` + a nevét a `game.js` `ART` listájába; ami nincs benne, azt helyettesítő rajz pótolja. Terv: `tools/game/CONCEPT.md`.
+- Teszt: `/game/#fast=40` (40× gyorsítás). A rekord a `cinnery-game-record` localStorage-kulcsban van (a kosáron kívül egyedül ez).
 
 ## Nyitvatartás
 - 2026-10-17 óta Krisz kérésére **nincs nyitvatartás a weboldalon** (sem a bento-kártyán, sem a Visit részben). Az `app.js` nyitva/zárva-logikája (`HOURS`, `.open-now`) bent maradt, elem híján nem csinál semmit; visszatételhez a `.open-now` elemeket és a `visit.hours`/`visit.mon`… szövegeket kell visszarakni (git-előzmény: `0283b06`).
@@ -30,7 +35,7 @@ Statikus weboldal + webshop-váz a Cinnery fahéjascsiga-pékségnek (Groningen)
 - 2026-10-12 óta **KI**: `<html lang="en" class="no-ordering">` az `index.html`, `product.html`, `cart.html` tetején. Ilyenkor csak árak látszanak: nincs kosár ikon, „Add to cart”/„Choose”/sor-gomb, lebegő kosársáv, rendelési panel és „order ahead” GYIK; a `cart.html` a menüre irányít; a fejlécben „See the menu” van. A `tools/build.mjs` ilyenkor az előrenderelt HTML-ben kiüríti az `.order-only` elemek `data-i18n` szövegét (JS nélküli lánctalpasok ne lássanak „Order now”-t); a böngészőben az `app.js` visszatölti. Visszakapcsolás után futtasd a buildet, és a szöveg visszakerül.
 - **Visszakapcsolás** (Krisz ~2026-11 közepére tervezi): a három fájlból töröld a `class="no-ordering"`-t, léptesd a `?v=`-t, teszteld a kosarat és az e-mailes előrendelést, telepítsd. Kód: `ORDERING` a `shop.js`-ben, `.order-only` / `.menu-only` a `base.css`-ben. Bájtra pontos utolsó bekapcsolt állapot: `ordering-2026-10-12` tag.
 
-1. A gyökér (`/`) mindig angolul nyílik, a `/nl/` hollandul (2026-10-31 óta saját URL + hreflang); a főoldali EN/NL gomb a két URL között vált, a termék-/kosároldalak `?lang=nl`-lel öröklik a nyelvet. Nincs mentett nyelv, böngészőnyelv figyelmen kívül; magyar nincs. localStorage csak a kosárhoz.
+1. A gyökér (`/`) mindig angolul nyílik, a `/nl/` hollandul (2026-10-31 óta saját URL + hreflang); a főoldali EN/NL gomb a két URL között vált, a termék-/kosároldalak `?lang=nl`-lel öröklik a nyelvet. Nincs mentett nyelv, böngészőnyelv figyelmen kívül; magyar nincs. localStorage csak a kosárhoz és a játék rekordjához.
 2. Adatvédelem: betöltéskor nulla harmadik feles kérés (fontok, képek helyben), Google Maps csak a „Show map” kattintásra, CSP meta az `index.html`-ben, külső linkek `noopener noreferrer`. Új külső erőforrás → CSP-t is bővíteni.
 3. Fizetés még nincs: a kosár mailto előrendelést nyit (cinnery.nl@gmail.com). Nincs házhozszállítás, nincs WhatsApp.
 4. Halal-állítás sehol (a menüben volt bacon roll). A hero alatti kiemelés „Artisan”.

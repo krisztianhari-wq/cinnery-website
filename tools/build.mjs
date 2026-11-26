@@ -172,6 +172,7 @@ function toDutch(html) {
   rep('<meta property="og:locale:alternate" content="nl_NL">', '<meta property="og:locale:alternate" content="en_GB">');
   // relative links and assets are one folder up from nl/
   html = html.replace(/\s(src|href)="(?!https?:|mailto:|tel:|#|\/|data:|\.\.\/)([^"]*)"/g, (m, attr, v) => ` ${attr}="../${v}"`);
+  rep('href="../game/"', 'href="spel/"');   // the Dutch game page lives at /nl/spel/
   return withLd(html, 'nl');
 }
 
@@ -213,6 +214,7 @@ const lines = [
   '- E-mail: cinnery.nl@gmail.com (catering, large orders, custom flavours)',
   '- Instagram: https://www.instagram.com/cinnery_rolls/',
   '- Website: https://cinnery.nl/ (English), https://cinnery.nl/nl/ (Dutch)',
+  '- Mini-game "Roll Run": https://cinnery.nl/game/ (English), https://cinnery.nl/nl/spel/ (Dutch) – free browser platformer: collect cinnamon roll ingredients in Amsterdam, The Hague and Groningen and bake rolls at the bakery',
   '',
   '## Menu',
   '',
@@ -232,11 +234,14 @@ writeFileSync(join(ROOT, 'llms.txt'), lines.join('\n').replace(/<[^>]+>/g, '') +
 // ---- sitemap.xml (both languages, linked to each other) ----
 const today = new Date().toISOString().slice(0, 10);
 const lastmod = k => `<lastmod>${readFileSync(join(ROOT, PAGES[k].file), 'utf8') === before[k] && oldMod[k] ? oldMod[k] : today}</lastmod>`;
+const gameAlt = `<xhtml:link rel="alternate" hreflang="en" href="${SITE}/game/"/><xhtml:link rel="alternate" hreflang="nl" href="${SITE}/nl/spel/"/><xhtml:link rel="alternate" hreflang="x-default" href="${SITE}/game/"/>`;
 const alt = `<xhtml:link rel="alternate" hreflang="en" href="${PAGES.en.url}"/><xhtml:link rel="alternate" hreflang="nl" href="${PAGES.nl.url}"/><xhtml:link rel="alternate" hreflang="x-default" href="${PAGES.en.url}"/>`;
 writeFileSync(join(ROOT, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url><loc>${PAGES.en.url}</loc>${lastmod('en')}${alt}</url>
   <url><loc>${PAGES.nl.url}</loc>${lastmod('nl')}${alt}</url>
+  <url><loc>${SITE}/game/</loc>${gameAlt}</url>
+  <url><loc>${SITE}/nl/spel/</loc>${gameAlt}</url>
 </urlset>
 `);
 
