@@ -117,7 +117,7 @@ window.CINNERY_PRODUCTS = [
  {
   "id": "cookie-classic",
   "cat": "cookie",
-  "price": 5,
+  "price": 5.5,
   "name": {
    "en": "Classic Cookie",
    "nl": "Klassiek koekje"
@@ -136,7 +136,7 @@ window.CINNERY_PRODUCTS = [
  {
   "id": "cookie-stuffed",
   "cat": "cookie",
-  "price": 5.5,
+  "price": 6,
   "name": {
    "en": "Stuffed Cookie",
    "nl": "Gevuld koekje"
